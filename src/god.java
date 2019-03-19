@@ -23,5 +23,7 @@ public class god {
 		System.out.println("hello");
 		System.out.println("hello");
 		System.out.println("hello");
+		System.out.println("hello");
+		System.out.println("hello");
 	}
 }
