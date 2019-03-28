@@ -1,4 +1,5 @@
 ## 프로젝트설명
+
 요약하자면, **GodDB**는 사용자 친화적인 인터페이스를 가지는 데이터베이스입니다.
 
 **LevelDB**와 **Snappy 알고리즘**을 적용하여 만들어진 [SnappyDB](http://www.snappydb.com/)에서 사용한 JNI를 기반으로 하여 인터페이스를 재구현하는 프로젝트입니다.
@@ -8,6 +9,7 @@
 복잡한 ***SQL***을 짜지말고, **와일드카드**를 통해 ***강력한 검색기능***을 가져보세요!
 
 ## 사용예시
+
 ```java
 DB godDB = DBManager.open("DB Name");
 
@@ -20,46 +22,245 @@ godDB.put("/Korea/Busan/PNU", student);
 
 JSONArray retStudents;
 
-retStudent = godDB.get("/Korea/Busan/*", "age==20");
+retStudent = godDB.get("/Korea/Busan/University/PNU/CSE/*", "age==23");
 ```
 
 ## 와일드카드
+
 GodDB는 **와일드카드**를 도입하여 기존 NoSQL 데이터베이스들과는 달리 강력한 검색기능을 구현하였습니다.
 
-GodDB가 제공하는 **와일드카드**의 종류에는 총 2가지가 있습니다.
+GodDB가 제공하는 **와일드카드**의 종류에는 총 3가지가 있습니다.
 
-### " * "
-To Add...
-#### 사용예시
-To Add...
+### " * " : 하위 모든 디렉토리 선택
 
-### " \# "
-To Add...
-#### 사용예시
-To Add...
+##### 사용예시
+
+```java
+/*
+ * └─/ 
+ *    ├─Korea
+ *    │  ├─Busan
+ *    │  │  ├─University
+ *    │  │  │  ├─PNU
+ *    │  │  │  │  ├─Faculty
+ *    │  │  │  │  │      faculty1 object
+ *    │  │  │  │  └─ CSE
+ *    │  │  │  │     ├─Freshman
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     ├─Sophomore
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     ├─Junior
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     └─Senior
+ *    │  │  │  │            student1 object
+ *    │  │  │  │            student2 object
+ *    │  │  │  ├─Dong-a
+ *    │  │  │  │  └─ ...
+ *    │  │  │  └─PKNU
+ *    │  │  │     └─ ...
+ *    │  │  └─Company
+ *    │  │     └─ ...
+ *    │  └─Seoul
+ *    └─Japan
+ * ...
+ */
+ 
+JSONArray retStudents;
+
+retStudent = godDB.get("/Korea/Busan/University/PNU/CSE/*", "age==23");
+```
+
+### " \# " : 하위 모든 디렉토리의 특정 경로의 디렉토리 선택
+
+##### 사용예시
+
+```java
+/*
+ * └─/ 
+ *    ├─Korea
+ *    │  ├─Busan
+ *    │  │  ├─University
+ *    │  │  │  ├─PNU
+ *    │  │  │  │  ├─Faculty
+ *    │  │  │  │  │      faculty1 object
+ *    │  │  │  │  └─ CSE
+ *    │  │  │  │     ├─Freshman
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     ├─Sophomore
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     ├─Junior
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     └─Senior
+ *    │  │  │  │            student1 object
+ *    │  │  │  │            student2 object
+ *    │  │  │  ├─Dong-a
+ *    │  │  │  │  ├─Faculty
+ *    │  │  │  │  │      faculty1 object
+ *    │  │  │  │  └─ CSE
+ *    │  │  │  │     ├─Freshman
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     ├─Sophomore
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     ├─Junior
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     └─Senior
+ *    │  │  │  │            student1 object
+ *    │  │  │  │            student2 object
+ *    │  │  │  └─PKNU
+ *    │  │  │     └─ ...
+ *    │  │  └─Company
+ *    │  │     └─ ...
+ *    │  └─Seoul
+ *    └─Japan
+ * ...
+ */
+ 
+JSONArray retStudents;
+
+retStudent = godDB.get("/Korea/Busan/University/#/CSE/Freshman", "age==23");
+```
+
+### " & " : 다중 디렉토리 선택
+
+##### 사용예시
+
+```java
+/*
+ * └─/ 
+ *    ├─Korea
+ *    │  ├─Busan
+ *    │  │  ├─University
+ *    │  │  │  ├─PNU
+ *    │  │  │  │  ├─Faculty
+ *    │  │  │  │  │      faculty1 object
+ *    │  │  │  │  └─ CSE
+ *    │  │  │  │     ├─Freshman
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     ├─Sophomore
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     ├─Junior
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     └─Senior
+ *    │  │  │  │            student1 object
+ *    │  │  │  │            student2 object
+ *    │  │  │  ├─Dong-a
+ *    │  │  │  │  ├─Faculty
+ *    │  │  │  │  │      faculty1 object
+ *    │  │  │  │  └─ CSE
+ *    │  │  │  │     ├─Freshman
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     ├─Sophomore
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     ├─Junior
+ *    │  │  │  │     │      student1 object
+ *    │  │  │  │     │      student2 object
+ *    │  │  │  │     └─Senior
+ *    │  │  │  │            student1 object
+ *    │  │  │  │            student2 object
+ *    │  │  │  └─PKNU
+ *    │  │  │     └─ ...
+ *    │  │  └─Company
+ *    │  │     └─ ...
+ *    │  └─Seoul
+ *    └─Japan
+ * ...
+ */
+ 
+JSONArray retStudents;
+String myPath = "/Korea/Busan/University/PNU/CSE";
+
+//자바는 연산자 오버로딩을 지원하지 않는다.
+retStudent = godDB.get(myPath + "/Freshman  & " + myPath + "/Junior", "age==23");
+```
 
 
 ## 조건문
+
 GodDB는 또한 조건문을 제공합니다.
 
-조건의 종류에는 총 3가지가 있습니다.
+조건의 종류에는 총 4가지가 있습니다.
 
-To Add...
+### " == " : 해당 항목이 일치하는 오브젝트들을 찾습니다.
 
-### " == "
-To Add...
-#### 사용예시
-To Add...
+##### 사용예시
 
-### " > "
-To Add...
-#### 사용예시
-To Add...
+```java
+JSONArray retStudents;
 
-### " < "
-To Add...
-#### 사용예시
-To Add...
+retStudent = godDB.get("/Korea/Busan/University/PNU/CSE/*", "age==23");
+```
+
+### " > " : 해당 항목보다 큰 값을 가지는 오브젝트들을 찾습니다.
+
+##### 사용예시
+
+```java
+JSONArray retStudents;
+
+retStudent = godDB.get("/Korea/Busan/University/PNU/CSE/*", "age>23");
+```
+
+### " < " : 해당 항목보다 작은 값을 가지는 오브젝트들을 찾습니다.
+
+##### 사용예시
+
+```java
+JSONArray retStudents;
+
+retStudent = godDB.get("/Korea/Busan/University/PNU/CSE/*", "age<23");
+```
+
+### " - " : 특정 조건을 제외하고 찾습니다.
+
+##### 사용예시
+
+```java
+JSONArray retStudents;
+
+retStudent = godDB.get("/Korea/Busan/University/PNU/CSE/*", "-age<23");
+
+// retStudent에는 나이가 23살 미만이 아닌 오브젝트들이 담겨있다.
+```
+
+## 옵션
+
+마지막으로 GodDB는 옵션을 설정할 수 있습니다.
+
+옵션의 종류에는 총 2가지가 있습니다.
+
+### " << " : 결과를 오름차순으로 정렬합니다.
+
+##### 사용예시
+
+```java
+JSONArray retStudents;
+
+retStudent = godDB.get("/Korea/Busan/University/PNU/CSE/*", "age>23", "age<<");
+```
+
+### " >> " : 결과를 내림차순으로 정렬합니다.
+
+##### 사용예시
+
+```java
+JSONArray retStudents;
+
+retStudent = godDB.get("/Korea/Busan/University/PNU/CSE/*", "age>23", "age>>");
+```
 
 ## 설치방법
 To Add...
