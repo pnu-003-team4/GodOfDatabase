@@ -36,7 +36,9 @@ GodDB가 제공하는 **와일드카드**의 종류에는 총 3가지가 있습�
 ##### 사용예시
 
  └─Root 
+ 
     ├─Korea
+    
     │  ├─Busan
     │  │  ├─University
     │  │  │  ├─PNU
