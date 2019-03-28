@@ -96,6 +96,8 @@ retStudent = godDB.get(myPath + "/Freshman  & " + myPath + "/Junior");
 ```
 // retStudent에는 부산대학교 정보컴퓨터공학부의 **1학년과 3학년**인 오브젝트들이 담겨있다.
 
+- - -
+
 조건문
 =============
 GodDB는 또한 조건문을 제공합니다.
@@ -138,6 +140,8 @@ retStudent = godDB.get("/Korea/Busan/University/PNU/CSE/*", "-age<23");
 ```
 // retStudent에는 **나이가 23세 미만이 아닌(23세 이상인)** 오브젝트들이 담겨있다.
 
+- - -
+
 옵션
 =============
 마지막으로 GodDB는 옵션을 설정할 수 있습니다.
@@ -159,6 +163,8 @@ JSONArray retStudents;
 
 retStudent = godDB.get("/Korea/Busan/University/PNU/CSE/*", "age>23", "age>>");
 ```
+
+- - -
 
 설치방법
 =============
