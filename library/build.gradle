@@ -1,6 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
+    externalNativeBuild {
+        ndkBuild {
+            path "src/main/jni/Android.mk"
+        }
+    }
+
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
 

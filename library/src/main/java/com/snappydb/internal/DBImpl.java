@@ -19,17 +19,11 @@ package com.snappydb.internal;
 import android.text.TextUtils;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 import com.snappydb.DB;
 import com.snappydb.KeyIterator;
 import com.snappydb.SnappydbException;
 
 import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
-import java.lang.reflect.Array;
 
 public class DBImpl implements DB {
     private static final String LIB_NAME = "snappydb-native";
@@ -81,34 +75,15 @@ public class DBImpl implements DB {
     @Override
     public void put (String path, JSONObject object) throws SnappydbException {
         /*
-         * TODO : Implement this
+         * TODO : path가 이미 존재하는지 확인하고, 존재한다면 해당 path를 업데이트 존재하지 않는다면 새로 생성
          */
-        checkArgs(key, value);
-
-        __put(key, value);
     }
 
     @Override
     public void put (String path, JSONObject[] objects) throws SnappydbException {
         /*
-         * TODO : Implement this
+         * TODO : path가 이미 존재하는지 확인하고, 존재한다면 해당 path를 업데이트 존재하지 않는다면 새로 생성
          */
-        checkArgs(key, value);
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        kryo.register(value.getClass());
-
-        Output output = new Output(stream);
-        try {
-            kryo.writeObject(output, value);
-            output.close();
-
-            __put(key, stream.toByteArray());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SnappydbException(e.getMessage());
-        }
     }
 
     // ***********************
@@ -116,13 +91,11 @@ public class DBImpl implements DB {
     // ***********************
 
     @Override
-    public void del (String path, String wildcard, String condition)  throws SnappydbException {
+    public void del (String path, String condition)  throws SnappydbException {
         /*
-         * TODO : Implement this
+         * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 오브젝트들 제거
+         * TODO : wlidcard는 Wildcard.java의 extractWildcard()를 활용한다. condition은 Condition.java의 extractCondtion()을 활용한다.
          */
-        checkKey(key);
-
-        __del(key);
     }
 
     // ***********************
@@ -130,32 +103,14 @@ public class DBImpl implements DB {
     // ***********************
 
     @Override
-    public JSONObject[] get(String key, String wildcard, String condition)  throws SnappydbException {
+    public JSONObject[] get(String path, String condition)  throws SnappydbException {
         /*
-         * TODO : Implement this
+         * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 오브젝트들 JSONObject의 array로 만들어서 return
+         * TODO : wlidcard는 Wildcard.java의 extractWildcard()를 활용한다. condition은 Condition.java의 extractCondtion()을 활용한다.
+         *
+         * return: JSONObject의 배열
          */
-        checkArgs(key, className);
-
-        if (className.isArray()) {
-            throw new SnappydbException(
-                    "You should call getArray instead");
-        }
-
-        byte[] data = getBytes(key);
-
-        kryo.register(className);
-
-        Input input = new Input(data);
-        try {
-            return kryo.readObject(input, className);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SnappydbException("Maybe you tried to retrieve an array using this method ? " +
-                    "please use getArray instead " + e.getMessage());
-        } finally {
-            input.close();
-        }
+        return null;
     }
 
     //****************************

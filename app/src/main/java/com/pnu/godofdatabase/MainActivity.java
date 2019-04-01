@@ -7,6 +7,9 @@ import com.snappydb.DB;
 import com.snappydb.DBFactory;
 import com.snappydb.SnappydbException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -16,19 +19,22 @@ public class MainActivity extends AppCompatActivity {
         try {
             DB snappydb = DBFactory.open("DB"); //create or open an existing database using the default name
 
-            snappydb.put("name", "Jack Reacher");
-            snappydb.putInt("age", 42);
-            snappydb.putBoolean("single", true);
-            snappydb.put("books", new String[]{"One Shot", "Tripwire", "61 Hours"});
+            JSONObject student = new JSONObject();
 
-            String 	 name   =  snappydb.get("name");
-            int 	   age    =  snappydb.getInt("age");
-            boolean  single =  snappydb.getBoolean("single");
-            String[] books  =  snappydb.getArray("books", String.class);// get array of string
+            try {
+                student.put("name", "JSON");
+                student.put("age", "23");
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+
+            snappydb.put("/Korea/Busan/University/PNU", student);
+            snappydb.get("/Korea/Busan/*/PNU", null);
 
             snappydb.close();
 
         } catch (SnappydbException e) {
+            e.printStackTrace();
         }
     }
 }

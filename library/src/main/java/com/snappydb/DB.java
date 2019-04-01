@@ -76,11 +76,10 @@ public interface DB {
      * Deletes the objects in path following the wildcard and codition.
      *
      * @param path not null.
-     * @param wildcard allow null.
      * @param condition allow null.
      * @throws SnappydbException if the key is null.
      */
-    void del (String path, String wildcard, String condition)  throws SnappydbException;
+    void del (String path, String condition)  throws SnappydbException;
 
     //******************************************************************************************************************
     //*      RETRIEVE
@@ -89,11 +88,10 @@ public interface DB {
      * Gets the object array in path following the wildcard and condition.
      *
      * @param key not null.
-     * @param wildcard allow null.
      * @param condition allow null.
      * @throws SnappydbException if the key is null.
      */
-    JSONObject[] get(String key, String wildcard, String condition)  throws SnappydbException;
+    JSONObject[] get(String key, String condition)  throws SnappydbException;
 
     //******************************************************************************************************************
     //*      KEYS OPERATIONS || TODO: STUDY - How to use these functions?
