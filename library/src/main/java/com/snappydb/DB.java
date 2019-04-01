@@ -18,7 +18,7 @@ package com.snappydb;
 
 import com.esotericsoftware.kryo.Kryo;
 
-import java.io.Serializable;
+import org.json.JSONObject;
 
 public interface DB {
     //******************************************************************************************************************
@@ -47,157 +47,56 @@ public interface DB {
     boolean isOpen ()  throws SnappydbException;
 
     //******************************************************************************************************************
-    //*      CREATE
+    //*      INSERT
     //******************************************************************************************************************
 
     /**
-     * Puts the byte array data for the key.
+     * Puts the object to the path.
      *
-     * @param key not null.
-     * @param data not null.
+     * @param path not null.
+     * @param object not null.
      * @throws SnappydbException if the key or data is null.
      */
-    void put (String key, byte[] data) throws SnappydbException;
+    void put (String path, JSONObject object) throws SnappydbException;
+
 
     /**
-     * Puts the {@link String} value for the key.
+     * Puts the object array to the path.
      *
-     * @param key not null.
-     * @param value not null.
-     * @throws SnappydbException if the key or value is null.
+     * @param path not null.
+     * @param objects not null.
+     * @throws SnappydbException if the key or data is null.
      */
-    void put (String key, String value) throws SnappydbException;
-
-    /**
-     * Puts the {@link Serializable} value for the key.
-     *
-     * @param key not null.
-     * @param value not null.
-     * @throws SnappydbException if the key or value is null.
-     */
-    void put (String key, Serializable value) throws SnappydbException;
-
-    /**
-     * Puts the {@link Serializable} value for the key.
-     *
-     * @param key not null.
-     * @param value not null.
-     * @throws SnappydbException if the key or value is null.
-     */
-    void put (String key, Serializable [] value) throws SnappydbException;
-
-    /**
-     * Puts the {@link Object} for the key.
-     *
-     * @param key not null.
-     * @param object not null.
-     * @throws SnappydbException if the key or object is null.
-     */
-    void put (String key, Object object) throws SnappydbException;
-
-    /**
-     * Puts the {@link Object} array for the key.
-     *
-     * @param key not null.
-     * @param object not null.
-     * @throws SnappydbException if the key is null.
-     */
-    void put (String key, Object [] object) throws SnappydbException;
-
-    /**
-     * Puts the primitive integer for the key.
-     *
-     * @param key not null.
-     * @param val
-     * @throws SnappydbException if the key is null.
-     */
-    void putInt (String key, int val) throws SnappydbException;
-
-    /**
-     * Puts the short short for the key.
-     *
-     * @param key not null.
-     * @param val
-     * @throws SnappydbException if the key is null.
-     */
-    void putShort (String key, short val) throws SnappydbException;
-
-    /**
-     * Puts the primitive boolean for the key.
-     *
-     * @param key not null.
-     * @param val
-     * @throws SnappydbException if the key is null.
-     */
-    void putBoolean (String key, boolean val) throws SnappydbException;
-
-    /**
-     * Puts the primitive double for the key.
-     *
-     * @param key not null.
-     * @param val
-     * @throws SnappydbException if the key is null.
-     */
-    void putDouble (String key, double val) throws SnappydbException;
-
-    /**
-     * Puts the primitive float for the key.
-     *
-     * @param key not null.
-     * @param val
-     * @throws SnappydbException if the key is null.
-     */
-    void putFloat (String key, float val) throws SnappydbException;
-
-    /**
-     * Puts the primitive long for the key.
-     *
-     * @param key not null.
-     * @param val
-     * @throws SnappydbException if the key is null.
-     */
-    void putLong (String key, long val) throws SnappydbException;
+    void put (String path, JSONObject[] objects) throws SnappydbException;
 
     //******************************************************************************************************************
     //*      DELETE
     //******************************************************************************************************************
     /**
-     * Deletes value for the key.
+     * Deletes the objects in path following the wildcard and codition.
      *
-     * @param key not null.
+     * @param path not null.
+     * @param wildcard allow null.
+     * @param condition allow null.
      * @throws SnappydbException if the key is null.
      */
-    void del (String key)  throws SnappydbException;
+    void del (String path, String wildcard, String condition)  throws SnappydbException;
 
     //******************************************************************************************************************
     //*      RETRIEVE
     //******************************************************************************************************************
-    String get(String key)  throws SnappydbException;
-
-    byte[] getBytes(String key)  throws SnappydbException;
-
-    <T extends Serializable> T get(String key, Class<T> className) throws SnappydbException;
-
-    <T> T getObject(String key, Class<T> className) throws SnappydbException;
-
-    <T extends Serializable> T[] getArray (String key, Class<T> className) throws SnappydbException;
-
-    <T> T[] getObjectArray (String key, Class<T> className) throws SnappydbException;
-
-    short getShort(String key)  throws SnappydbException;
-
-    int getInt(String key)  throws SnappydbException;
-
-    boolean getBoolean(String key)  throws SnappydbException;
-
-    double getDouble(String key)  throws SnappydbException;
-
-    long getLong(String key)  throws SnappydbException;
-
-    float getFloat(String key)  throws SnappydbException;
+    /**
+     * Gets the object array in path following the wildcard and condition.
+     *
+     * @param key not null.
+     * @param wildcard allow null.
+     * @param condition allow null.
+     * @throws SnappydbException if the key is null.
+     */
+    JSONObject[] get(String key, String wildcard, String condition)  throws SnappydbException;
 
     //******************************************************************************************************************
-    //*      KEYS OPERATIONS
+    //*      KEYS OPERATIONS || TODO: STUDY - How to use these functions?
     //******************************************************************************************************************
     boolean exists (String key) throws SnappydbException;
 

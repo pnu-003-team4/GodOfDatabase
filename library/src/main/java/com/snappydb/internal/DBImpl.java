@@ -25,6 +25,8 @@ import com.snappydb.DB;
 import com.snappydb.KeyIterator;
 import com.snappydb.SnappydbException;
 
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -74,17 +76,23 @@ public class DBImpl implements DB {
 
 
     // ***********************
-    // *       CREATE
+    // *       INSERT
     // ***********************
     @Override
-    public void put(String key, String value) throws SnappydbException {
+    public void put (String path, JSONObject object) throws SnappydbException {
+        /*
+         * TODO : Implement this
+         */
         checkArgs(key, value);
 
         __put(key, value);
     }
 
     @Override
-    public void put(String key, Serializable value) throws SnappydbException {
+    public void put (String path, JSONObject[] objects) throws SnappydbException {
+        /*
+         * TODO : Implement this
+         */
         checkArgs(key, value);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -101,118 +109,6 @@ public class DBImpl implements DB {
             e.printStackTrace();
             throw new SnappydbException(e.getMessage());
         }
-    }
-
-    @Override
-    public void put(String key, Object value) throws SnappydbException {
-        checkArgs(key, value);
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        kryo.register(value.getClass());
-
-        Output output = new Output(stream);
-        try {
-            kryo.writeObject(output, value);
-            output.close();
-
-            __put(key, stream.toByteArray());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SnappydbException(e.getMessage());
-        }
-    }
-
-    @Override
-    public void put(String key, byte[] value) throws SnappydbException {
-        checkArgs(key, value);
-
-        __put(key, value);
-    }
-
-
-    @Override
-    public void put(String key, Serializable[] value) throws SnappydbException {
-        checkArgs(key, value);
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        kryo.register(value.getClass());
-
-        Output output = new Output(stream);
-        try {
-            kryo.writeObject(output, value);
-            output.close();
-
-            __put(key, stream.toByteArray());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SnappydbException("Kryo exception " + e.getMessage());
-        }
-    }
-
-    @Override
-    public void put(String key, Object[] value) throws SnappydbException {
-        checkArgs(key, value);
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        kryo.register(value.getClass());
-
-        Output output = new Output(stream);
-        try {
-            kryo.writeObject(output, value);
-            output.close();
-
-            __put(key, stream.toByteArray());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SnappydbException("Kryo exception " + e.getMessage());
-        }
-    }
-
-    @Override
-    public void putShort(String key, short val) throws SnappydbException {
-        checkKey(key);
-
-        __putShort(key, val);
-    }
-
-
-    @Override
-    public void putInt(String key, int val) throws SnappydbException {
-        checkKey(key);
-
-        __putInt(key, val);
-    }
-
-
-    @Override
-    public void putBoolean(String key, boolean val) throws SnappydbException {
-        checkKey(key);
-
-        __putBoolean(key, val);
-    }
-
-    @Override
-    public void putDouble(String key, double val) throws SnappydbException {
-        checkKey(key);
-
-        __putDouble(key, val);
-    }
-
-    @Override
-    public void putFloat(String key, float val) throws SnappydbException {
-        checkKey(key);
-
-        __putFloat(key, val);
-    }
-
-    @Override
-    public void putLong(String key, long val) throws SnappydbException {
-        checkKey(key);
-
-        __putLong(key, val);
     }
 
     // ***********************
@@ -220,7 +116,10 @@ public class DBImpl implements DB {
     // ***********************
 
     @Override
-    public void del(String key) throws SnappydbException {
+    public void del (String path, String wildcard, String condition)  throws SnappydbException {
+        /*
+         * TODO : Implement this
+         */
         checkKey(key);
 
         __del(key);
@@ -231,8 +130,10 @@ public class DBImpl implements DB {
     // ***********************
 
     @Override
-    public <T extends Serializable> T get(String key, Class<T> className)
-            throws SnappydbException {
+    public JSONObject[] get(String key, String wildcard, String condition)  throws SnappydbException {
+        /*
+         * TODO : Implement this
+         */
         checkArgs(key, className);
 
         if (className.isArray()) {
@@ -255,139 +156,6 @@ public class DBImpl implements DB {
         } finally {
             input.close();
         }
-    }
-
-    @Override
-    public <T> T getObject (String key, Class<T> className)
-            throws SnappydbException {
-        checkArgs(key, className);
-
-        if (className.isArray()) {
-            throw new SnappydbException(
-                    "You should call getObjectArray instead");
-        }
-
-        byte[] data = getBytes(key);
-
-        kryo.register(className);
-
-        Input input = new Input(data);
-        try {
-            return kryo.readObject(input, className);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SnappydbException("Maybe you tried to retrieve an array using this method ? " +
-                    "please use getObjectArray instead " + e.getMessage());
-        } finally {
-            input.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends Serializable> T[] getArray(String key, Class<T> className)
-            throws SnappydbException {
-        checkArgs(key, className);
-
-        byte[] data = __getBytes(key);
-
-        kryo.register(className);
-
-        Input input = new Input(data);
-        T[] array = (T[]) Array.newInstance(className, 0);
-
-        try {
-            return (T[]) kryo.readObject(input, array.getClass());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SnappydbException("Maybe you tried to retrieve an array using this method " +
-                    "? please use getArray instead " + e.getMessage());
-        } finally {
-            input.close();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T[] getObjectArray(String key, Class<T> className)
-            throws SnappydbException {
-        checkArgs(key, className);
-
-        byte[] data = __getBytes(key);
-
-        kryo.register(className);
-
-        Input input = new Input(data);
-        T[] array = (T[]) Array.newInstance(className, 0);
-
-        try {
-            return (T[]) kryo.readObject(input, array.getClass());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new SnappydbException("Maybe you tried to retrieve an array using this method " +
-                    "? please use getArray instead " + e.getMessage());
-        } finally {
-            input.close();
-        }
-    }
-
-    @Override
-    public byte[] getBytes(String key) throws SnappydbException {
-        checkKey(key);
-
-        return __getBytes(key);
-    }
-
-    @Override
-    public String get(String key) throws SnappydbException {
-        checkKey(key);
-
-        return __get(key);
-    }
-
-    @Override
-    public short getShort(String key) throws SnappydbException {
-        checkKey(key);
-
-        return __getShort(key);
-    }
-
-    @Override
-    public int getInt(String key) throws SnappydbException {
-        checkKey(key);
-
-        return __getInt(key);
-    }
-
-    @Override
-    public boolean getBoolean(String key) throws SnappydbException {
-        checkKey(key);
-
-        return __getBoolean(key);
-    }
-
-    @Override
-    public double getDouble(String key) throws SnappydbException {
-        checkKey(key);
-
-        return __getDouble(key);
-    }
-
-    @Override
-    public long getLong(String key) throws SnappydbException {
-        checkKey(key);
-
-        return __getLong(key);
-    }
-
-    @Override
-    public float getFloat(String key) throws SnappydbException {
-        checkKey(key);
-
-        return __getFloat(key);
     }
 
     //****************************
