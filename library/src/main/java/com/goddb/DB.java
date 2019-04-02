@@ -18,6 +18,7 @@ package com.goddb;
 
 import com.esotericsoftware.kryo.Kryo;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public interface DB {
@@ -28,23 +29,23 @@ public interface DB {
     /**
      * Closes database.
      *
-     *  @throws SnappydbException
+     *  @throws GoddbException if exception
      */
-    void close ()  throws SnappydbException;
+    void close() throws GoddbException;
 
     /**
      * Destroys database
      *
-     *  @throws SnappydbException
+     *  @throws GoddbException if exception
      */
-    void destroy ()  throws SnappydbException;
+    void destroy() throws GoddbException;
 
     /**
      * Checks if database is open.
      *
      * @return {@code true} if database is open.
      */
-    boolean isOpen ()  throws SnappydbException;
+    boolean isOpen() throws GoddbException;
 
     //******************************************************************************************************************
     //*      INSERT
@@ -55,9 +56,9 @@ public interface DB {
      *
      * @param path not null.
      * @param object not null.
-     * @throws SnappydbException if the key or data is null.
+     * @throws GoddbException if the key or data is null.
      */
-    void put (String path, JSONObject object) throws SnappydbException;
+    void put(String path, JSONObject object) throws GoddbException;
 
 
     /**
@@ -65,9 +66,9 @@ public interface DB {
      *
      * @param path not null.
      * @param objects not null.
-     * @throws SnappydbException if the key or data is null.
+     * @throws GoddbException if the key or data is null.
      */
-    void put (String path, JSONObject[] objects) throws SnappydbException;
+    void put(String path, JSONArray objects) throws GoddbException;
 
     //******************************************************************************************************************
     //*      DELETE
@@ -77,9 +78,9 @@ public interface DB {
      *
      * @param path not null.
      * @param condition allow null.
-     * @throws SnappydbException if the key is null.
+     * @throws GoddbException if the key is null.
      */
-    void del (String path, String condition)  throws SnappydbException;
+    void del(String path, String condition) throws GoddbException;
 
     //******************************************************************************************************************
     //*      RETRIEVE
@@ -87,40 +88,47 @@ public interface DB {
     /**
      * Gets the object array in path following the wildcard and condition.
      *
-     * @param key not null.
+     * @param path not null.
      * @param condition allow null.
-     * @throws SnappydbException if the key is null.
+     * @throws GoddbException if the path is null.
      */
-    JSONObject[] get(String key, String condition)  throws SnappydbException;
+    JSONArray get(String path, String condition) throws GoddbException;
 
     //******************************************************************************************************************
     //*      KEYS OPERATIONS || TODO: STUDY - How to use these functions?
     //******************************************************************************************************************
-    boolean exists (String key) throws SnappydbException;
+    boolean exists(String key) throws GoddbException;
 
-    String[] findKeys(String prefix) throws SnappydbException;
-    String[] findKeys(String prefix, int offset) throws SnappydbException;
-    String[] findKeys(String prefix, int offset, int limit) throws SnappydbException;
+    String[] findKeys(String prefix) throws GoddbException;
 
-    int countKeys(String prefix) throws SnappydbException;
+    String[] findKeys(String prefix, int offset) throws GoddbException;
 
-    String[] findKeysBetween(String startPrefix, String endPrefix) throws SnappydbException;
-    String[] findKeysBetween(String startPrefix, String endPrefix, int offset) throws SnappydbException;
-    String[] findKeysBetween(String startPrefix, String endPrefix, int offset, int limit) throws SnappydbException;
+    String[] findKeys(String prefix, int offset, int limit) throws GoddbException;
 
-    int countKeysBetween(String startPrefix, String endPrefix) throws SnappydbException;
+    int countKeys(String prefix) throws GoddbException;
+
+    String[] findKeysBetween(String startPrefix, String endPrefix) throws GoddbException;
+
+    String[] findKeysBetween(String startPrefix, String endPrefix, int offset) throws GoddbException;
+
+    String[] findKeysBetween(String startPrefix, String endPrefix, int offset, int limit) throws GoddbException;
+
+    int countKeysBetween(String startPrefix, String endPrefix) throws GoddbException;
 
     //******************************************************************************************************************
     //*      ITERATORS
     //******************************************************************************************************************
-    KeyIterator allKeysIterator() throws SnappydbException;
-    KeyIterator allKeysReverseIterator() throws SnappydbException;
+    KeyIterator allKeysIterator() throws GoddbException;
 
-    KeyIterator findKeysIterator(String prefix) throws SnappydbException;
-    KeyIterator findKeysReverseIterator(String prefix) throws SnappydbException;
+    KeyIterator allKeysReverseIterator() throws GoddbException;
 
-    KeyIterator findKeysBetweenIterator(String startPrefix, String endPrefix) throws SnappydbException;
-    KeyIterator findKeysBetweenReverseIterator(String startPrefix, String endPrefix) throws SnappydbException;
+    KeyIterator findKeysIterator(String prefix) throws GoddbException;
+
+    KeyIterator findKeysReverseIterator(String prefix) throws GoddbException;
+
+    KeyIterator findKeysBetweenIterator(String startPrefix, String endPrefix) throws GoddbException;
+
+    KeyIterator findKeysBetweenReverseIterator(String startPrefix, String endPrefix) throws GoddbException;
 
     //******************************************************************************************************************
     //*      KRYO SERIALIZATION

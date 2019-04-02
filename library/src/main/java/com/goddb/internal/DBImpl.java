@@ -19,14 +19,15 @@ package com.goddb.internal;
 import android.text.TextUtils;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.goddb.SnappydbException;
 import com.goddb.DB;
+import com.goddb.GoddbException;
 import com.goddb.KeyIterator;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class DBImpl implements DB {
-    private static final String LIB_NAME = "snappydb-native";
+    private static final String LIB_NAME = "goddb-native";
     private static final int LIMIT_MAX = Integer.MAX_VALUE - 8;
 
     private String dbPath;
@@ -36,7 +37,7 @@ public class DBImpl implements DB {
         System.loadLibrary(LIB_NAME);
     }
 
-    public DBImpl(String path, Kryo... kryo) throws SnappydbException {
+    public DBImpl(String path, Kryo... kryo) throws GoddbException {
         this.dbPath = path;
 
         if (null != kryo && kryo.length > 0) {
@@ -59,12 +60,12 @@ public class DBImpl implements DB {
     }
 
     @Override
-    public void destroy() throws SnappydbException {
+    public void destroy() throws GoddbException {
         __destroy(dbPath);
     }
 
     @Override
-    public boolean isOpen() throws SnappydbException {
+    public boolean isOpen() throws GoddbException {
         return __isOpen();
     }
 
@@ -73,17 +74,23 @@ public class DBImpl implements DB {
     // *       INSERT
     // ***********************
     @Override
-    public void put (String path, JSONObject object) throws SnappydbException {
+    public void put(String path, JSONObject object) throws GoddbException {
         /*
          * TODO : path가 이미 존재하는지 확인하고, 존재한다면 해당 path를 업데이트 존재하지 않는다면 새로 생성
          */
+        checkArgs(path, object);
+
+        __put(path, object.toString());
     }
 
     @Override
-    public void put (String path, JSONObject[] objects) throws SnappydbException {
+    public void put(String path, JSONArray objects) throws GoddbException {
         /*
          * TODO : path가 이미 존재하는지 확인하고, 존재한다면 해당 path를 업데이트 존재하지 않는다면 새로 생성.
          */
+        checkArgs(path, objects);
+
+        __put(path, objects.toString());
     }
 
     // ***********************
@@ -91,11 +98,13 @@ public class DBImpl implements DB {
     // ***********************
 
     @Override
-    public void del (String path, String condition)  throws SnappydbException {
+    public void del(String path, String condition) throws GoddbException {
         /*
          * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 오브젝트들 제거
          * TODO : wlidcard는 Wildcard.java의 extractWildcard()를 활용한다. condition은 Condition.java의 extractCondtion()을 활용한다.
          */
+
+        __del(path);
     }
 
     // ***********************
@@ -103,13 +112,15 @@ public class DBImpl implements DB {
     // ***********************
 
     @Override
-    public JSONObject[] get(String path, String condition)  throws SnappydbException {
+    public JSONArray get(String path, String condition) throws GoddbException {
         /*
          * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 오브젝트들 JSONObject의 array로 만들어서 return
          * TODO : wlidcard는 Wildcard.java의 extractWildcard()를 활용한다. condition은 Condition.java의 extractCondtion()을 활용한다.
          *
          * return: JSONObject의 배열
          */
+
+        __get(path);
         return null;
     }
 
@@ -117,24 +128,24 @@ public class DBImpl implements DB {
     //*      KEYS OPERATIONS
     //****************************
     @Override
-    public boolean exists(String key) throws SnappydbException {
+    public boolean exists(String key) throws GoddbException {
         checkKey(key);
 
         return __exists(key);
     }
 
     @Override
-    public String[] findKeys(String prefix) throws SnappydbException {
+    public String[] findKeys(String prefix) throws GoddbException {
         return findKeys(prefix, 0, LIMIT_MAX);
     }
 
     @Override
-    public String[] findKeys(String prefix, int offset) throws SnappydbException {
+    public String[] findKeys(String prefix, int offset) throws GoddbException {
         return findKeys(prefix, offset, LIMIT_MAX);
     }
 
     @Override
-    public String[] findKeys(String prefix, int offset, int limit) throws SnappydbException {
+    public String[] findKeys(String prefix, int offset, int limit) throws GoddbException {
         checkPrefix(prefix);
         checkOffsetLimit(offset, limit);
 
@@ -142,7 +153,7 @@ public class DBImpl implements DB {
     }
 
     @Override
-    public int countKeys(String prefix) throws SnappydbException {
+    public int countKeys(String prefix) throws GoddbException {
         checkPrefix(prefix);
 
         return __countKeys(prefix);
@@ -150,20 +161,20 @@ public class DBImpl implements DB {
 
     @Override
     public String[] findKeysBetween(String startPrefix, String endPrefix)
-            throws SnappydbException {
+            throws GoddbException {
         return findKeysBetween(startPrefix, endPrefix, 0, LIMIT_MAX);
     }
 
     @Override
     public String[] findKeysBetween(String startPrefix, String endPrefix, int offset)
-            throws SnappydbException {
+            throws GoddbException {
         return findKeysBetween(startPrefix, endPrefix, offset, LIMIT_MAX);
     }
 
     @Override
     public String[] findKeysBetween(String startPrefix, String endPrefix, int offset, int limit)
-            throws SnappydbException {
-        checkRange(startPrefix, endPrefix);
+            throws GoddbException {
+        checkRange(startPrefix);
         checkOffsetLimit(offset, limit);
 
         return __findKeysBetween(startPrefix, endPrefix, offset, limit);
@@ -171,8 +182,8 @@ public class DBImpl implements DB {
 
     @Override
     public int countKeysBetween(String startPrefix, String endPrefix)
-            throws SnappydbException {
-        checkRange(startPrefix, endPrefix);
+            throws GoddbException {
+        checkRange(startPrefix);
 
         return __countKeysBetween(startPrefix, endPrefix);
     }
@@ -182,37 +193,37 @@ public class DBImpl implements DB {
     //***********************
     @Override
     public KeyIterator allKeysIterator()
-            throws SnappydbException {
+            throws GoddbException {
         return new KeyIteratorImpl(this, __findKeysIterator(null, false), null, false);
     }
 
     @Override
     public KeyIterator allKeysReverseIterator()
-            throws SnappydbException {
+            throws GoddbException {
         return new KeyIteratorImpl(this, __findKeysIterator(null, true),  null, true);
     }
 
     @Override
     public KeyIterator findKeysIterator(String prefix)
-            throws SnappydbException {
+            throws GoddbException {
         return new KeyIteratorImpl(this, __findKeysIterator(prefix, false), null, false);
     }
 
     @Override
     public KeyIterator findKeysReverseIterator(String prefix)
-            throws SnappydbException {
+            throws GoddbException {
         return new KeyIteratorImpl(this, __findKeysIterator(prefix, true), null, true);
     }
 
     @Override
     public KeyIterator findKeysBetweenIterator(String startPrefix, String endPrefix)
-            throws SnappydbException {
+            throws GoddbException {
         return new KeyIteratorImpl(this, __findKeysIterator(startPrefix, false), endPrefix, false);
     }
 
     @Override
     public KeyIterator findKeysBetweenReverseIterator(String startPrefix, String endPrefix)
-            throws SnappydbException {
+            throws GoddbException {
         return new KeyIteratorImpl(this, __findKeysIterator(startPrefix, true), endPrefix, true);
     }
 
@@ -228,39 +239,39 @@ public class DBImpl implements DB {
     // *      UTILS
     // ***********************
 
-    private void checkArgs (String key, Object value) throws SnappydbException {
+    private void checkArgs(String key, Object value) throws GoddbException {
         checkArgNotEmpty (key, "Key must not be empty");
 
         if (null == value) {
-            throw new SnappydbException ("Value must not be empty");
+            throw new GoddbException("Value must not be empty");
         }
     }
 
-    private void checkPrefix (String prefix) throws SnappydbException {
+    private void checkPrefix(String prefix) throws GoddbException {
         checkArgNotEmpty (prefix, "Starting prefix must not be empty");
     }
 
-    private void checkRange (String startPrefix, String endPrefix) throws SnappydbException {
+    private void checkRange(String startPrefix) throws GoddbException {
         checkArgNotEmpty (startPrefix, "Starting prefix must not be empty");
         checkArgNotEmpty (startPrefix, "Ending prefix must not be empty");
     }
 
-    private void checkKey (String key) throws SnappydbException {
+    private void checkKey(String key) throws GoddbException {
         checkArgNotEmpty (key, "Key must not be empty");
     }
 
-    private void checkArgNotEmpty (String arg, String errorMsg) throws SnappydbException {
+    private void checkArgNotEmpty(String arg, String errorMsg) throws GoddbException {
         if (TextUtils.isEmpty(arg)) {
-            throw new SnappydbException (errorMsg);
+            throw new GoddbException(errorMsg);
         }
     }
 
-    private void checkOffsetLimit (int offset, int limit) throws SnappydbException {
+    private void checkOffsetLimit(int offset, int limit) throws GoddbException {
         if (offset < 0) {
-            throw new SnappydbException ("Offset must not be negative");
+            throw new GoddbException("Offset must not be negative");
         }
         if (limit <= 0) {
-            throw new SnappydbException ("Limit must not be 0 or negative");
+            throw new GoddbException("Limit must not be 0 or negative");
         }
     }
 
@@ -268,59 +279,31 @@ public class DBImpl implements DB {
     // native code
     private native void __close();
 
-    private native void __open(String dbName) throws SnappydbException;
+    private native void __open(String dbName) throws GoddbException;
 
-    private native void __destroy(String dbName) throws SnappydbException;
+    private native void __destroy(String dbName) throws GoddbException;
 
-    private native boolean __isOpen() throws SnappydbException;
+    private native boolean __isOpen() throws GoddbException;
 
-    private native void __put(String key, byte[] value) throws SnappydbException;
+    private native void __put(String key, String value) throws GoddbException;
 
-    private native void __put(String key, String value) throws SnappydbException;
+    private native void __del(String key) throws GoddbException;
 
-    private native void __putShort(String key, short val) throws SnappydbException;
+    private native String __get(String key) throws GoddbException;
 
-    private native void __putInt(String key, int val) throws SnappydbException;
+    private native boolean __exists(String key) throws GoddbException;
 
-    private native void __putBoolean(String key, boolean val) throws SnappydbException;
+    private native String[] __findKeys(String prefix, int offset, int limit) throws GoddbException;
 
-    private native void __putDouble(String key, double val) throws SnappydbException;
+    private native int __countKeys(String prefix) throws GoddbException;
 
-    private native void __putFloat(String key, float val) throws SnappydbException;
+    private native String[] __findKeysBetween(String startPrefix, String endPrefix, int offset, int limit) throws GoddbException;
 
-    private native void __putLong(String key, long val) throws SnappydbException;
+    private native int __countKeysBetween(String startPrefix, String endPrefix) throws GoddbException;
 
-    private native void __del(String key) throws SnappydbException;
+    native long __findKeysIterator(String prefix, boolean reverse) throws GoddbException;
 
-    private native byte[] __getBytes(String key) throws SnappydbException;
-
-    private native String __get(String key) throws SnappydbException;
-
-    private native short __getShort(String key) throws SnappydbException;
-
-    private native int __getInt(String key) throws SnappydbException;
-
-    private native boolean __getBoolean(String key) throws SnappydbException;
-
-    private native double __getDouble(String key) throws SnappydbException;
-
-    private native long __getLong(String key) throws SnappydbException;
-
-    private native float __getFloat(String key) throws SnappydbException;
-
-    private native boolean __exists(String key) throws SnappydbException;
-
-    private native String[] __findKeys (String prefix, int offset, int limit) throws SnappydbException;
-
-    private native int __countKeys (String prefix) throws SnappydbException;
-
-    private native String[] __findKeysBetween(String startPrefix, String endPrefix, int offset, int limit) throws SnappydbException;
-
-    private native int __countKeysBetween(String startPrefix, String endPrefix) throws SnappydbException;
-
-    native long __findKeysIterator(String prefix, boolean reverse) throws SnappydbException;
-
-    native String[] __iteratorNextArray(long ptr, String endPrefix, boolean reverse, int max) throws SnappydbException;
+    native String[] __iteratorNextArray(long ptr, String endPrefix, boolean reverse, int max) throws GoddbException;
 
     native boolean __iteratorIsValid(long ptr, String endPrefix, boolean reverse);
 

@@ -16,15 +16,15 @@
 
 package com.goddb;
 
-import java.io.File;
-
 import android.content.Context;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.goddb.internal.DBImpl;
 
+import java.io.File;
+
 public class DBFactory {
-    private final static String DEFAULT_DBNAME = "snappydb";
+    private final static String DEFAULT_DBNAME = "goddb";
 
     /**
      * Return the Database with the given folder and name, if it doesn't exist create it
@@ -33,9 +33,9 @@ public class DBFactory {
      * @param dbName database file name
      * @param kryo optional custom instance of {@link com.esotericsoftware.kryo.Kryo} serializer
      * @return Database handler {@link DB}
-     * @throws SnappydbException
+     * @throws GoddbException if exception
      */
-    public static DB open(String folder, String dbName, Kryo... kryo) throws SnappydbException {
+    public static DB open(String folder, String dbName, Kryo... kryo) throws GoddbException {
         String dbFilePath = folder + File.separator + dbName;
         return new DBImpl(dbFilePath, kryo);
     }
@@ -46,9 +46,9 @@ public class DBFactory {
      * @param folder the folder of the db file will be stored
      * @param kryo optional custom instance of {@link com.esotericsoftware.kryo.Kryo} serializer
      * @return Database handler {@link DB}
-     * @throws SnappydbException
+     * @throws GoddbException if exception
      */
-    public static DB open(String folder, Kryo... kryo) throws SnappydbException {
+    public static DB open(String folder, Kryo... kryo) throws GoddbException {
         return open(folder, DEFAULT_DBNAME, kryo);
     }
 
@@ -59,9 +59,9 @@ public class DBFactory {
      * @param dbName database file name
      * @param kryo optional custom instance of {@link com.esotericsoftware.kryo.Kryo} serializer
      * @return Database handler {@link DB}
-     * @throws SnappydbException
+     * @throws GoddbException if exception
      */
-    public static DB open(Context ctx, String dbName, Kryo... kryo) throws SnappydbException {
+    public static DB open(Context ctx, String dbName, Kryo... kryo) throws GoddbException {
         return open(ctx.getFilesDir().getAbsolutePath(), dbName, kryo);
     }
 
@@ -71,9 +71,9 @@ public class DBFactory {
      * @param ctx context
      * @param kryo optional custom instance of {@link com.esotericsoftware.kryo.Kryo} serializer
      * @return Database handler {@link DB}
-     * @throws SnappydbException
+     * @throws GoddbException if exception
      */
-    public static DB open(Context ctx, Kryo... kryo) throws SnappydbException {
+    public static DB open(Context ctx, Kryo... kryo) throws GoddbException {
         return open(ctx, DEFAULT_DBNAME, kryo);
     }
 

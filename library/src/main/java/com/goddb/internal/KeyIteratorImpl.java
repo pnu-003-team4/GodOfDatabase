@@ -2,8 +2,8 @@ package com.goddb.internal;
 
 import android.util.Log;
 
+import com.goddb.GoddbException;
 import com.goddb.KeyIterator;
-import com.goddb.SnappydbException;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -38,7 +38,7 @@ class KeyIteratorImpl implements KeyIterator {
     @Override
     protected void finalize() throws Throwable {
         if (ptr != 0) {
-            Log.w("KeyIterator", "SnappyDB iterators must be closed");
+            Log.w("KeyIterator", "GodDB iterators must be closed");
             close();
         }
         super.finalize();
@@ -61,7 +61,7 @@ class KeyIteratorImpl implements KeyIterator {
                 close();
             }
             return keys;
-        } catch (SnappydbException e) {
+        } catch (GoddbException e) {
             throw new RuntimeException(e);
         }
     }

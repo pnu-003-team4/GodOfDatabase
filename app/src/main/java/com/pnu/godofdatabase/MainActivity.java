@@ -1,11 +1,11 @@
 package com.pnu.godofdatabase;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.goddb.DB;
 import com.goddb.DBFactory;
-import com.goddb.SnappydbException;
+import com.goddb.GoddbException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,9 +31,10 @@ public class MainActivity extends AppCompatActivity {
             godDB.put("/Korea/Busan/University/PNU", student);
             godDB.get("/Korea/Busan/*/PNU", null);
 
-            godDB.close();
+            godDB.del("Korea/Busan/University/PNU", "name==ParkJeongHwan");
 
-        } catch (SnappydbException e) {
+            godDB.close();
+        } catch (GoddbException e) {
             e.printStackTrace();
         }
     }

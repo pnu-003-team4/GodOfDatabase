@@ -11,12 +11,12 @@ import java.io.File;
 /**
  * Created by Nabil on 12/06/14.
  */
-public class SnappyDB {
+public class GodDB {
     private static volatile DB singleton = null;
 
-    public static DB with(Context context) throws SnappydbException {
+    public static DB with(Context context) throws GoddbException {
         if (singleton == null || !singleton.isOpen()) {//add check if DB is closed recreate (open) a new db (isOpen)
-            synchronized (SnappyDB.class) {
+            synchronized (GodDB.class) {
                 // double-checked locking.
                 // while we were waiting for the lock, another thread may have instantiated the instance
                 if (singleton == null || !singleton.isOpen()) {
@@ -87,7 +87,7 @@ public class SnappyDB {
         /**
          * Create the {@link DB} instance.
          */
-        public DB build() throws SnappydbException {
+        public DB build() throws GoddbException {
             if (null != dir) {
                 File f = new File(dir);
                 if((f.mkdirs() || f.isDirectory()) && f.canWrite()) {

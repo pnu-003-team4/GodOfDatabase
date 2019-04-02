@@ -16,15 +16,15 @@
 
 package com.goddb;
 
-public class SnappydbException extends Exception {
+public class GoddbException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public SnappydbException() {
+    public GoddbException() {
         super();
     }
 
-    public SnappydbException(String detailMessage) {
+    public GoddbException(String detailMessage) {
         super(detailMessage);
     }
 }

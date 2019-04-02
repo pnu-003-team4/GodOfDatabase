@@ -16,12 +16,12 @@
 
 
 #include <jni.h>
-#include <string.h>
+#include <cstring>
 #include <sstream>
 #include <iomanip>
 #include <vector>
-#include <stdlib.h>
-#include "com_snappydb_internal_DBImpl.h"
+#include <cstdlib>
+#include "com_goddb_internal_DBImpl.h"
 #include "leveldb/db.h"
 #include "leveldb/options.h"
 #include "debug.h";
@@ -37,13 +37,13 @@ char* databasePath;
 
 void throwException(JNIEnv *env, const char* msg) {
 	LOGE("throwException %s", msg);
-	jclass snappydbExceptionClazz = env->FindClass("com/snappydb/SnappydbException");
-	if ( NULL == snappydbExceptionClazz) {
+    jclass goddbExceptionClazz = env->FindClass("com/goddb/GoddbException");
+    if (NULL == goddbExceptionClazz) {
 		// FindClass already threw an exception such as NoClassDefFoundError.
 		env->Throw(env->ExceptionOccurred());
 		return;
 	}
-	 env->ThrowNew(snappydbExceptionClazz, msg);
+    env->ThrowNew(goddbExceptionClazz, msg);
 }
 
 //***********************
@@ -71,8 +71,8 @@ void JNI_OnUnload(JavaVM *vm, void *reserved) {
 	databasePath = NULL;
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1open(JNIEnv * env,
-		jobject thiz, jstring dbpath) {
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1open(JNIEnv *env,
+                                                               jobject thiz, jstring dbpath) {
 
 	LOGI("Opening database");
 
@@ -113,8 +113,8 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1open(JNIEnv * env,
 	}
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1close(JNIEnv *env,
-		jobject thiz) {
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1close(JNIEnv *env,
+                                                                jobject thiz) {
 
 	LOGI("Closing database %s", databasePath);
 
@@ -130,7 +130,7 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1close(JNIEnv *env,
 }
 
 
-JNIEXPORT jboolean JNICALL Java_com_snappydb_internal_DBImpl__1_1isOpen
+JNIEXPORT jboolean JNICALL Java_com_goddb_internal_DBImpl__1_1isOpen
   (JNIEnv * env, jobject thiz) {
     LOGI("Is database open");
 
@@ -141,7 +141,7 @@ JNIEXPORT jboolean JNICALL Java_com_snappydb_internal_DBImpl__1_1isOpen
     }
   }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1destroy(
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1destroy(
 		JNIEnv * env, jobject thiz, jstring dbpath) {
 
 	LOGI("Destroying database %s", databasePath);
@@ -176,8 +176,8 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1destroy(
 //*      CREATE
 //***********************
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1del(JNIEnv *env,
-		jobject thiz, jstring jKey) {
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1del(JNIEnv *env,
+                                                              jobject thiz, jstring jKey) {
 
 	LOGI("Deleting entry");
 
@@ -200,7 +200,8 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1del(JNIEnv *env,
 	}
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1put__Ljava_lang_String_2Ljava_lang_String_2(
+JNIEXPORT void JNICALL
+Java_com_goddb_internal_DBImpl__1_1put__Ljava_lang_String_2Ljava_lang_String_2(
 		JNIEnv *env, jobject thiz, jstring jKey, jstring jValue) {
 
 	LOGI("Putting a String ");
@@ -227,7 +228,7 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1put__Ljava_lang_Str
 	}
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1put__Ljava_lang_String_2_3B(
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1put__Ljava_lang_String_2_3B(
 		JNIEnv *env, jobject thiz, jstring jKey, jbyteArray arr) { //TODO add control to check if database is open, error otherwise
 
 	LOGI("Putting a Serializable ");
@@ -262,7 +263,7 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1put__Ljava_lang_Str
 	}
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putLong(
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1putLong(
 		JNIEnv *env, jobject thiz, jstring jKey, jlong jVal) {
 
 	LOGI("Putting a long ");
@@ -288,8 +289,9 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putLong(
 	}
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putInt(JNIEnv *env,
-		jobject thiz, jstring jKey, jint jVal) {
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1putInt(JNIEnv *env,
+                                                                 jobject thiz, jstring jKey,
+                                                                 jint jVal) {
 
 	LOGI("Putting an int");
 
@@ -314,7 +316,7 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putInt(JNIEnv *env,
 	}
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putShort(
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1putShort(
 		JNIEnv *env, jobject thiz, jstring jKey, jshort jValue) {
 
 	LOGI("Putting a short");
@@ -340,7 +342,7 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putShort(
 	}
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putBoolean(
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1putBoolean(
 		JNIEnv *env, jobject thiz, jstring jKey, jboolean jValue) {
 
 	LOGI("Putting a boolean");
@@ -366,7 +368,7 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putBoolean(
 	}
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putDouble(
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1putDouble(
 		JNIEnv *env, jobject thiz, jstring jKey, jdouble jVal) {
 
 	LOGI("Putting a double");
@@ -394,7 +396,7 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putDouble(
 	}
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putFloat(
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1putFloat(
 		JNIEnv *env, jobject thiz, jstring jKey, jfloat jValue) {
 
 	LOGI("Putting a float");
@@ -426,8 +428,8 @@ JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1putFloat(
 //*      RETRIEVE
 //***********************
 
-JNIEXPORT jlong JNICALL Java_com_snappydb_internal_DBImpl__1_1getLong(JNIEnv *env,
-		jobject thiz, jstring jKey) {
+JNIEXPORT jlong JNICALL Java_com_goddb_internal_DBImpl__1_1getLong(JNIEnv *env,
+                                                                   jobject thiz, jstring jKey) {
 
 	LOGI("Getting a long");
 
@@ -470,8 +472,8 @@ JNIEXPORT jlong JNICALL Java_com_snappydb_internal_DBImpl__1_1getLong(JNIEnv *en
 	}
 }
 
-JNIEXPORT jint JNICALL Java_com_snappydb_internal_DBImpl__1_1getInt(JNIEnv *env,
-		jobject thiz, jstring jKey) {
+JNIEXPORT jint JNICALL Java_com_goddb_internal_DBImpl__1_1getInt(JNIEnv *env,
+                                                                 jobject thiz, jstring jKey) {
 
 	LOGI("Getting an int");
 
@@ -511,7 +513,7 @@ JNIEXPORT jint JNICALL Java_com_snappydb_internal_DBImpl__1_1getInt(JNIEnv *env,
 	}
 }
 
-JNIEXPORT jdouble JNICALL Java_com_snappydb_internal_DBImpl__1_1getDouble(
+JNIEXPORT jdouble JNICALL Java_com_goddb_internal_DBImpl__1_1getDouble(
 		JNIEnv *env, jobject thiz, jstring jKey) {
 
 	LOGI("Getting a double");
@@ -530,7 +532,8 @@ JNIEXPORT jdouble JNICALL Java_com_snappydb_internal_DBImpl__1_1getDouble(
 
 
 	if (status.ok()) {// we can't use data.length() here to make sure of the size of float since it was encoded as string
-		double d = atof(data.c_str());
+        char *stopstring;
+        double d = strtod(data.c_str(), &stopstring);
 		LOGI("Successfully reading a double");
 		return d;
 
@@ -541,8 +544,8 @@ JNIEXPORT jdouble JNICALL Java_com_snappydb_internal_DBImpl__1_1getDouble(
 	}
 }
 
-JNIEXPORT jshort JNICALL Java_com_snappydb_internal_DBImpl__1_1getShort(JNIEnv *env,
-		jobject thiz, jstring jKey) {
+JNIEXPORT jshort JNICALL Java_com_goddb_internal_DBImpl__1_1getShort(JNIEnv *env,
+                                                                     jobject thiz, jstring jKey) {
 
 	LOGI("Getting a short");
 
@@ -580,7 +583,7 @@ JNIEXPORT jshort JNICALL Java_com_snappydb_internal_DBImpl__1_1getShort(JNIEnv *
 	}
 }
 
-JNIEXPORT jboolean JNICALL Java_com_snappydb_internal_DBImpl__1_1getBoolean(
+JNIEXPORT jboolean JNICALL Java_com_goddb_internal_DBImpl__1_1getBoolean(
 		JNIEnv *env, jobject thiz, jstring jKey) {
 
 	LOGI("Getting a boolean");
@@ -599,7 +602,7 @@ JNIEXPORT jboolean JNICALL Java_com_snappydb_internal_DBImpl__1_1getBoolean(
 	if (status.ok()) {
 		if (1 == data.length()) {
 			LOGI("Successfully reading a boolean");
-			return data.data()[0];
+            return (jboolean) data[0];
 
 		} else {
 			throwException(env, "Failed to get a boolean");
@@ -614,8 +617,8 @@ JNIEXPORT jboolean JNICALL Java_com_snappydb_internal_DBImpl__1_1getBoolean(
 	}
 }
 
-JNIEXPORT jstring JNICALL Java_com_snappydb_internal_DBImpl__1_1get(JNIEnv *env,
-		jobject thiz, jstring jKey) {
+JNIEXPORT jstring JNICALL Java_com_goddb_internal_DBImpl__1_1get(JNIEnv *env,
+                                                                 jobject thiz, jstring jKey) {
 
 	LOGI("Getting a String");
 
@@ -643,7 +646,7 @@ JNIEXPORT jstring JNICALL Java_com_snappydb_internal_DBImpl__1_1get(JNIEnv *env,
 	}
 }
 
-JNIEXPORT jbyteArray JNICALL Java_com_snappydb_internal_DBImpl__1_1getBytes(
+JNIEXPORT jbyteArray JNICALL Java_com_goddb_internal_DBImpl__1_1getBytes(
 		JNIEnv *env, jobject thiz, jstring jKey) {
 
 	LOGI("Getting a byte array");
@@ -676,8 +679,8 @@ JNIEXPORT jbyteArray JNICALL Java_com_snappydb_internal_DBImpl__1_1getBytes(
 	}
 }
 
-JNIEXPORT jfloat JNICALL Java_com_snappydb_internal_DBImpl__1_1getFloat(JNIEnv *env,
-		jobject thiz, jstring jKey) {
+JNIEXPORT jfloat JNICALL Java_com_goddb_internal_DBImpl__1_1getFloat(JNIEnv *env,
+                                                                     jobject thiz, jstring jKey) {
 
 	LOGI("Getting a float");
 
@@ -694,7 +697,8 @@ JNIEXPORT jfloat JNICALL Java_com_snappydb_internal_DBImpl__1_1getFloat(JNIEnv *
 
 	if (status.ok()) {// we can't use data.length() here to make sure of the size of float since it was encoded as string
 			LOGI("Successfully reading a float");
-			float f = atof(data.c_str());
+        char *endstring;
+        float f = strtof(data.c_str(), &endstring);
 			return f;
 
 	} else {
@@ -709,7 +713,7 @@ JNIEXPORT jfloat JNICALL Java_com_snappydb_internal_DBImpl__1_1getFloat(JNIEnv *
 //*      KEYS OPERATIONS
 //****************************
 
-JNIEXPORT jboolean JNICALL Java_com_snappydb_internal_DBImpl__1_1exists
+JNIEXPORT jboolean JNICALL Java_com_goddb_internal_DBImpl__1_1exists
   (JNIEnv *env, jobject thiz, jstring jKey) {
 
 	LOGI("does key exists");
@@ -741,7 +745,7 @@ JNIEXPORT jboolean JNICALL Java_com_snappydb_internal_DBImpl__1_1exists
 }
 
 
-JNIEXPORT jobjectArray JNICALL Java_com_snappydb_internal_DBImpl__1_1findKeys
+JNIEXPORT jobjectArray JNICALL Java_com_goddb_internal_DBImpl__1_1findKeys
   (JNIEnv *env, jobject thiz, jstring jPrefix, jint offset, jint limit) {
 
 	LOGI("find keys");
@@ -766,9 +770,9 @@ JNIEXPORT jobjectArray JNICALL Java_com_snappydb_internal_DBImpl__1_1findKeys
 	}
 
 	std::vector<std::string>::size_type n = result.size();
-	jobjectArray ret= (jobjectArray)env->NewObjectArray(n,
-		         env->FindClass("java/lang/String"),
-		         NULL);
+    jobjectArray ret = env->NewObjectArray(n,
+                                           env->FindClass("java/lang/String"),
+                                           NULL);
 
 	jstring str;
 	for (int i=0; i<n ; i++) {
@@ -783,7 +787,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_snappydb_internal_DBImpl__1_1findKeys
 	return ret;
 }
 
-JNIEXPORT jint JNICALL Java_com_snappydb_internal_DBImpl__1_1countKeys
+JNIEXPORT jint JNICALL Java_com_goddb_internal_DBImpl__1_1countKeys
   (JNIEnv *env, jobject thiz, jstring jPrefix) {
 
 	LOGI("count keys");
@@ -809,7 +813,7 @@ JNIEXPORT jint JNICALL Java_com_snappydb_internal_DBImpl__1_1countKeys
     return count;
 }
 
-JNIEXPORT jobjectArray JNICALL Java_com_snappydb_internal_DBImpl__1_1findKeysBetween
+JNIEXPORT jobjectArray JNICALL Java_com_goddb_internal_DBImpl__1_1findKeysBetween
   (JNIEnv *env, jobject thiz, jstring jStartPrefix, jstring jEndPrefix, jint offset, jint limit) {
 
 	LOGI("find keys between range");
@@ -853,7 +857,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_snappydb_internal_DBImpl__1_1findKeysBet
 	return ret;
 }
 
-JNIEXPORT jint JNICALL Java_com_snappydb_internal_DBImpl__1_1countKeysBetween
+JNIEXPORT jint JNICALL Java_com_goddb_internal_DBImpl__1_1countKeysBetween
   (JNIEnv *env, jobject thiz, jstring jStartPrefix, jstring jEndPrefix) {
 
 	LOGI("count keys between range");
@@ -881,7 +885,7 @@ JNIEXPORT jint JNICALL Java_com_snappydb_internal_DBImpl__1_1countKeysBetween
 	return count;
 }
 
-JNIEXPORT jlong JNICALL Java_com_snappydb_internal_DBImpl__1_1findKeysIterator
+JNIEXPORT jlong JNICALL Java_com_goddb_internal_DBImpl__1_1findKeysIterator
   (JNIEnv *env, jobject thiz, jstring jPrefix, jboolean reverse) {
 
 	LOGI("find keys iterator");
@@ -922,7 +926,7 @@ JNIEXPORT jlong JNICALL Java_com_snappydb_internal_DBImpl__1_1findKeysIterator
 	return (jlong) it;
 }
 
-JNIEXPORT jobjectArray JNICALL Java_com_snappydb_internal_DBImpl__1_1iteratorNextArray
+JNIEXPORT jobjectArray JNICALL Java_com_goddb_internal_DBImpl__1_1iteratorNextArray
   (JNIEnv *env, jobject thiz, jlong ptr, jstring jEndPrefix, jboolean reverse, jint max) {
 
 	LOGI("iterator next array");
@@ -972,7 +976,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_snappydb_internal_DBImpl__1_1iteratorNex
 	return ret;
 }
 
-JNIEXPORT jboolean JNICALL Java_com_snappydb_internal_DBImpl__1_1iteratorIsValid
+JNIEXPORT jboolean JNICALL Java_com_goddb_internal_DBImpl__1_1iteratorIsValid
   (JNIEnv *env, jobject thiz, jlong ptr, jstring jEndPrefix, jboolean reverse) {
 
 	LOGI("iterator is valid");
@@ -980,20 +984,20 @@ JNIEXPORT jboolean JNICALL Java_com_snappydb_internal_DBImpl__1_1iteratorIsValid
 	leveldb::Iterator* it = (leveldb::Iterator*) ptr;
 
 	if (!it->Valid()) {
-		return false;
+        return (jboolean) false;
 	}
 	if (jEndPrefix) {
 		const char* endPrefix = env->GetStringUTFChars(jEndPrefix, 0);
 		if ((!reverse && it->key().compare(endPrefix) > 0) || (reverse && it->key().compare(endPrefix) < 0)) {
 			env->ReleaseStringUTFChars(jEndPrefix, endPrefix);
-			return false;
+            return (jboolean) false;
 		}
 		env->ReleaseStringUTFChars(jEndPrefix, endPrefix);
 	}
-	return true;
+    return (jboolean) true;
 }
 
-JNIEXPORT void JNICALL Java_com_snappydb_internal_DBImpl__1_1iteratorClose
+JNIEXPORT void JNICALL Java_com_goddb_internal_DBImpl__1_1iteratorClose
   (JNIEnv *env, jobject thiz, jlong ptr) {
 
 	LOGI("iterator delete");
