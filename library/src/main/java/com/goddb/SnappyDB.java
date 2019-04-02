@@ -1,4 +1,4 @@
-package com.snappydb;
+package com.goddb;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -28,7 +28,7 @@ public class SnappyDB {
     }
 
     /**
-     * Fluent API for creating {@link com.snappydb.DB} instances.
+     * Fluent API for creating {@link DB} instances.
      */
     public static class Builder {
         private final Context context;
@@ -46,7 +46,7 @@ public class SnappyDB {
         private Kryo kryo;
 
         /**
-         * Start building a new {@link com.snappydb.DB} instance.
+         * Start building a new {@link DB} instance.
          */
         public Builder(Context context) {
             if (null == context) {
@@ -85,7 +85,7 @@ public class SnappyDB {
         }
 
         /**
-         * Create the {@link com.snappydb.DB} instance.
+         * Create the {@link DB} instance.
          */
         public DB build() throws SnappydbException {
             if (null != dir) {

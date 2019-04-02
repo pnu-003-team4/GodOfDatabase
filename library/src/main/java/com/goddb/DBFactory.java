@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.snappydb;
+package com.goddb;
 
 import java.io.File;
 
 import android.content.Context;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.snappydb.internal.DBImpl;
+import com.goddb.internal.DBImpl;
 
 public class DBFactory {
     private final static String DEFAULT_DBNAME = "snappydb";
@@ -32,7 +32,7 @@ public class DBFactory {
      * @param folder the folder of the db file will be stored
      * @param dbName database file name
      * @param kryo optional custom instance of {@link com.esotericsoftware.kryo.Kryo} serializer
-     * @return Database handler {@link com.snappydb.DB}
+     * @return Database handler {@link DB}
      * @throws SnappydbException
      */
     public static DB open(String folder, String dbName, Kryo... kryo) throws SnappydbException {
@@ -45,7 +45,7 @@ public class DBFactory {
      *
      * @param folder the folder of the db file will be stored
      * @param kryo optional custom instance of {@link com.esotericsoftware.kryo.Kryo} serializer
-     * @return Database handler {@link com.snappydb.DB}
+     * @return Database handler {@link DB}
      * @throws SnappydbException
      */
     public static DB open(String folder, Kryo... kryo) throws SnappydbException {
@@ -58,7 +58,7 @@ public class DBFactory {
      * @param ctx    context
      * @param dbName database file name
      * @param kryo optional custom instance of {@link com.esotericsoftware.kryo.Kryo} serializer
-     * @return Database handler {@link com.snappydb.DB}
+     * @return Database handler {@link DB}
      * @throws SnappydbException
      */
     public static DB open(Context ctx, String dbName, Kryo... kryo) throws SnappydbException {
@@ -66,11 +66,11 @@ public class DBFactory {
     }
 
     /**
-     * Return the Database with the default name {@link com.snappydb.DBFactory#DEFAULT_DBNAME}, if it doesn't exist create it
+     * Return the Database with the default name {@link DBFactory#DEFAULT_DBNAME}, if it doesn't exist create it
      *
      * @param ctx context
      * @param kryo optional custom instance of {@link com.esotericsoftware.kryo.Kryo} serializer
-     * @return Database handler {@link com.snappydb.DB}
+     * @return Database handler {@link DB}
      * @throws SnappydbException
      */
     public static DB open(Context ctx, Kryo... kryo) throws SnappydbException {

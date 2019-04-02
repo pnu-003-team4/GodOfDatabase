@@ -1,4 +1,4 @@
-package com.snappydb;
+package com.goddb;
 
 import java.io.Closeable;
 

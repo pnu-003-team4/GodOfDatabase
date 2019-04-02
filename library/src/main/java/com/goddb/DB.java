@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.snappydb;
+package com.goddb;
 
 import com.esotericsoftware.kryo.Kryo;
 

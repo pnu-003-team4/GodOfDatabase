@@ -3,9 +3,9 @@ package com.pnu.godofdatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.snappydb.DB;
-import com.snappydb.DBFactory;
-import com.snappydb.SnappydbException;
+import com.goddb.DB;
+import com.goddb.DBFactory;
+import com.goddb.SnappydbException;
 
 import org.json.JSONException;
 import org.json.JSONObject;

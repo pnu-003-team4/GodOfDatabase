@@ -1,9 +1,9 @@
-package com.snappydb.internal;
+package com.goddb.internal;
 
 import android.util.Log;
 
-import com.snappydb.KeyIterator;
-import com.snappydb.SnappydbException;
+import com.goddb.KeyIterator;
+import com.goddb.SnappydbException;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

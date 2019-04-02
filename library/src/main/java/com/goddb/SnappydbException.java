@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.snappydb;
+package com.goddb;
 
 public class SnappydbException extends Exception {
 

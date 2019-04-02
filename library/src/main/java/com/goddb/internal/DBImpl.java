@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.snappydb.internal;
+package com.goddb.internal;
 
 import android.text.TextUtils;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.snappydb.DB;
-import com.snappydb.KeyIterator;
-import com.snappydb.SnappydbException;
+import com.goddb.SnappydbException;
+import com.goddb.DB;
+import com.goddb.KeyIterator;
 
 import org.json.JSONObject;
 
