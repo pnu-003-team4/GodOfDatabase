@@ -93,25 +93,27 @@ public class MappingTable {
         return key;
     }
 
-    public int[] getChildsKey(String path) {
-        int[] a = {1,2};
-        return a;
-    }
-
     public int[] getChildsKey(int key) {
         int[] a = {1,2};
         return a;
     }
-
-    public int getParentKey(String path) {
-        int a = 1;
+    /*
+    public int[] getChildsKey(String path) {
+        int[] a = {1,2};
         return a;
     }
+    */
 
     public int getParentKey(int key) {
         int a = 1;
         return a;
     }
+    /*
+    public int getParentKey(String path) {
+        int a = 1;
+        return a;
+    }
+    */
 
     public boolean isPath(String path) {
         return getKey(path) >= 0;
