@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         try {
-            DB snappydb = DBFactory.open("DB"); //create or open an existing database using the default name
+            DB godDB = DBFactory.open("DB"); //create or open an existing database using the default name
 
             JSONObject student = new JSONObject();
 
@@ -28,10 +28,10 @@ public class MainActivity extends AppCompatActivity {
                 e1.printStackTrace();
             }
 
-            snappydb.put("/Korea/Busan/University/PNU", student);
-            snappydb.get("/Korea/Busan/*/PNU", null);
+            godDB.put("/Korea/Busan/University/PNU", student);
+            godDB.get("/Korea/Busan/*/PNU", null);
 
-            snappydb.close();
+            godDB.close();
 
         } catch (SnappydbException e) {
             e.printStackTrace();
