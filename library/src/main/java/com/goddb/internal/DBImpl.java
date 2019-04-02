@@ -82,7 +82,7 @@ public class DBImpl implements DB {
     @Override
     public void put (String path, JSONObject[] objects) throws SnappydbException {
         /*
-         * TODO : path가 이미 존재하는지 확인하고, 존재한다면 해당 path를 업데이트 존재하지 않는다면 새로 생성
+         * TODO : path가 이미 존재하는지 확인하고, 존재한다면 해당 path를 업데이트 존재하지 않는다면 새로 생성.
          */
     }
 
