@@ -8,3 +8,7 @@
 /library/.externalNativeBuild
 /library/build
 /app/build
+/.idea/caches/build_file_checksums.ser
+/library/build/outputs/logs
+/.idea/misc.xml
+/.idea/codeStyles/Project.xml
