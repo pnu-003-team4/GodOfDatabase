@@ -1,39 +1,39 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
+ADDED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:1-4:12
 	package
-		ADDED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:11-30
-		INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+		ADDED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:11-30
+		INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		ADDED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-		INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+		INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
+		ADDED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:1-4:12
+		INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
+		ADDED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:1-4:12
 	android:versionCode
-		INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		ADDED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-		INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+		INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
+		ADDED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:2:1-4:12
+		INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
 application
-ADDED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:3:10-25
+ADDED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml:3:10-25
 uses-sdk
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
+INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		ADDED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+		INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
+		ADDED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		ADDED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		INJECTED from /home/suho/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+		INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
+		ADDED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\flove\Desktop\andro\GodOfDatabase\library\src\main\AndroidManifest.xml
