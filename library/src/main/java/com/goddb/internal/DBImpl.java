@@ -80,6 +80,10 @@ public class DBImpl implements DB {
          */
         checkArgs(path, object);
 
+        if (path.contains("*") || path.contains("#")) {
+            //error
+        }
+
         __put(path, object.toString());
     }
 
@@ -89,6 +93,10 @@ public class DBImpl implements DB {
          * TODO : path가 이미 존재하는지 확인하고, 존재한다면 해당 path를 업데이트 존재하지 않는다면 새로 생성.
          */
         checkArgs(path, objects);
+
+        if (path.contains("*") || path.contains("#")) {
+            //error
+        }
 
         __put(path, objects.toString());
     }
