@@ -11,6 +11,11 @@ import java.util.regex.Pattern;
 public class MappingTable implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    // PathInfo: mapping table element class
+    // key: 현재 directory(path) key
+    // name: 현재 directory 이름
+    // parent: 상위 directory key
+    // childs: 하위 directory keys
     class PathInfo {
         private final int key;
         private final String name;
@@ -30,7 +35,6 @@ public class MappingTable implements Serializable {
         @Override
         public String toString() {
             String str = String.format("");
-
             return str;
         }
     }
@@ -48,7 +52,7 @@ public class MappingTable implements Serializable {
      * @param fileName
      */
     public MappingTable(String fileName) {
-        //*******//
+        //
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
             table = (ArrayList<PathInfo>) ois.readObject();
@@ -144,20 +148,24 @@ public class MappingTable implements Serializable {
      * @return child keys
      */
     public int[] getChildKeys(int key) {
-        //
+        /**
+         * 현 path의 key로 child keys 얻기
+         *
+         * @param key
+         * @return child keys
+         */
         int[] a = {1,2};
         return a;
     }
-    /**
-     * 현 path의 key로 parent key 얻기
-     *
-     * @param key
-     * @return parent key
-     */
+
     public int getParentKey(int key) {
-        //
-        int a = 1;
-        return a;
+        /**
+         * TODO : 현 path의 key로 parent key 얻기
+         *
+         * @param key
+         * @return parent key
+         */
+        return 1;
     }
 
     /*
