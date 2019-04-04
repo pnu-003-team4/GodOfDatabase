@@ -48,7 +48,7 @@ public class MappingTable implements Serializable {
      * @param fileName
      */
     public MappingTable(String fileName) {
-        //TODO
+        //*******//
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
             table = (ArrayList<PathInfo>) ois.readObject();
@@ -65,7 +65,7 @@ public class MappingTable implements Serializable {
      * @param fileName
      */
     public void saveToFile(String fileName) {
-        //TODO
+        //************//
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
             oos.writeObject(table);
@@ -144,7 +144,7 @@ public class MappingTable implements Serializable {
      * @return child keys
      */
     public int[] getChildKeys(int key) {
-        // TODO
+        //
         int[] a = {1,2};
         return a;
     }
@@ -155,7 +155,7 @@ public class MappingTable implements Serializable {
      * @return parent key
      */
     public int getParentKey(int key) {
-        // TODO
+        //
         int a = 1;
         return a;
     }
