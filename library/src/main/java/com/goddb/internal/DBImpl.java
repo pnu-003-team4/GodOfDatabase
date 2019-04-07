@@ -24,6 +24,7 @@ import com.goddb.GoddbException;
 import com.goddb.KeyIterator;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DBImpl implements DB {
@@ -75,30 +76,40 @@ public class DBImpl implements DB {
     // ***********************
     @Override
     public void put(String path, JSONObject object) throws GoddbException {
-        /*
-         * TODO : path가 이미 존재하는지 확인하고, 존재한다면 해당 path를 업데이트 존재하지 않는다면 새로 생성
-         */
-        checkArgs(path, object);
+        checkArgs(path, object); // path, object가 null 인지 확인
 
-        if (path.contains("*") || path.contains("#")) {
-            //error
+        if (!exists(path)) {
+            JSONArray newArray = new JSONArray();
+            newArray.put(object);
+            __put(path, newArray.toString());
+        } else {
+            try {
+                JSONArray oldArray = new JSONArray(__get(path));
+                oldArray.put(object);
+                __put(path, oldArray.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-
-        __put(path, object.toString());
     }
 
     @Override
     public void put(String path, JSONArray objects) throws GoddbException {
-        /*
-         * TODO : path가 이미 존재하는지 확인하고, 존재한다면 해당 path를 업데이트 존재하지 않는다면 새로 생성.
-         */
         checkArgs(path, objects);
 
-        if (path.contains("*") || path.contains("#")) {
-            //error
+        if (!exists(path)) {
+            JSONArray newArray = new JSONArray();
+            newArray.put(objects);
+            __put(path, newArray.toString());
+        } else {
+            try {
+                JSONArray oldArray = new JSONArray(__get(path));
+                oldArray.put(objects);
+                __put(path, oldArray.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-
-        __put(path, objects.toString());
     }
 
     // ***********************
@@ -109,6 +120,16 @@ public class DBImpl implements DB {
     public void del(String path, String condition) throws GoddbException {
         /*
          * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 오브젝트들 제거
+         * TODO : wlidcard는 Wildcard.java의 extractWildcard()를 활용한다. condition은 Condition.java의 extractCondtion()을 활용한다.
+         */
+
+        __del(path);
+    }
+
+    @Override
+    public void deldir(String path, String condition) throws GoddbException {
+        /*
+         * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 path들 제거
          * TODO : wlidcard는 Wildcard.java의 extractWildcard()를 활용한다. condition은 Condition.java의 extractCondtion()을 활용한다.
          */
 
