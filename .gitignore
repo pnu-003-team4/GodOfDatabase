@@ -270,7 +270,8 @@ Temporary Items
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
 
-
 .idea/caches/build_file_checksums.ser
 library/build/intermediates/incremental/packageDebugResources/compile-file-map.properties
 library/build/intermediates/incremental/packageDebugResources/merger.xml
+.idea/codeStyles/Project.xml
+library/build/outputs/logs/manifest-merger-debug-report.txt

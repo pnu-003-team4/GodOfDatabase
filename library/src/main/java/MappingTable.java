@@ -1,12 +1,25 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
+public class MappingTable implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-public class MappingTable {
+    // PathInfo: mapping table element class
+    // key: 현재 directory(path) key
+    // name: 현재 directory 이름
+    // parent: 상위 directory key
+    // childs: 하위 directory keys
     class PathInfo {
-        private int key;
-        private String name;
-        private int parent;
+        private final int key;
+        private final String name;
+        private final int parent;
         private ArrayList<Integer> childs;
 
         public PathInfo(int key, String name, int parent ) {
@@ -19,6 +32,11 @@ public class MappingTable {
             childs.add(child);
             return true;
         }
+        @Override
+        public String toString() {
+            String str = String.format("");
+            return str;
+        }
     }
     private ArrayList<PathInfo> table;
 
@@ -28,8 +46,37 @@ public class MappingTable {
     public MappingTable(MappingTable mt) {
         table = mt.table;	//copy...?
     }
-    public MappingTable(String filename) {
-
+    /**
+     * read file
+     *
+     * @param fileName
+     */
+    public MappingTable(String fileName) {
+        //
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+            table = (ArrayList<PathInfo>) ois.readObject();
+            ois.close();
+        } catch (IOException ex) {
+            //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    /**
+     * save mapping table to file
+     *
+     * @param fileName
+     */
+    public void saveToFile(String fileName) {
+        //************//
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+            oos.writeObject(table);
+            oos.close();
+        } catch (IOException ex) {
+            //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -93,32 +140,53 @@ public class MappingTable {
         return key;
     }
 
-    public int[] getChildsKey(int key) {
+
+    /**
+     * 현 path의 key로 child keys 얻기
+     *
+     * @param key
+     * @return child keys
+     */
+    public int[] getChildKeys(int key) {
+        /**
+         * 현 path의 key로 child keys 얻기
+         *
+         * @param key
+         * @return child keys
+         */
         int[] a = {1,2};
         return a;
     }
-    /*
-    public int[] getChildsKey(String path) {
-        int[] a = {1,2};
-        return a;
-    }
-    */
 
     public int getParentKey(int key) {
-        int a = 1;
-        return a;
+        /**
+         * TODO : 현 path의 key로 parent key 얻기
+         *
+         * @param key
+         * @return parent key
+         */
+        return 1;
     }
+
+    /*
+    public int[] getChildKeys(String path) {
+    	int[] a = {1,2};
+    	return a;
+    }
+     */
     /*
     public int getParentKey(String path) {
-        int a = 1;
-        return a;
+    	int a = 1;
+    	return a;
     }
     */
 
-    public boolean isPath(String path) {
+
+    public boolean PathExists(String path) {
         return getKey(path) >= 0;
     }
-/*
+
+    /*
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -130,5 +198,5 @@ public class MappingTable {
         System.out.println(name[1]);
         System.out.print(N);
     }
- */
+    */
 }
