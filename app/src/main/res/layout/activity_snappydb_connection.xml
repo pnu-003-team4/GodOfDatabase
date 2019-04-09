@@ -26,6 +26,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btn_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:text="수정"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_update"
+        app:layout_constraintStart_toEndOf="@+id/edit_update" />
+
     <EditText
         android:id="@+id/edit_select"
         android:layout_width="wrap_content"
@@ -89,13 +98,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_select" />
 
-    <Button
-        android:id="@+id/btn_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:text="수정"
-        app:layout_constraintBottom_toBottomOf="@+id/edit_update"
-        app:layout_constraintStart_toEndOf="@+id/edit_update" />
+
 
 </android.support.constraint.ConstraintLayout>
