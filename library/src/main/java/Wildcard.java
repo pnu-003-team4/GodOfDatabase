@@ -5,8 +5,11 @@ public class Wildcard {
     public static String extractWildcard(List minjae, String path) {
         // 변수
         path = "Korea/Pusan/Haeundae/*";
+        String[] and = new String[10];
         String wild = "";
         String WildComponent = "";
+        String WildComponent2 = "";
+
         boolean IsWild = false;
 
         int pathlength = path.length();
@@ -27,21 +30,17 @@ public class Wildcard {
 
         if (IsWild) {
             System.out.print(wild);
-            if (wild == "#") {
+            if (wild.equals("#")) {
                 WildComponent = path.substring(wildlocation, pathlength);
                 // TODO : 리스트를 전달 받고 WildComponent 에 맞는 키, 밸류 리턴
             }
-            if (wild == "*") {
+            if (wild.equals("*")) {
                 // TODO : 리스트를 전달 받고 그 하위에있는 키, 밸류를 모두 표출.
             }
-            if (wild == "&") {
-                int i = 0;
-                int zzez = 0;
-                while (path.charAt(wildlocation - i) == '/') {
-                    i--;
-                    zzez = wildlocation - i;
-                }
-                WildComponent = path.substring(zzez, wildlocation);
+            if (wild.equals("&")) {
+                WildComponent = path.substring(0, wildlocation);
+                WildComponent2 = path.substring(wildlocation + 1, pathlength);
+
                 //TODO : 리스트를 전달 받고 다음 & 값을 계속 받아오게 함
             }
         }
