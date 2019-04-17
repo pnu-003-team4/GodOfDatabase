@@ -173,7 +173,7 @@ public class MappingTable implements Serializable {
     public String toString() {
         String str = "";
         for( PathInfo p : table) {
-            str = str + p + "\n";
+            str += p + "\n";
         }
         return str;
     }
