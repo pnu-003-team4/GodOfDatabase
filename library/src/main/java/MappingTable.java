@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -28,7 +30,7 @@ public class MappingTable implements Serializable {
             this.key = key;
             this.name = name;
             this.parent = parent;
-            this.childs = new ArrayList<Integer>();
+            this.childs = new ArrayList<>();
         }
         public boolean addChild(int child) {
             childs.add(child);
@@ -36,15 +38,13 @@ public class MappingTable implements Serializable {
         }
         @Override
         public String toString() {
-            String str = String.format("key: %d,\tname: %-20s, parent: %d,\tchilds: %s", key, name, parent, childs);
-
-            return str;
+            return String.format(Locale.US, "key: %d,\tname: %-20s, parent: %d,\tchilds: %s", key, name, parent, childs);
         }
     }
     private ArrayList<PathInfo> table;
 
     public MappingTable() {
-        table = new ArrayList<PathInfo>();
+        table = new ArrayList<>();
         table.add(new PathInfo(0,"/",-1)); // root
     }
     public MappingTable(MappingTable mt) {
@@ -53,7 +53,7 @@ public class MappingTable implements Serializable {
     /**
      * read file
      *
-     * @param fileName
+     * @param fileName This is the file which has mapping table.
      */
     public MappingTable(String fileName) {
     	/*
@@ -70,7 +70,7 @@ public class MappingTable implements Serializable {
     /**
      * save mapping table to file
      *
-     * @param fileName
+     * @param fileName This is the file which will save mapping table.
      */
     public void saveToFile(String fileName) {
     	/*
@@ -87,7 +87,7 @@ public class MappingTable implements Serializable {
      * path -> key
      * 존재하지 않는 path는 추가하지 않고 -1를 리턴함
      *
-     * @param path not null.
+     * @param path like /korea/busan/pnu
      * @return key or -1
      */
     public int getKey(String path) {
@@ -118,7 +118,7 @@ public class MappingTable implements Serializable {
      * put 할 때 쓰길 권장
      * 존재하지 않는 path는 mapping table에 추가함
      *
-     * @param path not null.
+     * @param path like /korea/busan/pnu
      * @return key
      */
     public int addPathAndGetKey(String path) {
@@ -150,20 +150,16 @@ public class MappingTable implements Serializable {
     /**
      * 현 path의 key로 child keys 얻기
      *
-     * @param key
+     * @param key This is current key.
      * @return child keys
      */
     public ArrayList<Integer> getChildKeys(int key) {
-        ArrayList<Integer> childkeys = new ArrayList<>();
-        for(int i=0; i<table.get(key).childs.size(); ++i) {
-            childkeys.add(table.get(key).childs.get(i));
-        }
-        return childkeys;
+        return new ArrayList<>(table.get(key).childs);
     }
     /**
      * 현 path의 key로 parent key 얻기
      *
-     * @param key
+     * @param key This is current key.
      * @return parent key
      */
     public int getParentKey(int key) {
@@ -177,7 +173,7 @@ public class MappingTable implements Serializable {
     public String toString() {
         String str = "";
         for( PathInfo p : table) {
-            str += p + "\n";
+            str = str + p + "\n";
         }
         return str;
     }
