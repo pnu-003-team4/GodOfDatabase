@@ -32,6 +32,12 @@ public class MappingTable implements Serializable {
             this.parent = parent;
             this.childs = new ArrayList<>();
         }
+        public PathInfo(final PathInfo p ) {
+            this.key = p.key;
+            this.name = p.name;
+            this.parent = p.parent;
+            this.childs = new ArrayList<>(p.childs);
+        }
         public boolean addChild(int child) {
             childs.add(child);
             return true;
@@ -47,8 +53,8 @@ public class MappingTable implements Serializable {
         table = new ArrayList<>();
         table.add(new PathInfo(0,"/",-1)); // root
     }
-    public MappingTable(MappingTable mt) {
-        table = mt.table;	//copy...?
+    public MappingTable(final MappingTable mt) {
+        table = new ArrayList<>(mt.table);
     }
     /**
      * read file
@@ -184,26 +190,31 @@ public class MappingTable implements Serializable {
         }
     }
 
-/*	public static void main(String[] args) {
+/*    public static void main(String[] args) {
         //Scanner scanner = new Scanner(System.in);
         //String path = scanner.next();
         //logger.info("");
 
-    	MappingTable mt = new MappingTable();
-    	mt.addPathAndGetKey("/Busan");
-    	mt.addPathAndGetKey("/Busan/university");
-    	mt.addPathAndGetKey("/Busan/university/PNU");
-    	mt.addPathAndGetKey("/Seoul");
-    	mt.addPathAndGetKey("/Busan/A/B");
-    	mt.print();
-    	System.out.println(mt);
-    	System.out.println(mt.getKey("/"));
-    	System.out.println(mt.getKey("/Busan"));
-    	System.out.println(mt.getKey("/Busan/university"));
-    	System.out.println(mt.getKey("/Busan/university/PNU"));
-    	System.out.println(mt.getKey("/Seoul"));
-    	System.out.println(mt.getKey("/Busan/A"));
-    	System.out.println(mt.getKey("/Busan/A/B"));
+        MappingTable mt = new MappingTable();
+        mt.addPathAndGetKey("/Busan");
+        mt.addPathAndGetKey("/Busan/university");
+        mt.addPathAndGetKey("/Busan/university/PNU");
+        mt.addPathAndGetKey("/Seoul");
+        mt.addPathAndGetKey("/Busan/A/B");
+        mt.print();
+        System.out.println(mt);
+        System.out.println(mt.getKey("/"));
+        System.out.println(mt.getKey("/Busan"));
+        System.out.println(mt.getKey("/Busan/university"));
+        System.out.println(mt.getKey("/Busan/university/PNU"));
+        System.out.println(mt.getKey("/Seoul"));
+        System.out.println(mt.getKey("/Busan/A"));
+        System.out.println(mt.getKey("/Busan/A/B"));
+
+        MappingTable mt2 = new MappingTable(mt);
+        mt2.addPathAndGetKey("/Seo");
+        System.out.println(mt2);
+        System.out.println(mt);
     }*/
 
 }
