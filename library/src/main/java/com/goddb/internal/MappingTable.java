@@ -1,3 +1,5 @@
+package com.goddb.internal;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -5,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class MappingTable implements Serializable {
@@ -28,24 +29,29 @@ public class MappingTable implements Serializable {
             this.parent = parent;
             this.childs = new ArrayList<Integer>();
         }
+
         public boolean addChild(int child) {
             childs.add(child);
             return true;
         }
+
         @Override
         public String toString() {
             String str = String.format("");
             return str;
         }
     }
+
     private ArrayList<PathInfo> table;
 
     public MappingTable() {
         table = new ArrayList<PathInfo>();
     }
+
     public MappingTable(MappingTable mt) {
         table = mt.table;	//copy...?
     }
+
     /**
      * read file
      *
@@ -63,6 +69,7 @@ public class MappingTable implements Serializable {
             //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
      * save mapping table to file
      *
