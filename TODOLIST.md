@@ -6,12 +6,12 @@
 
 정환
 =============
-클래스: Wildcard.java
+클래스: com.goddb.internal.Wildcard.java
 함수 : extractWildcard()
 할일 : 세부구현
 
 지홍
 =============
-클래스: Condition.java
+클래스: com.goddb.internal.Condition.java
 함수 : extractCondition()
 할일 : 세부구현

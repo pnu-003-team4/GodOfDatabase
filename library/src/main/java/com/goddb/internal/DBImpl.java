@@ -27,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class DBImpl implements DB {
     private static final String LIB_NAME = "goddb-native";
     private static final int LIMIT_MAX = Integer.MAX_VALUE - 8;
@@ -120,7 +122,7 @@ public class DBImpl implements DB {
     public void del(String path, String condition) throws GoddbException {
         /*
          * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 오브젝트들 제거
-         * TODO : wlidcard는 Wildcard.java의 extractWildcard()를 활용한다. condition은 Condition.java의 extractCondtion()을 활용한다.
+         * TODO : wlidcard는 com.goddb.internal.Wildcard.java의 extractWildcard()를 활용한다. condition은 com.goddb.internal.Condition.java의 extractCondtion()을 활용한다.
          */
 
         __del(path);
@@ -130,7 +132,7 @@ public class DBImpl implements DB {
     public void deldir(String path, String condition) throws GoddbException {
         /*
          * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 path들 제거
-         * TODO : wlidcard는 Wildcard.java의 extractWildcard()를 활용한다. condition은 Condition.java의 extractCondtion()을 활용한다.
+         * TODO : wlidcard는 com.goddb.internal.Wildcard.java의 extractWildcard()를 활용한다. condition은 com.goddb.internal.Condition.java의 extractCondtion()을 활용한다.
          */
 
         __del(path);
@@ -142,14 +144,18 @@ public class DBImpl implements DB {
 
     @Override
     public JSONArray get(String path, String condition) throws GoddbException {
-        /*
-         * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 오브젝트들 JSONObject의 array로 만들어서 return
-         * TODO : wlidcard는 Wildcard.java의 extractWildcard()를 활용한다. condition은 Condition.java의 extractCondtion()을 활용한다.
-         *
-         * return: JSONObject의 배열
-         */
+        try {
+            JSONArray retData = new JSONArray();
+            ArrayList<String> paths = Wildcard.extractWildcard(path);
 
-        __get(path);
+            for (String p : paths) {
+                retData.put(__get(p));
+            }
+
+            return Condition.extractCondition(retData, condition);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

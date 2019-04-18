@@ -1,12 +1,16 @@
-import java.util.List;
+package com.goddb.internal;
+
 //branch test1 test2
 
+import java.util.ArrayList;
+
 public class Wildcard {
-    public static String extractWildcard(List minjae, String path) {
+    public static ArrayList<String> extractWildcard(String path) {
         // 변수
         path = "Korea/Pusan/Haeundae/*";
         String[] and = new String[10];
         String wild = "";
+        ArrayList<String> result = new ArrayList<String>();
         String WildComponent = "";
         String WildComponent2 = "";
 
@@ -45,7 +49,7 @@ public class Wildcard {
             }
         }
 
-        return WildComponent;
+        return result;
     }
 }
 
@@ -53,7 +57,7 @@ public class Wildcard {
 
 
 /*
-public class Wildcard {
+public class com.goddb.internal.Wildcard {
 
 
     public static String[] extractWildcard(List minjae, String path) {
