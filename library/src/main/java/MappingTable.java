@@ -1,3 +1,5 @@
+//package com.goddb.internal;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,12 +18,12 @@ public class MappingTable implements Serializable {
     private static final Logger logger = Logger.getLogger("logger");
 
     // PathInfo: mapping table element class
-    // key: 현재 directory(path) key
+    // key: 현재 directory(path) key ( -1(or <0) : invalid )
     // name: 현재 directory 이름
     // parent: 상위 directory key
     // childs: 하위 directory keys
     class PathInfo implements Serializable {
-        private final int key;
+        private int key;
         private final String name;
         private final int parent;
         private ArrayList<Integer> childs;
@@ -36,11 +38,16 @@ public class MappingTable implements Serializable {
             this.key = p.key;
             this.name = p.name;
             this.parent = p.parent;
-            this.childs = p.childs;
+            this.childs = new ArrayList<>(p.childs);
         }
-        public boolean addChild(int child) {
+        public void addChild(int child) {
             childs.add(child);
-            return true;
+        }
+        public void keyToInvalid() {
+            key = -1;
+        }
+        private boolean isInvalid() {
+            return key < 0;
         }
         @Override
         public String toString() {
@@ -53,8 +60,8 @@ public class MappingTable implements Serializable {
         table = new ArrayList<>();
         table.add(new PathInfo(0,"/",-1)); // root
     }
-    public MappingTable(MappingTable mt) {
-        table = mt.table;
+    public MappingTable( final MappingTable mt) {
+        table = new ArrayList<>(mt.table);
     }
     /**
      * read file
@@ -94,7 +101,7 @@ public class MappingTable implements Serializable {
      * 존재하지 않는 path는 추가하지 않고 -1를 리턴함
      *
      * @param path like /korea/busan/pnu
-     * @return key or -1
+     * @return key or -1(path doesn't exist)
      */
     public int getKey(String path) {
         // path: /korea/busan/pnu -> name: [ root, korea, busan, pnu ]
@@ -108,7 +115,7 @@ public class MappingTable implements Serializable {
             int childkey = 0;
             for(j=0; j<table.get(key).childs.size(); ++j) {
                 childkey = table.get(key).childs.get(j);
-                if (table.get(childkey).name.equals(name[i]) )
+                if (table.get(childkey).name.equals(name[i]) && !table.get(childkey).isInvalid() )
                     break;
             }
             if( j == table.get(key).childs.size() )
@@ -137,12 +144,19 @@ public class MappingTable implements Serializable {
             int childkey = 0;
             for(j=0; j<table.get(key).childs.size(); ++j) {
                 childkey = table.get(key).childs.get(j);
-                if (table.get(childkey).name.equals(name[i]) )
+                if (table.get(childkey).name.equals(name[i]) && !table.get(childkey).isInvalid() )
                     break;
             }
             if( j == table.get(key).childs.size() ) {	// 존재하지 않으면 path를 추가함
-                int index = table.size();
-                table.add(new PathInfo(index, name[i], key));
+                int index = findInvalidIndex();
+                if( index < 0 ) {
+                    index = table.size();
+                    table.add(new PathInfo(index, name[i], key));
+                }
+                else {
+                    table.remove(index);
+                    table.add(index, new PathInfo(index, name[i], key));
+                }
                 table.get(key).addChild(index);
                 key = index;
             }
@@ -150,6 +164,20 @@ public class MappingTable implements Serializable {
                 key = childkey;
         }
         return key;
+    }
+    /**
+     * used for addPathAndGetKey to find index which is invalid
+     * @return index or -1
+     */
+    private int findInvalidIndex() {
+        int index = -1;
+        for( int i=0; i<table.size(); ++i) {
+            if(table.get(i).isInvalid() ) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 
 
@@ -173,12 +201,23 @@ public class MappingTable implements Serializable {
     }
     /**
      * mapping table에 존재하는 path를 삭제합니다.
-     *
+     * 하위 directory(path)도 같이 삭제합니다.
      * @param path which You want to delete.
-     * @return delete is success.
+     * @return delete is success. (path: exist)
      */
     public boolean deletePath(String path) {
-        return false;
+        int key = getKey(path);
+        return deleteKey(key);
+    }
+    private boolean deleteKey(int key) {
+        if( key < 0 )
+            return false;
+        ArrayList<Integer> childkeys = getChildKeys(key);
+        for( int i =0; i<childkeys.size(); ++i) {
+            deleteKey(childkeys.get(i));
+        }
+        table.get(key).keyToInvalid();
+        return true;
     }
 
     public boolean PathExists(String path) {
@@ -199,31 +238,5 @@ public class MappingTable implements Serializable {
         }
     }
 
-    /*public static void main(String[] args) {
-        //Scanner scanner = new Scanner(System.in);
-        //String path = scanner.next();
-        //logger.info("");
-
-        MappingTable mt = new MappingTable();
-        mt.addPathAndGetKey("/Busan");
-        mt.addPathAndGetKey("/Busan/university");
-        mt.addPathAndGetKey("/Busan/university/PNU");
-        mt.addPathAndGetKey("/Seoul");
-        mt.addPathAndGetKey("/Busan/A/B");
-        mt.print();
-        System.out.println(mt);
-        System.out.println(mt.getKey("/"));
-        System.out.println(mt.getKey("/Busan"));
-        System.out.println(mt.getKey("/Busan/university"));
-        System.out.println(mt.getKey("/Busan/university/PNU"));
-        System.out.println(mt.getKey("/Seoul"));
-        System.out.println(mt.getKey("/Busan/A"));
-        System.out.println(mt.getKey("/Busan/A/B"));
-
-        MappingTable mt2 = new MappingTable(mt);
-        mt2.addPathAndGetKey("/Seo");
-        System.out.println(mt2);
-        System.out.println(mt);
-    }*/
 
 }
