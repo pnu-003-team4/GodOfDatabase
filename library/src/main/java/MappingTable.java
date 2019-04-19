@@ -22,7 +22,7 @@ public class MappingTable implements Serializable {
     // name: 현재 directory 이름
     // parent: 상위 directory key
     // childs: 하위 directory keys
-    class PathInfo implements Serializable {
+    private class PathInfo implements Serializable {
         private int key;
         private final String name;
         private final int parent;
@@ -46,7 +46,7 @@ public class MappingTable implements Serializable {
         public void keyToInvalid() {
             key = -1;
         }
-        private boolean isInvalid() {
+        public boolean isInvalid() {
             return key < 0;
         }
         @Override
