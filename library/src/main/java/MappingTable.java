@@ -32,11 +32,11 @@ public class MappingTable implements Serializable {
             this.parent = parent;
             this.childs = new ArrayList<>();
         }
-        public PathInfo(final PathInfo p ) {
+        public PathInfo( PathInfo p ) {
             this.key = p.key;
             this.name = p.name;
             this.parent = p.parent;
-            this.childs = new ArrayList<>(p.childs);
+            this.childs = p.childs;
         }
         public boolean addChild(int child) {
             childs.add(child);
@@ -53,8 +53,8 @@ public class MappingTable implements Serializable {
         table = new ArrayList<>();
         table.add(new PathInfo(0,"/",-1)); // root
     }
-    public MappingTable(final MappingTable mt) {
-        table = new ArrayList<>(mt.table);
+    public MappingTable(MappingTable mt) {
+        table = mt.table;
     }
     /**
      * read file
@@ -190,7 +190,7 @@ public class MappingTable implements Serializable {
         }
     }
 
-/*    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         //Scanner scanner = new Scanner(System.in);
         //String path = scanner.next();
         //logger.info("");
