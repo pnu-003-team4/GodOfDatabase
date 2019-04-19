@@ -27,8 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 public class DBImpl implements DB {
     private static final String LIB_NAME = "goddb-native";
     private static final int LIMIT_MAX = Integer.MAX_VALUE - 8;
@@ -146,11 +144,14 @@ public class DBImpl implements DB {
     public JSONArray get(String path, String condition) throws GoddbException {
         try {
             JSONArray retData = new JSONArray();
+            /*
             ArrayList<String> paths = Wildcard.extractWildcard(path);
 
             for (String p : paths) {
                 retData.put(__get(p));
             }
+            */
+            retData.put(__get(path));
 
             return Condition.extractCondition(retData, condition);
         } catch (JSONException e) {
