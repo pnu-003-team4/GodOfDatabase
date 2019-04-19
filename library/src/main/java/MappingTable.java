@@ -171,6 +171,15 @@ public class MappingTable implements Serializable {
     public int getParentKey(int key) {
         return table.get(key).parent;
     }
+    /**
+     * mapping table에 존재하는 path를 삭제합니다.
+     *
+     * @param path which You want to delete.
+     * @return delete is success.
+     */
+    public boolean deletePath(String path) {
+        return false;
+    }
 
     public boolean PathExists(String path) {
         return getKey(path) >= 0;
