@@ -1,14 +1,10 @@
 package com.pnu.godofdatabase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
-import com.goddb.DB;
-import com.goddb.DBFactory;
-import com.goddb.GoddbException;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,26 +12,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        try {
-            DB godDB = DBFactory.open("DB"); //create or open an existing database using the default name
 
-            JSONObject student = new JSONObject();
+        Button btn_GOD = (Button) findViewById(R.id.btn_GOD);
+        Button btn_sqlite = (Button) findViewById(R.id.btn_sqlite);
+        Button btn_snappy = (Button)findViewById(R.id.btn_snappy);
+        Button btn_cal = (Button)findViewById(R.id.btn_cal);
 
-            try {
-                student.put("name", "JSON");
-                student.put("age", "23");
-            } catch (JSONException e1) {
-                e1.printStackTrace();
+
+        btn_GOD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, GOD_connection.class);
+                startActivity(intent);
             }
+        });
 
-            godDB.put("/Korea/Busan/University/PNU", student);
-            godDB.get("/Korea/Busan/*/PNU", null);
+        btn_snappy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, snappyDB_connection.class);
+                startActivity(intent);
+            }
+        });
 
-            godDB.del("Korea/Busan/University/PNU", "name==ParkJeongHwan");
-
-            godDB.close();
-        } catch (GoddbException e) {
-            e.printStackTrace();
-        }
+        btn_sqlite.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(MainActivity.this, SQLite_connection.class);
+                startActivity(intent);
+            }
+        });
     }
 }
