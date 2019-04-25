@@ -21,9 +21,9 @@ public class SQLite_connection extends AppCompatActivity {
         setContentView(R.layout.activity_sqlite_connection);
 
         final EditText edit_result = findViewById(R.id.editText1);
-        Button btn_Save = findViewById(R.id.button1);
-        Button btn_Load = findViewById(R.id.button2);
-        final TextView tv = findViewById(R.id.textView1);
+        Button btn_Save = findViewById(R.id.btn_save);
+        Button btn_Load = findViewById(R.id.btn_load);
+        final TextView tv = findViewById(R.id.tv_result);
 
         btn_Save.setOnClickListener(new View.OnClickListener() {
             @Override    // 입력한 데이터를 파일에 추가로 저장하기
@@ -52,7 +52,7 @@ public class SQLite_connection extends AppCompatActivity {
                 try {
                     // 파일에서 읽은 데이터를 저장하기 위해서 만든 변수
                     StringBuffer data = new StringBuffer();
-                    FileInputStream fis = openFileInput("myfile.txt");//파일명
+                    FileInputStream fis = openFileInput("file.txt");//파일명
                     BufferedReader buffer = new BufferedReader
                             (new InputStreamReader(fis));
                     String str = buffer.readLine(); // 파일에서 한줄을 읽어옴
