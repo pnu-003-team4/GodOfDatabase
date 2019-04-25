@@ -1,19 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MainActivity Page"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+    <Button
+        android:id="@+id/btn_GOD"
+        android:layout_width="0dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="60dp"
+        android:text="GodOfDatabase"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintEnd_toEndOf="@+id/btn_sqlite"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_sqlite"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btn_sqlite"
+        android:layout_width="0dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="66dp"
+        android:text="SQLite"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintEnd_toEndOf="@+id/btn_snappy"
+        app:layout_constraintStart_toStartOf="@+id/btn_snappy"
+        app:layout_constraintTop_toBottomOf="@+id/btn_GOD" />
+
+    <Button
+        android:id="@+id/btn_snappy"
+        android:layout_width="0dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="68dp"
+        android:text="Snappy DB"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintEnd_toEndOf="@+id/btn_cal"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_cal"
+        app:layout_constraintTop_toBottomOf="@+id/btn_sqlite" />
+
+    <Button
+        android:id="@+id/btn_cal"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="63dp"
+        android:text="성능측정"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_snappy" />
 </android.support.constraint.ConstraintLayout>
