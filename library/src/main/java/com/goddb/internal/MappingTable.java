@@ -66,7 +66,7 @@ public class MappingTable implements Serializable {
     /**
      * read file
      *
-     * @param fileName This is the file which has mapping table.
+     * @param fileName This is the file with mapping table.
      */
     public MappingTable(String fileName) {
     	/*
@@ -83,7 +83,7 @@ public class MappingTable implements Serializable {
     /**
      * save mapping table to file
      *
-     * @param fileName This is the file which will save mapping table.
+     * @param fileName This is the file to save mapping table.
      */
     public void saveToFile(String fileName) {
     	/*
@@ -98,7 +98,7 @@ public class MappingTable implements Serializable {
 
     /**
      * path -> key
-     * 존재하지 않는 path는 추가하지 않고 -1를 리턴함
+     * if path doesn't exist : return -1
      *
      * @param path like /korea/busan/pnu
      * @return key or -1(path doesn't exist)
@@ -128,8 +128,9 @@ public class MappingTable implements Serializable {
     }
 
     /**
-     * put 할 때 쓰길 권장
-     * 존재하지 않는 path는 mapping table에 추가함
+     * It is recommended to use it for PUT function.
+     * if path doesn't exist : add the path to mapping table and return its key
+     * if path exists : same as getKey function ( just return key )
      *
      * @param path like /korea/busan/pnu
      * @return key
@@ -182,7 +183,7 @@ public class MappingTable implements Serializable {
 
 
     /**
-     * 현 path의 key로 child keys 얻기
+     * get child keys by using the current key
      *
      * @param key This is current key.
      * @return child keys
@@ -191,7 +192,7 @@ public class MappingTable implements Serializable {
         return new ArrayList<>(table.get(key).childs);
     }
     /**
-     * 현 path의 key로 parent key 얻기
+     * get parent key by using the current key
      *
      * @param key This is current key.
      * @return parent key
@@ -200,8 +201,8 @@ public class MappingTable implements Serializable {
         return table.get(key).parent;
     }
     /**
-     * mapping table에 존재하는 path를 삭제합니다.
-     * 하위 directory(path)도 같이 삭제합니다.
+     * Delete the path that exists in the mapping table.
+     * Also delete all subdirectories (paths).
      * @param path which You want to delete.
      * @return delete is success. (path: exist)
      */
@@ -219,7 +220,12 @@ public class MappingTable implements Serializable {
         table.get(key).keyToInvalid();
         return true;
     }
-
+    /**
+     * Check that path is in mapping table
+     *
+     * @param path like /korea/busan/pnu
+     * @return path exist
+     */
     public boolean PathExists(String path) {
         return getKey(path) >= 0;
     }
@@ -232,11 +238,10 @@ public class MappingTable implements Serializable {
         return str;
     }
     public void print() {
-        for(PathInfo p : table ) {
+        for (PathInfo p : table) {
             logger.info(p.toString());
             //System.out.println(p);
         }
     }
-
 
 }
