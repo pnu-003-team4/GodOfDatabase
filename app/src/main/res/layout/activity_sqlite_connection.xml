@@ -1,36 +1,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:textColor="@color/black">
+        android:hint="Name"
+        android:textColor="@color/black" />
 
-        <requestFocus />
-    </EditText>
-
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/et_age"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="추가" />
-
-    <Button
-        android:id="@+id/btn_load"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="검색" />
+        android:hint="Age"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/tv_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="결과"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_height="wrap_content"
         android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btn_insert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="insert" />
+    <Button
+        android:id="@+id/btn_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="update" />
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="delete" />
+
+    <Button
+        android:id="@+id/btn_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="select" />
 
 </LinearLayout>
