@@ -124,18 +124,47 @@ public class DBImpl implements DB {
          * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 오브젝트들 제거
          * TODO : wlidcard는 com.goddb.internal.Wildcard.java의 extractWildcard()를 활용한다. condition은 com.goddb.internal.Condition.java의 extractCondtion()을 활용한다.
          */
+        boolean chk = false;
 
-        __del(path);
+        if (exists(path)) {
+            try {
+                JSONArray oldArray = new JSONArray(__get(path));
+                JSONArray conditionArray, retArray = new JSONArray();
+
+                conditionArray = Condition.extractCondition(oldArray, condition);
+
+                ArrayList wildcardArrayList = Wildcard.extractWildcard(path);
+
+                if (wildcardArrayList == null) {
+                    for (int i = 0; i < oldArray.length(); i++) {
+                        for (int j = 0; j < conditionArray.length(); j++) {
+                            if (oldArray.getJSONArray(i) == conditionArray.getJSONArray(j)) {
+                                chk = true;
+                            }
+                        }
+                        if (chk == false) {
+                            retArray.put(oldArray.getJSONArray(i));
+                        }
+                        chk = false;
+                    }
+                    __del(path);
+                    __put(path, retArray.toString());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+        }
     }
 
     @Override
-    public void deldir(String path, String condition) throws GoddbException {
+    public void deldir(String path, String condition) {
         /*
          * TODO : path가 존재하는지 확인하고, 존재한다면 wildcard와 condition을 확인하여 해당하는 path들 제거
          * TODO : wlidcard는 com.goddb.internal.Wildcard.java의 extractWildcard()를 활용한다. condition은 com.goddb.internal.Condition.java의 extractCondtion()을 활용한다.
          */
 
-        __del(path);
     }
 
     // ***********************
