@@ -16,6 +16,11 @@ public class Condition {
 
     public static void separation(String condition, int flag) { //연산자를 구분한다.
 
+        switch (condition = condition.replaceAll(" ", "")) { //입력받은 문자열의 공백 제거
+        }
+        switch (condition = condition.replaceAll("'", "")) { //문자열을 입력받았을때 작은따옴표가 있다면 제거
+        }
+
         if(flag == 0) {
             if(condition.indexOf("-") != -1) {
                 operator = "-";
@@ -60,58 +65,60 @@ public class Condition {
         }
     }
 
-    public static JSONArray extractCondition(JSONArray objects, String condition) throws JSONException {
-        ArrayList<JSONObject> newarray = new ArrayList<>();
+    public static JSONArray extractCondition(JSONArray jsonArray, String condition) throws JSONException {
+        ArrayList<JSONObject> newobject = new ArrayList<>();
+        JSONArray newarray = new JSONArray();
 
         separation(condition, 0);
 
         //연관된 오브젝트를 배열에 넣는다.
-        for (int i = 0; i < objects.length(); i++) {
-            JSONObject obj = objects.getJSONObject(i);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject obj = jsonArray.getJSONObject(i);
             try {
                 switch(operator) {
                     case "==":
-                        if (Integer.valueOf(obj.get(leftOperand).toString()) == Integer.parseInt(rightOperand)) { //Int
-                            newarray.add(obj);
+                        if ((obj.get(leftOperand).toString()).equals(rightOperand)) { //int일때와 문자열일때 둘 다 만족하기 위해 equals를 사용한다.
+                            newobject.add(obj);
                         }
                         break;
 
                     case ">":
                         if (Integer.valueOf(obj.get(leftOperand).toString()) > Integer.parseInt(rightOperand)) {
-                            newarray.add(obj);
+                            newobject.add(obj);
                         }
                         break;
 
                     case "<":
                         if (Integer.valueOf(obj.get(leftOperand).toString()) < Integer.parseInt(rightOperand)) {
-                            newarray.add(obj);
+                            newobject.add(obj);
                         }
                         break;
 
                     case "!=":
                         if (Integer.valueOf(obj.get(leftOperand).toString()) != Integer.parseInt(rightOperand)) {
-                            newarray.add(obj);
+                            newobject.add(obj);
                         }
                         break;
 
                     case "<=":
                         if (Integer.valueOf(obj.get(leftOperand).toString()) <= Integer.parseInt(rightOperand)) {
-                            newarray.add(obj);
+                            newobject.add(obj);
                         }
                         break;
 
                     case ">=":
                         if (Integer.valueOf(obj.get(leftOperand).toString()) >= Integer.parseInt(rightOperand)) {
-                            newarray.add(obj);
+                            newobject.add(obj);
                         }
                         break;
                 }
+                newarray.put(newobject);
+
             } catch (JSONException e) {
                 e.printStackTrace();
                 throw e;
             }
         }
-        //return (JSONObject[])newarray.toArray();
-        return null;
+        return newarray;
     }
 }
