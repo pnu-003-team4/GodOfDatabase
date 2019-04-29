@@ -1,55 +1,98 @@
 package com.goddb.internal;
 
 //branch test1 test2
+//test
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Wildcard {
-    public static ArrayList<String> extractWildcard(String path) {
-        // 변수
-        path = "Korea/Pusan/Haeundae/*";
-        String[] and = new String[10];
+    ArrayList<JSONObject> result = new ArrayList<>();
+
+
+    public static String Sharp(String path) {
+        //Todo : Search
+        System.out.println("# " + path);
+        return path;
+    }
+
+    public static String Star(String path) {
+        //Todo : View all
+        System.out.println("* " + path);
+        return path;
+    }
+
+    public static String Split(String path) {
+        //Todo : multi search
         String wild = "";
-        ArrayList<String> result = new ArrayList<String>();
-        String WildComponent = "";
-        String WildComponent2 = "";
-
         boolean IsWild = false;
-
-        int pathlength = path.length();
         int wildlocation = 0;
         if (path.indexOf("#") > -1) {
             wild = "#";
             wildlocation = path.indexOf("#");
             IsWild = true;
+            Sharp(path);
         } else if (path.indexOf("*") > -1) {
             wild = "*";
             wildlocation = path.indexOf("*");
             IsWild = true;
-        } else if (path.indexOf("&") > -1) {
+            Star(path);
+        }
+        if (IsWild == false) {
+            // 차일드 나오게 만들어야함
+            System.out.println("& " + path);
+        }
+        return path;
+    }
+
+    public static ArrayList<String> extractWildcard(String path, List Minjae) {
+        // 변수
+        //ArrayList<JSONObject> result = new ArrayList<>();
+        // 변수
+        path = "Korea/Pusan/Haeundae/*&Korea/Seoul/kangnam&US/Sanhose&??&whycant..&#zzez";
+        String wild = "";
+        boolean IsWild = false;
+
+        int pathlength = path.length();
+        int wildlocation = 0;
+        if (path.indexOf("&") > -1) {
             wild = "&";
             wildlocation = path.indexOf("&");
             IsWild = true;
+            //And(path);
+        } else {
+            if (path.indexOf("#") > -1) {
+                wild = "#";
+                wildlocation = path.indexOf("#");
+                IsWild = true;
+                Sharp(path);
+            } else if (path.indexOf("*") > -1) {
+                wild = "*";
+                wildlocation = path.indexOf("*");
+                IsWild = true;
+                Star(path);
+            }
+
         }
 
         if (IsWild) {
-            System.out.print(wild);
             if (wild.equals("#")) {
-                WildComponent = path.substring(wildlocation, pathlength);
-                // TODO : 리스트를 전달 받고 WildComponent 에 맞는 키, 밸류 리턴
+                Sharp(path);
+            } else if (wild.equals("*")) {
+                Star(path);
+            } else if (wild.equals("&")) {
+                String str = path;
+                String[] array = str.split("&");
+                for (int i = 0; i < array.length; i++) {
+                    Split(array[i]);
             }
-            if (wild.equals("*")) {
-                // TODO : 리스트를 전달 받고 그 하위에있는 키, 밸류를 모두 표출.
-            }
-            if (wild.equals("&")) {
-                WildComponent = path.substring(0, wildlocation);
-                WildComponent2 = path.substring(wildlocation + 1, pathlength);
-
-                //TODO : 리스트를 전달 받고 다음 & 값을 계속 받아오게 함
             }
         }
 
-        return result;
+
+        return null;
     }
 }
 
