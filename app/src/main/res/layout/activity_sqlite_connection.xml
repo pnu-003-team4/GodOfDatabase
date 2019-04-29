@@ -1,49 +1,106 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <EditText
-        android:id="@+id/et_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Name"
-        android:textColor="@color/black" />
-
-    <EditText
-        android:id="@+id/et_age"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Age"
-        android:textColor="@color/black" />
-
-    <TextView
-        android:id="@+id/tv_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black" />
+    tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btn_insert"
-        android:layout_width="match_parent"
+        android:id="@+id/btn_put"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="insert" />
+        android:text="입력"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_put"
+        app:layout_constraintStart_toEndOf="@+id/edit_put" />
+
+    <EditText
+        android:id="@+id/edit_put"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="36dp"
+        android:ems="10"
+        android:text="insert into MYLIST values(null, 'name', price)"
+        android:textColor="@color/black"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/btn_update"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="update" />
+        android:layout_marginBottom="1dp"
+        android:text="수정"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_update"
+        app:layout_constraintStart_toEndOf="@+id/edit_update" />
 
-    <Button
-        android:id="@+id/btn_delete"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/edit_select"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="delete" />
+        android:layout_marginTop="181dp"
+        android:ems="10"
+        android:text="select * from MYLIST"
+        android:textColor="@color/black"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/btn_update"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_select"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="select" />
+        android:text="찾기"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_select"
+        app:layout_constraintStart_toEndOf="@+id/edit_select" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/output"
+        android:layout_width="0dp"
+        android:layout_height="185dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="39dp"
+        android:layout_marginEnd="4dp"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_update" />
+
+    <EditText
+        android:id="@+id/edit_del"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:ems="10"
+        android:text="delete from MYLIST"
+        android:textColor="@color/black"
+        android:inputType="textPersonName"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btn_del"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_del"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="19dp"
+        android:text="삭제"
+        app:layout_constraintBottom_toTopOf="@+id/btn_select"
+        app:layout_constraintStart_toEndOf="@+id/edit_del" />
+
+    <EditText
+        android:id="@+id/edit_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="22dp"
+        android:ems="10"
+        android:text="update MYLIST set price=99 where name='test'"
+        android:textColor="@color/black"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_select" />
+
+</android.support.constraint.ConstraintLayout>

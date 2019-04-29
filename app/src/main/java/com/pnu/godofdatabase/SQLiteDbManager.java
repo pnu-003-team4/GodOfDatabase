@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 public class SQLiteDbManager extends SQLiteOpenHelper {
 
@@ -25,21 +26,35 @@ public class SQLiteDbManager extends SQLiteOpenHelper {
     }
 
     public void insert(String _query) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL(_query);
-        db.close();
+        try{
+            SQLiteDatabase db = getWritableDatabase();
+            db.execSQL(_query);
+            db.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 
     public void update(String _query) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL(_query);
-        db.close();
+        try{
+            SQLiteDatabase db = getWritableDatabase();
+            db.execSQL(_query);
+            db.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void delete(String _query) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL(_query);
-        db.close();
+        try{
+            SQLiteDatabase db = getWritableDatabase();
+            db.execSQL(_query);
+            db.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public String PrintData() {
@@ -51,11 +66,46 @@ public class SQLiteDbManager extends SQLiteOpenHelper {
             str += cursor.getInt(0)
                     + " : Name "
                     + cursor.getString(1)
-                    + ", age = "
+                    + ", price = "
                     + cursor.getInt(2)
                     + "\n";
         }
 
         return str;
+    }
+
+    public String ConditionPrintData(String _query) {
+        SQLiteDatabase db = getReadableDatabase();
+        String str = "";
+        String compare = _query.substring(7,_query.indexOf("from"));
+
+        if (compare.equals("name")) {
+            Cursor cursor = db.rawQuery("select * from MYLIST", null);
+
+            while (cursor.moveToNext()) {
+                str += cursor.getInt(0)
+                        + ", name = "
+                        + cursor.getString(1)
+                        + "\n";
+            }
+        }
+        else if (compare.equals("price")) {
+            Cursor cursor = db.rawQuery("select * from MYLIST", null);
+            cursor.moveToFirst();
+            while (cursor.moveToNext()) {
+                str += cursor.getInt(0)
+                        + ", price = "
+                        + cursor.getInt(2)
+                        + "\n";
+            }
+        }
+
+        return str;
+    }
+
+    public void select(String _query){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(_query);
+        db.close();
     }
 }

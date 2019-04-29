@@ -7,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SQLite_connection extends Activity {
 
@@ -18,63 +19,79 @@ public class SQLite_connection extends Activity {
         final SQLiteDbManager sqliteDbManager = new SQLiteDbManager(getApplicationContext(), "Food.db", null, 1);
 
         // DB에 저장 될 속성을 입력받는다
-        final EditText etName = findViewById(R.id.et_name);
-        final EditText etAge = findViewById(R.id.et_age);
+//        final EditText etName = findViewById(R.id.et_name);
+//        final EditText etAge = findViewById(R.id.et_age);
 
-        // 쿼리 결과 입력
-        final TextView tvResult = findViewById(R.id.tv_result);
+        final EditText edit_put = (EditText)findViewById(R.id.edit_put);
+        final EditText edit_select = (EditText)findViewById(R.id.edit_select);
+        final EditText edit_del = (EditText)findViewById(R.id.edit_del);
+        final EditText edit_update = (EditText)findViewById(R.id.edit_update);
+
+        final TextView textView = (TextView)findViewById(R.id.output);
+
+        Button btn_put = (Button) findViewById(R.id.btn_put);
+        Button btn_select = (Button) findViewById(R.id.btn_select);
+        Button btn_del = (Button)findViewById(R.id.btn_del);
+        Button btn_update = (Button)findViewById(R.id.btn_update);
 
         // Insert
-        Button btnInsert = findViewById(R.id.btn_insert);
-        btnInsert.setOnClickListener(new OnClickListener() {
+        btn_put.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // insert into 테이블명 values (값, 값, 값...);
-                String name = etName.getText().toString();
-                String age = etAge.getText().toString();
-                sqliteDbManager.insert("insert into MYLIST values(null, '" + name + "', " + age + ");");
+                String query = edit_put.getText().toString();
 
-                tvResult.setText(sqliteDbManager.PrintData());
+//                sqliteDbManager.insert("insert into MYLIST values(null, '" + name + "', " + age + ");");
+                sqliteDbManager.insert(query);
+                textView.setText(sqliteDbManager.PrintData());
+                Toast.makeText(getApplicationContext(), "입력되었습니다", Toast.LENGTH_LONG).show();
             }
         });
 
         // Update
-        Button btnUpdate = findViewById(R.id.btn_update);
-        btnUpdate.setOnClickListener(new OnClickListener() {
-
+        btn_update.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 // update 테이블명 where 조건 set 값;
-                String name = etName.getText().toString();
-                String age = etAge.getText().toString();
-                sqliteDbManager.update("update FOOD_LIST set price = " + age + " where name = '" + name + "';");
+                String query = edit_update.getText().toString();
 
-                tvResult.setText(sqliteDbManager.PrintData());
+                sqliteDbManager.update(query);
+                textView.setText(sqliteDbManager.PrintData());
+                Toast.makeText(getApplicationContext(), "수정되었습니다", Toast.LENGTH_LONG).show();
             }
         });
 
         // Delete
-        Button btnDelete = findViewById(R.id.btn_delete);
-        btnDelete.setOnClickListener(new OnClickListener() {
+        btn_del.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // delete from 테이블명 where 조건;
-                String name = etName.getText().toString();
-                sqliteDbManager.delete("delete from FOOD_LIST where name = '" + name + "';");
+                String query = edit_del.getText().toString();
 
-                tvResult.setText(sqliteDbManager.PrintData());
+                sqliteDbManager.delete(query);
+                textView.setText(sqliteDbManager.PrintData());
+                Toast.makeText(getApplicationContext(), "삭제되었습니다", Toast.LENGTH_LONG).show();
             }
         });
 
-        // Select
-        Button btnSelect = findViewById(R.id.btn_select);
-        btnSelect.setOnClickListener(new OnClickListener() {
+//        // Select
+        btn_select.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                tvResult.setText(sqliteDbManager.PrintData());
+                String query = edit_select.getText().toString();
+                if(query.isEmpty()){
+                    Toast.makeText(getApplicationContext(), "if문", Toast.LENGTH_LONG).show();
+                    textView.setText(sqliteDbManager.PrintData());
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "else 문", Toast.LENGTH_LONG).show();
+                    textView.setText(sqliteDbManager.ConditionPrintData(query));
+                }
+//                textView.setText(sqliteDbManager.PrintData());
+                Toast.makeText(getApplicationContext(), "검색되었습니다.", Toast.LENGTH_LONG).show();
             }
         });
     }
