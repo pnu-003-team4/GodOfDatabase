@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="test_calculator"
+              	xmlns:jacoco="antlib:org.jacoco.ant">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="/Applications/Eclipse.app/Contents/Eclipse/"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="11"/>
+    <property name="source" value="11"/>
+    <path id="JUnit 4.libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
+        <pathelement location="${ECLIPSE_HOME}plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
+    	<fileset dir="${ant.home}/lib" includes="*.jar"></fileset>
+    	<fileset dir="${ant.home}/lib/junit" includes="*.jar"></fileset>
+    </path>
+    <path id="test_calculator.classpath">
+        <pathelement location="bin"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+    </path>
+    <path id="run.CalculatorTest.classpath">
+        <path refid="test_calculator.classpath"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="test_calculator.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target name="CalculatorTest">
+        <mkdir dir="${junit.output.dir}"/>
+    	
+    	<taskdef url="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+    		<classpath path="../jacocoant.jar"></classpath>
+    	</taskdef>
+    	
+    	<jacoco:coverage>
+    	
+    	
+    	
+	        <junit fork="yes" printsummary="withOutAndErr">
+	            <formatter type="xml"/>
+	            <test name="test_calculator.CalculatorTest" todir="${junit.output.dir}"/>
+	            <jvmarg line="-ea"/>
+	            <classpath refid="run.CalculatorTest.classpath"/>
+	        </junit>
+    	</jacoco:coverage>
+    	<jacoco:report>
+    		<executiondata>
+    			<file file="jacoco.exec"></file>
+    		</executiondata>
+    		
+    		<structure name="java coverage">
+    			<classfiles>
+    				<filset dir="bin"/>
+    			</classfiles>
+    			<sourcefiles encoding="UTF-8">
+    				<fileset dir = "src"/>
+    			</sourcefiles>
+    		</structure>
+    		<html destdir="${junit.output.dir}/coverage-report"/>
+    	</jacoco:report>
+    </target>
+              	
+              	
+              	
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>
