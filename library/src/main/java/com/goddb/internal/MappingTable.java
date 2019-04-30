@@ -189,6 +189,8 @@ public class MappingTable implements Serializable {
      * @return child keys
      */
     public ArrayList<Integer> getChildKeys(int key) {
+        if(key < 0)
+            return new ArrayList<>();
         return new ArrayList<>(table.get(key).childs);
     }
     /**
@@ -198,6 +200,8 @@ public class MappingTable implements Serializable {
      * @return parent key
      */
     public int getParentKey(int key) {
+        if(key < 0)
+            return key;
         return table.get(key).parent;
     }
     /**
@@ -238,10 +242,11 @@ public class MappingTable implements Serializable {
         return str;
     }
     public void print() {
-        for (PathInfo p : table) {
+        for(PathInfo p : table ) {
             logger.info(p.toString());
             //System.out.println(p);
         }
     }
+
 
 }
