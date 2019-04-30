@@ -138,12 +138,12 @@ public class DBImpl implements DB {
                 if (wildcardArrayList == null) {
                     for (int i = 0; i < oldArray.length(); i++) {
                         for (int j = 0; j < conditionArray.length(); j++) {
-                            if (oldArray.getJSONArray(i) == conditionArray.getJSONArray(j)) {
+                            if (oldArray.getJSONObject(i).toString().equals(conditionArray.getJSONObject(j).toString())) {
                                 chk = true;
                             }
                         }
-                        if (chk == false) {
-                            retArray.put(oldArray.getJSONArray(i));
+                        if (!chk) {
+                            retArray.put(oldArray.getJSONObject(i));
                         }
                         chk = false;
                     }
@@ -191,7 +191,10 @@ public class DBImpl implements DB {
             } else {
                 return null;
             }
-            return Condition.extractCondition(retData, condition);
+            if (condition.getBytes().length <= 0)
+                return retData;
+            else
+                return Condition.extractCondition(retData, condition);
         } catch (JSONException e) {
             e.printStackTrace();
         }

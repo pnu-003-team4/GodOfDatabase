@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     EditText inputAge;
     Button inputBtn;
     Button outputBtn;
+    Button delBtn;
     TextView resultText;
     DB godDB; //create or open an existing database using the default name
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         inputAge = findViewById(R.id.inputAge);
         inputBtn = findViewById(R.id.inputBtn);
         outputBtn = findViewById(R.id.outputBtn);
+        delBtn = findViewById(R.id.delBtn);
         resultText = findViewById(R.id.result);
 
         inputBtn.setOnClickListener(new View.OnClickListener() {
@@ -54,13 +56,19 @@ public class MainActivity extends AppCompatActivity {
 
         outputBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                JSONArray temp = getTest(String.valueOf(inputPath.getText()), String.valueOf(inputAge.getText()));
+                JSONArray temp = getTest(inputPath.getText().toString(), inputAge.getText().toString());
 
                 if (temp != null) {
                     resultText.setText(temp.toString());
                 } else {
                     Log.d("get", "null.");
                 }
+            }
+        });
+
+        delBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                delTest(inputPath.getText().toString(), inputAge.getText().toString());
             }
         });
     }
@@ -86,6 +94,17 @@ public class MainActivity extends AppCompatActivity {
         } catch (GoddbException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    void delTest(String path, String condition) {
+        try {
+            godDB = DBFactory.open(this); //create or open an existing database using the default name
+            godDB.del(path, condition);
+            godDB.close();
+            resultText.setText("delete");
+        } catch (GoddbException e) {
+            e.printStackTrace();
         }
     }
 }
