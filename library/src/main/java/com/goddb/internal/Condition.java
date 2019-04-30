@@ -30,7 +30,17 @@ public class Condition {
                 idx = condition.indexOf("==");
                 leftOperand = condition.substring(0, idx);
                 rightOperand = condition.substring(idx+2);
-            } else if (condition.indexOf(">") != -1) {
+            } else if(condition.indexOf(">=") != -1) {
+                operator = ">=";
+                idx = condition.indexOf("=");
+                leftOperand = condition.substring(0, idx-1);
+                rightOperand = condition.substring(idx+1);
+            } else if(condition.indexOf("<=") != -1) {
+                operator = "<=";
+                idx = condition.indexOf("=");
+                leftOperand = condition.substring(0, idx-1);
+                rightOperand = condition.substring(idx+1);
+            } else if(condition.indexOf(">") != -1) {
                 operator = ">";
                 idx = condition.indexOf(">");
                 leftOperand = condition.substring(0, idx);
