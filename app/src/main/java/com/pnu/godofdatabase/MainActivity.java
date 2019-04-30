@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         outputBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                JSONArray temp = getTest(String.valueOf(inputPath.getText()));
+                JSONArray temp = getTest(String.valueOf(inputPath.getText()), String.valueOf(inputAge.getText()));
 
                 if (temp != null) {
                     resultText.setText(temp.toString());
@@ -70,15 +70,16 @@ public class MainActivity extends AppCompatActivity {
             godDB = DBFactory.open(this); //create or open an existing database using the default name
             godDB.put(path, obj);
             godDB.close();
+            resultText.setText("put");
         } catch (GoddbException e) {
             e.printStackTrace();
         }
     }
 
-    JSONArray getTest(String path) {
+    JSONArray getTest(String path, String condition) {
         try {
             godDB = DBFactory.open(this); //create or open an existing database using the default name
-            JSONArray ret = godDB.get(path, null);
+            JSONArray ret = godDB.get(path, condition);
             godDB.close();
 
             return ret;

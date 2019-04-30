@@ -27,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class DBImpl implements DB {
     private static final String LIB_NAME = "goddb-native";
     private static final int LIMIT_MAX = Integer.MAX_VALUE - 8;
@@ -131,7 +133,7 @@ public class DBImpl implements DB {
 
                 conditionArray = Condition.extractCondition(oldArray, condition);
 
-                ArrayList wildcardArrayList = Wildcard.extractWildcard(path);
+                ArrayList<String> wildcardArrayList = Wildcard.extractWildcard(path, null);
 
                 if (wildcardArrayList == null) {
                     for (int i = 0; i < oldArray.length(); i++) {
@@ -151,8 +153,6 @@ public class DBImpl implements DB {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } else {
-
         }
     }
 
@@ -171,7 +171,7 @@ public class DBImpl implements DB {
 
     @Override
     public JSONArray get(String path, String condition) throws GoddbException {
-        JSONArray retData = new JSONArray();
+        JSONArray retData;
 
         /*
         JSONArray result;
@@ -185,13 +185,17 @@ public class DBImpl implements DB {
         }
         */
 
-        if (exists(path)) {
-            retData.put(__get(path));
-        } else {
-            return null;
+        try {
+            if (exists(path)) {
+                retData = new JSONArray(__get(path));
+            } else {
+                return null;
+            }
+            return Condition.extractCondition(retData, condition);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        //return Condition.extractCondition(retData, condition);
-        return retData;
+        return null;
     }
 
     //****************************

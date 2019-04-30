@@ -4,8 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 
 public class Condition {
 
@@ -66,54 +64,50 @@ public class Condition {
     }
 
     public static JSONArray extractCondition(JSONArray jsonArray, String condition) throws JSONException {
-        ArrayList<JSONObject> newobject = new ArrayList<>();
         JSONArray newarray = new JSONArray();
-
         separation(condition, 0);
 
         //연관된 오브젝트를 배열에 넣는다.
         for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject obj = jsonArray.getJSONObject(i);
+            JSONObject obj = new JSONObject(jsonArray.getString(i));
             try {
                 switch(operator) {
                     case "==":
                         if ((obj.get(leftOperand).toString()).equals(rightOperand)) { //int일때와 문자열일때 둘 다 만족하기 위해 equals를 사용한다.
-                            newobject.add(obj);
+                            newarray.put(obj);
                         }
                         break;
 
                     case ">":
                         if (Integer.valueOf(obj.get(leftOperand).toString()) > Integer.parseInt(rightOperand)) {
-                            newobject.add(obj);
+                            newarray.put(obj);
                         }
                         break;
 
                     case "<":
                         if (Integer.valueOf(obj.get(leftOperand).toString()) < Integer.parseInt(rightOperand)) {
-                            newobject.add(obj);
+                            newarray.put(obj);
                         }
                         break;
 
                     case "!=":
                         if (Integer.valueOf(obj.get(leftOperand).toString()) != Integer.parseInt(rightOperand)) {
-                            newobject.add(obj);
+                            newarray.put(obj);
                         }
                         break;
 
                     case "<=":
                         if (Integer.valueOf(obj.get(leftOperand).toString()) <= Integer.parseInt(rightOperand)) {
-                            newobject.add(obj);
+                            newarray.put(obj);
                         }
                         break;
 
                     case ">=":
                         if (Integer.valueOf(obj.get(leftOperand).toString()) >= Integer.parseInt(rightOperand)) {
-                            newobject.add(obj);
+                            newarray.put(obj);
                         }
                         break;
                 }
-                newarray.put(newobject);
-
             } catch (JSONException e) {
                 e.printStackTrace();
                 throw e;
