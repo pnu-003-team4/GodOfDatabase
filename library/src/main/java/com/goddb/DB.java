@@ -86,10 +86,9 @@ public interface DB {
      * Deletes the path following the wildcard and codition.
      *
      * @param path      not null.
-     * @param condition allow null.
      * @throws GoddbException if the key is null.
      */
-    void deldir(String path, String condition) throws GoddbException;
+    void deldir(String path) throws GoddbException;
 
     //******************************************************************************************************************
     //*      RETRIEVE
