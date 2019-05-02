@@ -53,7 +53,7 @@ public class Condition {
             }
         }
 
-        if(flag == 1) { //-연산자가 적용되었으므로, 기존의 연산자와 반대의 효과를 낸다.
+        if(flag == 1) { //-연산자가 적용되었으므로, 기존의 연산자와 반대의 효과를 낸다
             if(condition.indexOf("==") != -1) {
                 operator = "!=";
                 idx = condition.indexOf("==");
