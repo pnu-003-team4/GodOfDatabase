@@ -40,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
         delBtn = findViewById(R.id.delBtn);
         resultText = findViewById(R.id.result);
 
+        try {
+            godDB = DBFactory.open(this, "test"); //create or open an existing database using the default name
+        } catch (GoddbException e) {
+            e.printStackTrace();
+        }
+
         inputBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 JSONObject student = new JSONObject();
@@ -73,11 +79,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    protected void onStop(Bundle savedInstanceState) {
+        try {
+            godDB.close();
+        } catch (GoddbException e) {
+            e.printStackTrace();
+        }
+    }
+
     void putTest(String path, JSONObject obj) {
         try {
-            godDB = DBFactory.open(this); //create or open an existing database using the default name
             godDB.put(path, obj);
-            godDB.close();
             resultText.setText("put");
         } catch (GoddbException e) {
             e.printStackTrace();
@@ -86,9 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
     JSONArray getTest(String path, String condition) {
         try {
-            godDB = DBFactory.open(this); //create or open an existing database using the default name
             JSONArray ret = godDB.get(path, condition);
-            godDB.close();
 
             return ret;
         } catch (GoddbException e) {
@@ -99,9 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     void delTest(String path, String condition) {
         try {
-            godDB = DBFactory.open(this); //create or open an existing database using the default name
             godDB.del(path, condition);
-            godDB.close();
             resultText.setText("delete");
         } catch (GoddbException e) {
             e.printStackTrace();
