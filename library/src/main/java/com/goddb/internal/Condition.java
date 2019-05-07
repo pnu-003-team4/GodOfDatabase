@@ -84,6 +84,9 @@ public class Condition {
     }
 
     public static JSONArray extractCondition(JSONArray jsonArray, String condition) throws JSONException {
+
+        if (condition.isEmpty()) return jsonArray;
+
         JSONArray newarray = new JSONArray();
         separation(condition, 0);
 

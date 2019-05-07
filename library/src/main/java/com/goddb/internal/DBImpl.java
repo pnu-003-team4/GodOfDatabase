@@ -91,10 +91,10 @@ public class DBImpl implements DB {
             JSONArray newArray = new JSONArray();
             newArray.put(object);
 
-            __put(path, newArray.toString());
+            __put(String.valueOf(newKey), newArray.toString());
         } else {
             try {
-                JSONArray oldArray = new JSONArray(__get(path));
+                JSONArray oldArray = new JSONArray(__get(String.valueOf(newKey)));
                 oldArray.put(object);
                 __put(String.valueOf(newKey), oldArray.toString());
             } catch (JSONException e) {
@@ -132,13 +132,11 @@ public class DBImpl implements DB {
     @Override
     public void del(String path, String condition) throws GoddbException {
         boolean chk = false;
-        int newKey;
-        ArrayList<String> wildcardArrayList = Wildcard.extractWildcard(path, null); // mappingTable);
+        ArrayList<Integer> wildcardArrayList = Wildcard.extractWildcard(path, mappingTable);
 
-        for (String curPath : wildcardArrayList) {
-            newKey = mappingTable.getKey(curPath);
+        for (int curPath : wildcardArrayList) {
             try {
-                JSONArray oldArray = new JSONArray(__get(String.valueOf(newKey)));
+                JSONArray oldArray = new JSONArray(__get(String.valueOf(curPath)));
                 JSONArray conditionArray, retArray = new JSONArray();
 
                 conditionArray = Condition.extractCondition(oldArray, condition);
@@ -154,8 +152,8 @@ public class DBImpl implements DB {
                     }
                     chk = false;
                 }
-                __del(String.valueOf(newKey));
-                __put(String.valueOf(newKey), retArray.toString());
+                __del(String.valueOf(curPath));
+                __put(String.valueOf(curPath), retArray.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -164,13 +162,11 @@ public class DBImpl implements DB {
 
     @Override
     public void deldir(String path) {
-        ArrayList<String> wildcardArrayList = Wildcard.extractWildcard(path, null); // mappingTable);
-        int newKey;
+        ArrayList<Integer> wildcardArrayList = Wildcard.extractWildcard(path, mappingTable);
 
-        for (String curPath : wildcardArrayList) {
-            newKey = mappingTable.getKey(curPath);
+        for (int curPath : wildcardArrayList) {
             try {
-                __del(String.valueOf(newKey));
+                __del(String.valueOf(curPath));
             } catch (GoddbException e) {
                 e.printStackTrace();
             }
@@ -184,18 +180,15 @@ public class DBImpl implements DB {
     @Override
     public JSONArray get(String path, String condition) throws GoddbException {
         JSONArray retData;
-        int newKey;
 
         retData = new JSONArray();
 
-        ArrayList<String> paths = Wildcard.extractWildcard(path, null); // mappingTable);
-
-        for (String curPath : paths) {
-            newKey = mappingTable.getKey(curPath);
-            if (exists(String.valueOf(newKey))) {
+        ArrayList<Integer> paths = Wildcard.extractWildcard(path, mappingTable);
+        for (int curPath : paths) {
+            if (exists(String.valueOf(curPath))) {
                 try {
                     JSONArray tempArray;
-                    tempArray = Condition.extractCondition(new JSONArray(__get(String.valueOf(newKey))), condition);
+                    tempArray = Condition.extractCondition(new JSONArray(__get(String.valueOf(curPath))), condition);
                     for (int i = 0; i < tempArray.length(); i++) {
                         retData.put(tempArray.getJSONObject(i));
                     }
