@@ -6,11 +6,6 @@ package com.goddb.internal;
 import java.util.ArrayList;
 
 public class Wildcard {
-    static MappingTable mappingTable = new MappingTable();
-
-
-
-
     public static String Sharp(String path) {
         //Todo : Search
         // 차일드 나오게 만들어야함
@@ -24,7 +19,7 @@ public class Wildcard {
         return path;
     }
 
-    public static int Split(String path) {
+    public static int Split(String path, MappingTable mappingTable) {
         //Todo : multi search
         String wild = "";
         boolean IsWild = false;
@@ -52,8 +47,6 @@ public class Wildcard {
     public static ArrayList<Integer> extractWildcard(String path, MappingTable mp) {
         // 변수
         ArrayList<Integer> result = new ArrayList<>();
-        //
-        mappingTable = mp;
 
         //path = "/Korea/Pusan/Haeundae/*&/Korea/Seoul/kangnam&US/Sanhose&??&whycant..&#zzez";
         String wild = "";
@@ -90,7 +83,7 @@ public class Wildcard {
                 String str = path;
                 String[] array = str.split("&");
                 for (int i = 0; i < array.length; i++) {
-                    result.add(Split(array[i]));
+                    result.add(Split(array[i], mp));
 
 
                 }
@@ -99,7 +92,7 @@ public class Wildcard {
             }
         }
 
-
-        return null;
+        result.add(mp.getKey(path));
+        return result;
     }
 }
