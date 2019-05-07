@@ -1,6 +1,7 @@
 package com.goddb.internal;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -99,36 +100,42 @@ public class MappingTable implements Serializable {
     	table = new ArrayList<>(mt.table);
     }*/
     /**
-     * TODO read file
+     * constructor with read file
      *
      * @param fileName This is the file with mapping table.
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws ClassNotFoundException
      */
-    public MappingTable(String fileName) {
-    	/*
-        try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
-            table = (ArrayList<PathInfo>) ois.readObject();
-            ois.close();
-        } catch (IOException ex) {
-            //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+    public MappingTable(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
+        table = new ArrayList<>();
+        readFile(fileName);
     }
     /**
-     * TODO save mapping table to file
+     * read file
+     *
+     * @param fileName This is the file with mapping table.
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws ClassNotFoundException
+     */
+    @SuppressWarnings("unchecked")
+    public void readFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+        table = (ArrayList<PathInfo>) ois.readObject();
+        ois.close();
+    }
+    /**
+     * save mapping table to file
      *
      * @param fileName This is the file to save mapping table.
+     * @throws IOException
+     * @throws FileNotFoundException
      */
-    public void saveToFile(String fileName) {
-    	/*
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
-            oos.writeObject(table);
-            oos.close();
-        } catch (IOException ex) {
-            //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
-        } */
+    public void saveToFile(String fileName) throws FileNotFoundException, IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+        oos.writeObject(table);
+        oos.close();
     }
 
     /**
@@ -249,14 +256,14 @@ public class MappingTable implements Serializable {
         int parentKey = getParentKey(key);
         if(!table.get(parentKey).deleteChild(key))
             return false;
-        return deleteKey(key);
+        return __deleteKey(key);
     }
-    private boolean deleteKey(int key) {
+    private boolean __deleteKey(int key) {
         if( key < 0 ) // exception
             return false;
         ArrayList<Integer> childkeys = getChildKeys(key);
         for( int i =0; i<childkeys.size(); ++i) {
-            deleteKey(childkeys.get(i));
+            __deleteKey(childkeys.get(i));
         }
         table.get(key).keyToInvalid();
         return true;
@@ -279,7 +286,7 @@ public class MappingTable implements Serializable {
         return str;
     }
     public void print() {
-        for(PathInfo p : table ) {
+        for (PathInfo p : table) {
             logger.info(p.toString());
             //System.out.println(p);
         }
