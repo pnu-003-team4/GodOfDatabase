@@ -43,6 +43,7 @@ public class MappingTable implements Serializable {
     // parent: 상위 directory key
     // childs: 하위 directory keys
     private class PathInfo implements Serializable {
+        private static final long serialVersionUID = 2L;
         private int key;
         private final String name;
         private final int parent;
@@ -60,15 +61,29 @@ public class MappingTable implements Serializable {
             this.parent = p.parent;
             this.childs = new ArrayList<>(p.childs);
         }*/
-        public void addChild(int child) {
-            childs.add(child);
+        public boolean addChild(int child) { //
+            int i;
+            for(i=0; i<childs.size() && childs.get(i)<child; ++i );
+            if(i<childs.size() && childs.get(i)==child)
+                return false; // 실패
+            childs.add(i,child);
+            return true;
         }
-        /*public void keyToInvalid() { // key가 delete될 때
-        	key = -1;
-        }*/
-        /*public boolean isInvalid() { // delete된 index 알아낼 때 필요 (findInvalidIndex)
-        	return key < 0;
-        }*/
+        public boolean deleteChild(int child) { //
+            int i;
+            for(i=0; i<childs.size() && !(childs.get(i)==child); ++i ) ;
+            if(i<childs.size()) {
+                childs.remove(i);
+                return true;
+            }
+            return false; // 실패
+        }
+        public void keyToInvalid() { // key가 delete될 때
+            key = -1;
+        }
+        public boolean isInvalid() { // delete된 index 알아낼 때 필요 (findInvalidIndex)
+            return key < 0;
+        }
         @Override
         public String toString() {
             return String.format(Locale.US, "key: %d,\tname: %-20s, parent: %d,\tchilds: %s", key, name, parent, childs);
@@ -88,7 +103,7 @@ public class MappingTable implements Serializable {
      *
      * @param fileName This is the file with mapping table.
      */
-    //public MappingTable(String fileName) {
+    public MappingTable(String fileName) {
     	/*
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
@@ -99,13 +114,13 @@ public class MappingTable implements Serializable {
         } catch (ClassNotFoundException ex) {
             //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
         }*/
-    //}
+    }
     /**
      * TODO save mapping table to file
      *
      * @param fileName This is the file to save mapping table.
      */
-    //public void saveToFile(String fileName) {
+    public void saveToFile(String fileName) {
     	/*
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
@@ -114,7 +129,7 @@ public class MappingTable implements Serializable {
         } catch (IOException ex) {
             //Logger.getLogger(Tester.class.getName()).log(Level.SEVERE, null, ex);
         } */
-    //}
+    }
 
     /**
      * path -> key
@@ -169,14 +184,14 @@ public class MappingTable implements Serializable {
             }
             if( j == table.get(key).childs.size() ) {	// 존재하지 않으면 path를 추가함
                 int index = findInvalidIndex();
-                //if( index < 0 ) {
-                index = table.size();
-                table.add(new PathInfo(index, name[i], key));
-                //}
-                /*else { //delete된  key가 존재
-                	table.remove(index);
-                	table.add(index, new PathInfo(index, name[i], key));
-                }*/
+                if( index < 0 ) {
+                    index = table.size();
+                    table.add(new PathInfo(index, name[i], key));
+                }
+                else { //delete된  key가 존재
+                    table.remove(index);
+                    table.add(index, new PathInfo(index, name[i], key));
+                }
                 table.get(key).addChild(index);
                 key = index;
             }
@@ -191,12 +206,12 @@ public class MappingTable implements Serializable {
      */
     private int findInvalidIndex() {
         int index = -1;
-    	/*for( int i=0; i<table.size(); ++i) {
-    		if(table.get(i).isInvalid() ) { // delete된 key가 존재
-    			index = i;
-    			break;
-    		}
-    	}*/
+        for( int i=0; i<table.size(); ++i) {
+            if(table.get(i).isInvalid() ) { // delete된 key가 존재
+                index = i;
+                break;
+            }
+        }
         return index;
     }
 
@@ -229,22 +244,23 @@ public class MappingTable implements Serializable {
      * @param path which You want to delete.
      * @return delete is success. (path: exist)
      */
-    /*public boolean deletePath(String path) {
-    	int key = getKey(path);
-    	int parentKey = getParentKey(key);
-    	// TODO deleteChild 만들기(getchildkey위해), isInvalid 필요??
+    public boolean deletePath(String path) {
+        int key = getKey(path);
+        int parentKey = getParentKey(key);
+        if(!table.get(parentKey).deleteChild(key))
+            return false;
         return deleteKey(key);
     }
     private boolean deleteKey(int key) {
-    	if( key < 0 ) // exception
-    		return false;
-    	ArrayList<Integer> childkeys = getChildKeys(key);
-    	for( int i =0; i<childkeys.size(); ++i) {
-    		deleteKey(childkeys.get(i));
-    	}
-    	table.get(key).keyToInvalid();
+        if( key < 0 ) // exception
+            return false;
+        ArrayList<Integer> childkeys = getChildKeys(key);
+        for( int i =0; i<childkeys.size(); ++i) {
+            deleteKey(childkeys.get(i));
+        }
+        table.get(key).keyToInvalid();
         return true;
-    }*/
+    }
     /**
      * Check that path is in mapping table
      *
@@ -265,6 +281,7 @@ public class MappingTable implements Serializable {
     public void print() {
         for(PathInfo p : table ) {
             logger.info(p.toString());
+            //System.out.println(p);
         }
     }
 
