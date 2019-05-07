@@ -17,7 +17,6 @@
 package com.goddb.internal;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.goddb.DB;
@@ -88,13 +87,11 @@ public class DBImpl implements DB {
         checkArgs(path, object); // path, object가 null 인지 확인
 
         newKey = mappingTable.addPathAndGetKey(path);
-        Log.d("newKey", String.valueOf(newKey));
-        Log.d("newKey", String.valueOf(mappingTable.getKey(path)));
         if (!exists(String.valueOf(newKey))) {
             JSONArray newArray = new JSONArray();
             newArray.put(object);
 
-            __put(path, newArray.toString());
+            __put(String.valueOf(newKey), newArray.toString());
         } else {
             try {
                 JSONArray oldArray = new JSONArray(__get(String.valueOf(newKey)));
@@ -188,10 +185,7 @@ public class DBImpl implements DB {
 
         ArrayList<Integer> paths = Wildcard.extractWildcard(path, mappingTable);
         for (int curPath : paths) {
-            Log.d("get", String.valueOf(curPath));
-            Log.d("exist", String.valueOf(exists(String.valueOf(curPath))));
             if (exists(String.valueOf(curPath))) {
-                Log.d("get", "exists");
                 try {
                     JSONArray tempArray;
                     tempArray = Condition.extractCondition(new JSONArray(__get(String.valueOf(curPath))), condition);

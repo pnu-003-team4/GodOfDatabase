@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         resultText = findViewById(R.id.result);
 
         try {
-            godDB = DBFactory.open(this, "test"); //create or open an existing database using the default name
+            godDB = DBFactory.open(this); //create or open an existing database using the default name
         } catch (GoddbException e) {
             e.printStackTrace();
         }
