@@ -159,6 +159,43 @@ public class DBImpl implements DB {
             }
         }
     }
+    // ***********************
+    // *      UPDATE
+    // ***********************
+
+    @Override
+    public void update(String path, String condition, String modData) throws GoddbException {
+        boolean chk = false;
+        //JSONObject modObject = new JSONObject(modData);
+
+        ArrayList<Integer> wildcardArrayList = Wildcard.extractWildcard(path, mappingTable);
+
+        for (int curPath : wildcardArrayList) {
+            try {
+                JSONArray oldArray = new JSONArray(__get(String.valueOf(curPath)));
+                JSONArray conditionArray, retArray = new JSONArray();
+
+                conditionArray = Condition.extractCondition(oldArray, condition);
+
+                for (int i = 0; i < oldArray.length(); i++) {
+                    for (int j = 0; j < conditionArray.length(); j++) {
+                        if (oldArray.getJSONObject(i).toString().equals(conditionArray.getJSONObject(j).toString())) {
+                            chk = true;
+                        }
+                    }
+                    if (!chk) {
+                        //oldArray.getJSONObject(i).put();
+                        retArray.put(oldArray.getJSONObject(i));
+                    }
+                    chk = false;
+                }
+                __del(String.valueOf(curPath));
+                __put(String.valueOf(curPath), retArray.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Override
     public void deldir(String path) {

@@ -91,6 +91,19 @@ public interface DB {
     void deldir(String path) throws GoddbException;
 
     //******************************************************************************************************************
+    //*      UPDATE
+    //******************************************************************************************************************
+    /**
+     * Updates the objects in path following the wildcard and codition.
+     *
+     * @param path not null.
+     * @param condition allow null.
+     * @throws GoddbException if the key is null.
+     */
+    void update(String path, String condition, String modData) throws GoddbException;
+
+
+    //******************************************************************************************************************
     //*      RETRIEVE
     //******************************************************************************************************************
     /**
