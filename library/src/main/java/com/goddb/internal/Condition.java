@@ -3,6 +3,7 @@ package com.goddb.internal;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.regex.Pattern;
 
 
 public class Condition {
@@ -83,9 +84,7 @@ public class Condition {
         }
     }
 
-    public static JSONArray extractCondition(JSONArray jsonArray, String condition) throws JSONException {
-
-        if (condition.isEmpty()) return jsonArray;
+    private static JSONArray objectCondition(JSONArray jsonArray, String condition) throws JSONException {
 
         JSONArray newarray = new JSONArray();
         separation(condition, 0);
@@ -137,5 +136,23 @@ public class Condition {
             }
         }
         return newarray;
+    }
+
+    public static JSONArray extractCondition(JSONArray jsonArray, String condition) throws JSONException {
+
+        if (condition.isEmpty()) return jsonArray;
+
+        JSONArray newArray;
+        // age<20&&age>10 -> splitConditions: [ age<20, age>10 ]
+        String[] splitConditions;
+        Pattern pattern = Pattern.compile("&&");
+        splitConditions = pattern.split(condition);
+        int conditionNum = splitConditions.length;
+
+        newArray = objectCondition(jsonArray, splitConditions[0]);
+        for(int i=1; i<conditionNum; ++i) {
+            newArray = objectCondition(newArray, splitConditions[i]);
+        }
+        return newArray;
     }
 }
