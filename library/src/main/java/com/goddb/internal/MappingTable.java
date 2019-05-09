@@ -255,7 +255,7 @@ public class MappingTable implements Serializable {
      */
     public boolean deletePath(String path) {
         int key = getKey(path);
-        if( key < 0 )
+        if( key < 0 ) // 존재x, invalid
             return false;
         int parentKey = getParentKey(key);
         if( parentKey < 0 ) // root를 지울 순 없음.
@@ -263,8 +263,8 @@ public class MappingTable implements Serializable {
         return table.get(parentKey).deleteChild(key) && __deleteKey(key);
     }
     private boolean __deleteKey(int key) {
-        if( key < 0 ) // exception
-            return false;
+    	/*if( table.get(key).isInvalid() ) //.. 필요할까? deletePath에서만 쓸거면..
+    		return false;*/
         ArrayList<Integer> childkeys = getChildKeys(key);
         for( int i =0; i<childkeys.size(); ++i) {
             __deleteKey(childkeys.get(i));
