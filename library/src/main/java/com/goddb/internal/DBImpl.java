@@ -166,7 +166,7 @@ public class DBImpl implements DB {
     @Override
     public void update(String path, String condition, String modData) throws GoddbException {
         boolean chk = false;
-        //JSONObject modObject = new JSONObject(modData);
+        String[] section = modData.split(",");
 
         ArrayList<Integer> wildcardArrayList = Wildcard.extractWildcard(path, mappingTable);
 
@@ -184,7 +184,10 @@ public class DBImpl implements DB {
                         }
                     }
                     if (!chk) {
-                        //oldArray.getJSONObject(i).put();
+                        for(int k = 0; k < section.length ; k++) {
+                            String[] data = section[k].split(":");
+                            oldArray.getJSONObject(i).put(data[0], data[1]);
+                        }
                         retArray.put(oldArray.getJSONObject(i));
                     }
                     chk = false;
@@ -196,6 +199,7 @@ public class DBImpl implements DB {
             }
         }
     }
+
 
     @Override
     public void deldir(String path) {
