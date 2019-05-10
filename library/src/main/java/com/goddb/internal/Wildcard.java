@@ -13,14 +13,17 @@ public class Wildcard {
         return path;
     }
 
-    public static String Star(String path) {
-        //Todo : View all
-        System.out.println("* " + path);
-        return path;
+    public static ArrayList<Integer> Star(int pathkey, MappingTable mappingTable) {
+        ArrayList<Integer> child;
+        child = mappingTable.getChildKeys(pathkey);
+        for (int i = 0; i < child.size(); i++) {
+            child.addAll(Star(child.get(i), mappingTable));
+        }
+
+        return child;
     }
 
-    public static int Split(String path, MappingTable mappingTable) {
-        //Todo : multi search
+    public static ArrayList<Integer> Split(String path, MappingTable mappingTable) {
         String wild = "";
         boolean IsWild = false;
         int wildlocation = 0;
@@ -34,13 +37,16 @@ public class Wildcard {
             wild = "*";
             wildlocation = path.indexOf("*");
             IsWild = true;
-            Star(path);
+            String Starpath = path.substring(0, wildlocation - 1);
+            return Star(mappingTable.getKey(Starpath), mappingTable);
         }
         if (IsWild == false) {
             //ArrayList<Integer> child;
-            return mappingTable.getKey(path);
+            ArrayList<Integer> temp = new ArrayList<>();
+            temp.add(mappingTable.getKey(path));
+            return temp;
         }
-        return 0;
+        return null;
 
     }
 
@@ -69,30 +75,30 @@ public class Wildcard {
                 wild = "*";
                 wildlocation = path.indexOf("*");
                 IsWild = true;
-                Star(path);
+
             }
 
         }
 
         if (IsWild) {
-            if (wild.equals("#")) {
+            if (("#").equals(wild)) {
                 Sharp(path);
-            } else if (wild.equals("*")) {
-                Star(path);
-            } else if (wild.equals("&")) {
+            } else if (("*").equals(wild)) {
+                String Starpath = path.substring(0, wildlocation - 1);
+                result.addAll(Star(mp.getKey(Starpath), mp));
+            } else if (("&").equals(wild)) {
                 String str = path;
                 String[] array = str.split("&");
                 for (int i = 0; i < array.length; i++) {
-                    result.add(Split(array[i], mp));
-
+                    result.addAll(Split(array[i], mp));
 
                 }
                 // System.out.println(result);
                 return result;
             }
-        }
+        } else
+            result.add(mp.getKey(path));
 
-        result.add(mp.getKey(path));
         return result;
     }
 }
