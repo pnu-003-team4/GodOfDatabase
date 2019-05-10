@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class DBImpl implements DB {
     private static final String LIB_NAME = "goddb-native";
@@ -159,6 +160,54 @@ public class DBImpl implements DB {
             }
         }
     }
+    // ***********************
+    // *      UPDATE
+    // ***********************
+
+    @Override
+    public void update(String path, String condition, String modData) throws GoddbException {
+        try {
+            JSONObject obj = new JSONObject();
+
+            String[] section = modData.split(",");
+            for (int k = 0; k < section.length; k++) {
+                String[] data = section[k].split("=");
+                obj.put(data[0], data[1]);
+            }
+            __update(path, condition, obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void __update(String path, String condition, JSONObject modData) throws GoddbException {
+
+        Iterator<String> keys = modData.keys();
+        ArrayList<Integer> wildcardArrayList = Wildcard.extractWildcard(path, mappingTable);
+
+        for (int curPath : wildcardArrayList) {
+            try {
+                JSONArray oldArray = new JSONArray(__get(String.valueOf(curPath)));
+                JSONArray conditionArray = Condition.extractCondition(oldArray, condition);
+
+                for (int i = 0; i < oldArray.length(); i++) {
+                    for (int j = 0; j < conditionArray.length(); j++) {
+                        if (oldArray.getJSONObject(i).toString().equals(conditionArray.getJSONObject(j).toString())) {
+                            while (keys.hasNext()) {
+                                String curKey = keys.next();
+                                oldArray.getJSONObject(i).put(curKey, modData.get(curKey));
+                            }
+                        }
+                    }
+                }
+                __del(String.valueOf(curPath));
+                __put(String.valueOf(curPath), oldArray.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     @Override
     public void deldir(String path) {
