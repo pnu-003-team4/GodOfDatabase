@@ -80,7 +80,7 @@ public interface DB {
      * @param condition allow null.
      * @throws GoddbException if the key is null.
      */
-    void del(String path, String condition) throws GoddbException;
+    JSONArray del(String path, String condition) throws GoddbException;
 
     /**
      * Deletes the path following the wildcard and codition.
@@ -88,7 +88,7 @@ public interface DB {
      * @param path      not null.
      * @throws GoddbException if the key is null.
      */
-    void deldir(String path) throws GoddbException;
+    JSONArray deldir(String path) throws GoddbException;
 
     //******************************************************************************************************************
     //*      UPDATE
