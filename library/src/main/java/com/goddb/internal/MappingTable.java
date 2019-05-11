@@ -8,9 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Locale;
-import java.util.Scanner;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -250,11 +248,10 @@ public class MappingTable implements Serializable {
     /**
      * Delete the path that exists in the mapping table.
      * Also delete all subdirectories (paths).
-     * @param path which You want to delete.
+     * @param key which You want to delete.
      * @return delete is success. (path: exist)
      */
-    public boolean deletePath(String path) {
-        int key = getKey(path);
+    public boolean deletePath(int key) {
         if( key < 0 ) // 존재x, invalid
             return false;
         int parentKey = getParentKey(key);
