@@ -8,9 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Locale;
-import java.util.Scanner;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -39,6 +37,8 @@ import java.util.regex.Pattern;
 public class MappingTable implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger("logger");
+
+    private ArrayList<PathInfo> table;
 
     // PathInfo: mapping table element class
     // key: 현재 directory(path) key ( -1(or <0) : invalid )
@@ -74,7 +74,7 @@ public class MappingTable implements Serializable {
         }
         public boolean deleteChild(int child) { //
             int i;
-            for(i=0; i<childs.size() && !(childs.get(i)==child); ++i ) ;
+            for(i=0; i<childs.size() && childs.get(i)!=child; ++i ) ;
             if(i<childs.size()) {
                 childs.remove(i);
                 return true;
@@ -92,7 +92,7 @@ public class MappingTable implements Serializable {
             return String.format(Locale.US, "key: %d,\tname: %-20s, parent: %d,\tchilds: %s", key, name, parent, childs);
         }
     }
-    private ArrayList<PathInfo> table;
+
 
     public MappingTable() {
         table = new ArrayList<>();
@@ -260,14 +260,14 @@ public class MappingTable implements Serializable {
         int parentKey = getParentKey(key);
         if( parentKey < 0 ) // root를 지울 순 없음.
             return false;
-        return table.get(parentKey).deleteChild(key) && __deleteKey(key);
+        return table.get(parentKey).deleteChild(key) && deleteKey(key);
     }
-    private boolean __deleteKey(int key) {
+    private boolean deleteKey(int key) {
     	/*if( table.get(key).isInvalid() ) //.. 필요할까? deletePath에서만 쓸거면..
     		return false;*/
         ArrayList<Integer> childkeys = getChildKeys(key);
         for( int i =0; i<childkeys.size(); ++i) {
-            __deleteKey(childkeys.get(i));
+            deleteKey(childkeys.get(i));
         }
         table.get(key).keyToInvalid();
         return true;
@@ -278,7 +278,7 @@ public class MappingTable implements Serializable {
      * @param path like /korea/busan/pnu
      * @return path exist
      */
-    public boolean PathExists(String path) {
+    public boolean pathExists(String path) {
         return getKey(path) >= 0;
     }
     @Override
