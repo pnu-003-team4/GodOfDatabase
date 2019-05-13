@@ -3,29 +3,27 @@ package com.goddb.internal;
 //branch test1 test2
 //test
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class Wildcard {
-    ArrayList<JSONObject> result = new ArrayList<>();
-
-
     public static String Sharp(String path) {
         //Todo : Search
+        // 차일드 나오게 만들어야함
         System.out.println("# " + path);
         return path;
     }
 
-    public static String Star(String path) {
-        //Todo : View all
-        System.out.println("* " + path);
-        return path;
+    public static ArrayList<Integer> Star(int pathkey, MappingTable mappingTable) {
+        ArrayList<Integer> child;
+        child = mappingTable.getChildKeys(pathkey);
+        for (int i = 0; i < child.size(); i++) {
+            child.addAll(Star(child.get(i), mappingTable));
+        }
+
+        return child;
     }
 
-    public static String Split(String path) {
-        //Todo : multi search
+    public static ArrayList<Integer> Split(String path, MappingTable mappingTable) {
         String wild = "";
         boolean IsWild = false;
         int wildlocation = 0;
@@ -34,24 +32,29 @@ public class Wildcard {
             wildlocation = path.indexOf("#");
             IsWild = true;
             Sharp(path);
+
         } else if (path.indexOf("*") > -1) {
             wild = "*";
             wildlocation = path.indexOf("*");
             IsWild = true;
-            Star(path);
+            String Starpath = path.substring(0, wildlocation - 1);
+            return Star(mappingTable.getKey(Starpath), mappingTable);
         }
         if (IsWild == false) {
-            // 차일드 나오게 만들어야함
-            System.out.println("& " + path);
+            //ArrayList<Integer> child;
+            ArrayList<Integer> temp = new ArrayList<>();
+            temp.add(mappingTable.getKey(path));
+            return temp;
         }
-        return path;
+        return null;
+
     }
 
-    public static ArrayList<String> extractWildcard(String path, List Minjae) {
+    public static ArrayList<Integer> extractWildcard(String path, MappingTable mp) {
         // 변수
-        //ArrayList<JSONObject> result = new ArrayList<>();
-        // 변수
-        path = "Korea/Pusan/Haeundae/*&Korea/Seoul/kangnam&US/Sanhose&??&whycant..&#zzez";
+        ArrayList<Integer> result = new ArrayList<>();
+
+        //path = "/Korea/Pusan/Haeundae/*&/Korea/Seoul/kangnam&US/Sanhose&??&whycant..&#zzez";
         String wild = "";
         boolean IsWild = false;
 
@@ -72,46 +75,30 @@ public class Wildcard {
                 wild = "*";
                 wildlocation = path.indexOf("*");
                 IsWild = true;
-                Star(path);
+
             }
 
         }
 
         if (IsWild) {
-            if (wild.equals("#")) {
+            if (("#").equals(wild)) {
                 Sharp(path);
-            } else if (wild.equals("*")) {
-                Star(path);
-            } else if (wild.equals("&")) {
+            } else if (("*").equals(wild)) {
+                String Starpath = path.substring(0, wildlocation - 1);
+                result.addAll(Star(mp.getKey(Starpath), mp));
+            } else if (("&").equals(wild)) {
                 String str = path;
                 String[] array = str.split("&");
                 for (int i = 0; i < array.length; i++) {
-                    Split(array[i]);
-            }
-            }
-        }
+                    result.addAll(Split(array[i], mp));
 
+                }
+                // System.out.println(result);
+                return result;
+            }
+        } else
+            result.add(mp.getKey(path));
 
-        return null;
+        return result;
     }
 }
-
-
-
-
-/*
-public class com.goddb.internal.Wildcard {
-
-
-    public static String[] extractWildcard(List minjae, String path) {
-        /*
-         * TODO: path를 받았을 때(ex, "/Korea/Busan/University/*"), 연관된 path를 찾아내어 배열로 Return
-         * TODO: 민재가 만드는 리스트(path와 index를 매칭시키는)를 가져와서 확인한다....
-         *
-         * return: 와일드카드와 연관된 path
-
-
-        return null;
-    }
-}
-*/

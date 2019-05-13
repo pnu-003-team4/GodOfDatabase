@@ -30,7 +30,17 @@ public class Condition {
                 idx = condition.indexOf("==");
                 leftOperand = condition.substring(0, idx);
                 rightOperand = condition.substring(idx+2);
-            } else if (condition.indexOf(">") != -1) {
+            } else if(condition.indexOf(">=") != -1) {
+                operator = ">=";
+                idx = condition.indexOf("=");
+                leftOperand = condition.substring(0, idx-1);
+                rightOperand = condition.substring(idx+1);
+            } else if(condition.indexOf("<=") != -1) {
+                operator = "<=";
+                idx = condition.indexOf("=");
+                leftOperand = condition.substring(0, idx-1);
+                rightOperand = condition.substring(idx+1);
+            } else if(condition.indexOf(">") != -1) {
                 operator = ">";
                 idx = condition.indexOf(">");
                 leftOperand = condition.substring(0, idx);
@@ -64,6 +74,9 @@ public class Condition {
     }
 
     public static JSONArray extractCondition(JSONArray jsonArray, String condition) throws JSONException {
+
+        if (condition.isEmpty()) return jsonArray;
+
         JSONArray newarray = new JSONArray();
         separation(condition, 0);
 

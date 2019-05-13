@@ -1,39 +1,39 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
+ADDED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:1-4:12
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:1-4:12
 	package
-		ADDED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:11-30
-		INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+		ADDED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:11-30
+		INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		ADDED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-		INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+		INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
+		ADDED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:1-4:12
+		INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
+		ADDED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:1-4:12
 	android:versionCode
-		INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		ADDED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:2:1-4:12
-		INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+		INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
+		ADDED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:2:1-4:12
+		INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
 application
-ADDED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml:3:10-25
+ADDED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml:3:10-25
 uses-sdk
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
+INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		ADDED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+		INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
+		ADDED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		ADDED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
-		INJECTED from /Users/junghyewon/StudioProjects/GodOfDatabase/library/src/main/AndroidManifest.xml
+		INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
+		ADDED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\lim00\AndroidStudioProjects\GodOfDatabase_\library\src\main\AndroidManifest.xml
