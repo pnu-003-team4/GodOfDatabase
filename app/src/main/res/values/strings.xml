@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GodOfDatabase</string>
+    <string name="snappy_test">snappy 성능</string>
+    <string name="button">Button</string>
+    <string name="GOD_test">GOD 성능</string>
+    <string name="result">result</string>
 </resources>
