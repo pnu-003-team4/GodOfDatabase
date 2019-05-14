@@ -28,6 +28,7 @@ public class Quality_test extends AppCompatActivity {
                 long beginWriteStr = System.nanoTime();
                 for(int i=0; i<1000; i ++){
                     int num = (int)Math.random() * 1000;
+
                     sqliteDbManager.insert("insert into MYLIST values(null, 'test', " + num + ");");
 //                    textView.setText(sqliteDbManager.PrintData());
 
