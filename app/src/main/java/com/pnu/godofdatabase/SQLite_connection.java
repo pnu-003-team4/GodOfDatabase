@@ -18,18 +18,21 @@ public class SQLite_connection extends Activity {
 
         final SQLiteDbManager sqliteDbManager = new SQLiteDbManager(getApplicationContext(), "Food.db", null, 1);
 
+        // DB에 저장 될 속성을 입력받는다
+//        final EditText etName = findViewById(R.id.et_name);
+//        final EditText etAge = findViewById(R.id.et_age);
 
-        final EditText edit_put = findViewById(R.id.edit_put);
-        final EditText edit_select = findViewById(R.id.edit_select);
-        final EditText edit_del = findViewById(R.id.edit_del);
-        final EditText edit_update = findViewById(R.id.edit_update);
+        final EditText edit_put = (EditText)findViewById(R.id.edit_put);
+        final EditText edit_select = (EditText)findViewById(R.id.edit_select);
+        final EditText edit_del = (EditText)findViewById(R.id.edit_del);
+        final EditText edit_update = (EditText)findViewById(R.id.edit_update);
 
-        final TextView textView = findViewById(R.id.output);
+        final TextView textView = (TextView)findViewById(R.id.output);
 
-        Button btn_put = findViewById(R.id.btn_put);
-        Button btn_select = findViewById(R.id.btn_select);
-        Button btn_del = findViewById(R.id.btn_del);
-        Button btn_update = findViewById(R.id.btn_update);
+        Button btn_put = (Button) findViewById(R.id.btn_put);
+        Button btn_select = (Button) findViewById(R.id.btn_select);
+        Button btn_del = (Button)findViewById(R.id.btn_del);
+        Button btn_update = (Button)findViewById(R.id.btn_update);
 
         // Insert
         btn_put.setOnClickListener(new OnClickListener() {
