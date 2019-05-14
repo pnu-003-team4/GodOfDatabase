@@ -1,17 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GOD_connection">
+
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="88dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal"
-        android:textSize="30dp"
-        android:text="GodOfDatabase" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PATH:"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/inputPath"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DATA:"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/inputData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CONDITION:"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/inputCondition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/inputBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/holo_purple"
+        android:text="입력"
+        android:textColor="@android:color/background_light" />
+
+    <Button
+        android:id="@+id/outputBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/holo_purple"
+        android:text="출력"
+        android:textColor="@android:color/background_light" />
+
+    <Button
+        android:id="@+id/delBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@android:color/holo_purple"
+        android:text="삭제"
+        android:textColor="@android:color/background_light" />
+
+    <Button
+        android:id="@+id/modBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_purple"
+        android:text="수정"
+        android:textColor="@android:color/background_light" />
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light" />
+
 </LinearLayout>
