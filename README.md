@@ -1,5 +1,8 @@
 프로젝트설명
 =============
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bd116007c2834dceb3b698ca37f61f9a)](https://app.codacy.com/app/SuhoSon/GodOfDatabase?utm_source=github.com&utm_medium=referral&utm_content=pnu-003-team4/GodOfDatabase&utm_campaign=Badge_Grade_Dashboard)
+
 요약하자면, **GodDB**는 사용자 친화적인 인터페이스를 가지는 데이터베이스입니다.
 
 **LevelDB**와 **Snappy 알고리즘**을 적용하여 만들어진 [SnappyDB](http://www.snappydb.com/)에서 사용한 JNI를 기반으로 하여 인터페이스를 재구현하는 프로젝트입니다.

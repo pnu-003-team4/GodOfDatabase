@@ -8,9 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Locale;
-import java.util.Scanner;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -30,6 +28,8 @@ import java.util.regex.Pattern;
  *
  * 원하는 path의 부모 directory(path) key를 해당 path의 key 정보를 이용하여 얻을 수 있음 (int getParentKey(int))
  * 원하는 path의 자식 directory(path)들의 key를  해당 path의 key 정보를 이용하여 얻을 수 있음 (ArrayList<Integer> getChildKeys(int)
+ *
+ * path 정보를 table에서 지울 수 있음 (boolean deletePath(String))
  *
  * @author MinJae
  *
@@ -248,19 +248,20 @@ public class MappingTable implements Serializable {
     /**
      * Delete the path that exists in the mapping table.
      * Also delete all subdirectories (paths).
-     * @param path which You want to delete.
+     * @param key which You want to delete.
      * @return delete is success. (path: exist)
      */
-    public boolean deletePath(String path) {
-        int key = getKey(path);
-        int parentKey = getParentKey(key);
-        if(!table.get(parentKey).deleteChild(key))
+    public boolean deletePath(int key) {
+        if( key < 0 ) // 존재x, invalid
             return false;
-        return __deleteKey(key);
+        int parentKey = getParentKey(key);
+        if( parentKey < 0 ) // root를 지울 순 없음.
+            return false;
+        return table.get(parentKey).deleteChild(key) && __deleteKey(key);
     }
     private boolean __deleteKey(int key) {
-        if( key < 0 ) // exception
-            return false;
+    	/*if( table.get(key).isInvalid() ) //.. 필요할까? deletePath에서만 쓸거면..
+    		return false;*/
         ArrayList<Integer> childkeys = getChildKeys(key);
         for( int i =0; i<childkeys.size(); ++i) {
             __deleteKey(childkeys.get(i));
@@ -286,7 +287,7 @@ public class MappingTable implements Serializable {
         return str;
     }
     public void print() {
-        for (PathInfo p : table) {
+        for(PathInfo p : table ) {
             logger.info(p.toString());
             //System.out.println(p);
         }

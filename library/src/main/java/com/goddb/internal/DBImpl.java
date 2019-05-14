@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class DBImpl implements DB {
     private static final String LIB_NAME = "goddb-native";
@@ -84,7 +85,13 @@ public class DBImpl implements DB {
     @Override
     public void put(String path, JSONObject object) throws GoddbException {
         int newKey;
+
         checkArgs(path, object); // path, object가 null 인지 확인
+        handlePath(path);
+
+        if (path.charAt(0) != '/') {
+            path = "/".concat(path);
+        }
 
         newKey = mappingTable.addPathAndGetKey(path);
         if (!exists(String.valueOf(newKey))) {
@@ -107,6 +114,7 @@ public class DBImpl implements DB {
     public void put(String path, JSONArray objects) throws GoddbException {
         int newKey;
         checkArgs(path, objects);
+        handlePath(path);
 
         newKey = mappingTable.addPathAndGetKey(path);
         if (!exists(String.valueOf(newKey))) {
@@ -130,16 +138,20 @@ public class DBImpl implements DB {
     // ***********************
 
     @Override
-    public void del(String path, String condition) throws GoddbException {
+    public JSONArray del(String path, String condition) throws GoddbException {
+        checkKey(path);
+        handlePath(path);
+
         boolean chk = false;
+        JSONArray retArray = new JSONArray();
         ArrayList<Integer> wildcardArrayList = Wildcard.extractWildcard(path, mappingTable);
 
         for (int curPath : wildcardArrayList) {
             try {
                 JSONArray oldArray = new JSONArray(__get(String.valueOf(curPath)));
-                JSONArray conditionArray, retArray = new JSONArray();
+                JSONArray putArray = new JSONArray();
 
-                conditionArray = Condition.extractCondition(oldArray, condition);
+                JSONArray conditionArray = Condition.extractCondition(oldArray, condition);
 
                 for (int i = 0; i < oldArray.length(); i++) {
                     for (int j = 0; j < conditionArray.length(); j++) {
@@ -148,29 +160,97 @@ public class DBImpl implements DB {
                         }
                     }
                     if (!chk) {
+                        putArray.put(oldArray.getJSONObject(i));
+                    } else {
                         retArray.put(oldArray.getJSONObject(i));
                     }
                     chk = false;
                 }
                 __del(String.valueOf(curPath));
-                __put(String.valueOf(curPath), retArray.toString());
+                __put(String.valueOf(curPath), putArray.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return retArray;
+    }
+    // ***********************
+    // *      UPDATE
+    // ***********************
+
+    @Override
+    public void update(String path, String condition, String modData) throws GoddbException {
+        checkArgs(path, modData);
+        handlePath(path);
+
+        modData = modData.trim();
+
+        try {
+            JSONObject obj = new JSONObject();
+
+            String[] section = modData.split(",");
+            for (int k = 0; k < section.length; k++) {
+                String[] data = section[k].split("=");
+                obj.put(data[0], data[1]);
+            }
+            __update(path, condition, obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void __update(String path, String condition, JSONObject modData) throws GoddbException {
+        ArrayList<Integer> wildcardArrayList = Wildcard.extractWildcard(path, mappingTable);
+
+        for (int curPath : wildcardArrayList) {
+            try {
+                JSONArray oldArray = new JSONArray(__get(String.valueOf(curPath)));
+                JSONArray conditionArray = Condition.extractCondition(oldArray, condition);
+
+                for (int i = 0; i < oldArray.length(); i++) {
+                    for (int j = 0; j < conditionArray.length(); j++) {
+                        if (oldArray.getJSONObject(i).toString().equals(conditionArray.getJSONObject(j).toString())) {
+                            Iterator<String> keys = modData.keys();
+                            while (keys.hasNext()) {
+                                String curKey = keys.next();
+                                oldArray.getJSONObject(i).put(curKey, modData.get(curKey));
+                            }
+                        }
+                    }
+                }
+                __del(String.valueOf(curPath));
+                __put(String.valueOf(curPath), oldArray.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
 
+
     @Override
-    public void deldir(String path) {
+    public JSONArray deldir(String path) throws GoddbException {
+        checkKey(path);
+        handlePath(path);
+
+        JSONArray retArray = new JSONArray();
         ArrayList<Integer> wildcardArrayList = Wildcard.extractWildcard(path, mappingTable);
 
         for (int curPath : wildcardArrayList) {
             try {
+                mappingTable.deletePath(curPath);
+                retArray.put(new JSONArray(__get(String.valueOf(curPath))));
                 __del(String.valueOf(curPath));
+
             } catch (GoddbException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
+        return retArray;
     }
 
     // ***********************
@@ -179,6 +259,9 @@ public class DBImpl implements DB {
 
     @Override
     public JSONArray get(String path, String condition) throws GoddbException {
+        checkKey(path);
+        handlePath(path);
+
         JSONArray retData;
 
         retData = new JSONArray();
@@ -315,6 +398,16 @@ public class DBImpl implements DB {
     // ***********************
     // *      UTILS
     // ***********************
+
+    private String handlePath(String path) {
+        String retPath = path;
+
+        if (path.charAt(0) != '/') {
+            retPath = "/".concat(path);
+        }
+
+        return retPath.trim();
+    }
 
     private void checkArgs(String key, Object value) throws GoddbException {
         checkArgNotEmpty (key, "Key must not be empty");
