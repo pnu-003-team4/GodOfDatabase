@@ -18,6 +18,10 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     api 'com.snappydb:snappydb-lib:0.5.2'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -27,4 +31,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':library')
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 }

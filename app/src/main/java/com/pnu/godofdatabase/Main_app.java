@@ -16,7 +16,7 @@ public class Main_app extends AppCompatActivity {
         Button btn_GOD = findViewById(R.id.btn_GOD);
         Button btn_sqlite = findViewById(R.id.btn_sqlite);
         Button btn_snappy = findViewById(R.id.btn_snappy);
-        Button btn_cal = findViewById(R.id.btn_cal);
+        Button btn_per = findViewById(R.id.btn_cal);
 
 
         btn_GOD.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +39,14 @@ public class Main_app extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Main_app.this, SQLite_connection.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_per.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Main_app.this, performance.class);
                 startActivity(intent);
             }
         });
