@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Quality_test"
+    android:orientation="vertical">
+    
+
+    <Button
+        android:id="@+id/sqlite_put_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SQLite put 테스트" />
+
+    <Button
+        android:id="@+id/sqlite_get_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SQLite get 테스트" />
+
+    <TextView
+        android:id="@+id/output"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="여기있음...."
+        android:textColor="@color/black"
+        android:textSize="20sp"/>
+</LinearLayout>

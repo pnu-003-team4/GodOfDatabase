@@ -19,6 +19,9 @@ public class SQLiteDbManager extends SQLiteOpenHelper {
         // 새로운 테이블을 생성한다.
         // create table 테이블명 (컬럼명 타입 옵션);
         db.execSQL("CREATE TABLE MYLIST( _id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price INTEGER);");
+//        db.execSQL("CREATE TABLE TEST01( _id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, number INTEGER);");
+//        db.execSQL("CREATE TABLE TEST02( _id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, number INTEGER);");
+//        db.execSQL("CREATE TABLE TEST03( _id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, number INTEGER);");
     }
 
     @Override
@@ -66,7 +69,7 @@ public class SQLiteDbManager extends SQLiteOpenHelper {
             str += cursor.getInt(0)
                     + " : Name "
                     + cursor.getString(1)
-                    + ", price = "
+                    + ", number = "
                     + cursor.getInt(2)
                     + "\n";
         }
