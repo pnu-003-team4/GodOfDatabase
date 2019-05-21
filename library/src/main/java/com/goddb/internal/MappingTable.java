@@ -112,9 +112,13 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      * @throws ClassNotFoundException
      */
-    public MappingTable(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public MappingTable(String fileName) throws IOException, ClassNotFoundException {
         table = new ArrayList<>();
-        readFile(fileName);
+        try {
+            readFile(fileName);
+        } catch (FileNotFoundException e) {	// not open
+            table.add(new PathInfo(0,"<root>",-1));
+        }
     }
     /**
      * read file
