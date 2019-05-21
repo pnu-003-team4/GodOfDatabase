@@ -31,8 +31,8 @@ import java.util.regex.Pattern;
  *
  * path 정보를 table에서 지울 수 있음 (boolean deletePath(String))
  *
- * table을 file에 저장하거나 (readFile(String fileName), constructor)
- * 저장했던 file을 읽어올 수 있음 (saveToFile(String fileName))
+ * table을 file에 저장하거나 (saveToFile(String fileName))
+ * 저장했던 file을 읽어올 수 있음 (readFile(String fileName), constructor)
  *
  * @author MinJae
  *
