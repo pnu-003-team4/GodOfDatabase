@@ -31,6 +31,9 @@ import java.util.regex.Pattern;
  *
  * path 정보를 table에서 지울 수 있음 (boolean deletePath(String))
  *
+ * table을 file에 저장하거나 (readFile(String fileName), constructor)
+ * 저장했던 file을 읽어올 수 있음 (saveToFile(String fileName))
+ *
  * @author MinJae
  *
  */
@@ -58,7 +61,7 @@ public class MappingTable implements Serializable {
             this.parent = parent;
             this.childs = new ArrayList<>();
         }
-        /*public PathInfo( PathInfo p ) { // not need
+        /*public PathInfo( PathInfo p ) {
             this.key = p.key;
             this.name = p.name;
             this.parent = p.parent;
@@ -98,13 +101,13 @@ public class MappingTable implements Serializable {
         table = new ArrayList<>();
         table.add(new PathInfo(0,"<root>",-1)); // root
     }
-    /*public MappingTable( final MappingTable mt) {	// not need
+    /*public MappingTable( final MappingTable mt) {
     	table = new ArrayList<>(mt.table);
     }*/
     /**
      * constructor with read file
      *
-     * @param fileName This is the file with mapping table.
+     * @param fileName This is an existing file with mapping table.
      * @throws IOException
      * @throws FileNotFoundException
      * @throws ClassNotFoundException
@@ -116,7 +119,7 @@ public class MappingTable implements Serializable {
     /**
      * read file
      *
-     * @param fileName This is the file with mapping table.
+     * @param fileName This is an existing file with mapping table.
      * @throws IOException
      * @throws FileNotFoundException
      * @throws ClassNotFoundException
@@ -259,14 +262,14 @@ public class MappingTable implements Serializable {
         int parentKey = getParentKey(key);
         if( parentKey < 0 ) // root를 지울 순 없음.
             return false;
-        return table.get(parentKey).deleteChild(key) && deleteKey(key);
+        return table.get(parentKey).deleteChild(key) && deleteKeyChilds(key);
     }
-    private boolean deleteKey(int key) {
+    private boolean deleteKeyChilds(int key) {
     	/*if( table.get(key).isInvalid() ) //.. 필요할까? deletePath에서만 쓸거면..
     		return false;*/
         ArrayList<Integer> childkeys = getChildKeys(key);
         for( int i =0; i<childkeys.size(); ++i) {
-            deleteKey(childkeys.get(i));
+            deleteKeyChilds(childkeys.get(i));
         }
         table.get(key).keyToInvalid();
         return true;
