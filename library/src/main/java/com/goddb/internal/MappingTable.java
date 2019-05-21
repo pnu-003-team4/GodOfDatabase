@@ -148,26 +148,7 @@ public class MappingTable implements Serializable {
      * @return key or -1(path doesn't exist)
      */
     public int getKey(String path) {
-        // path: /korea/busan/pnu -> name: [ root, korea, busan, pnu ]
-        String[] name;
-        Pattern pattern = Pattern.compile("/");
-        name = pattern.split(path);
-        int key = 0;
-        // 해당 key에서의 path와 일치하는 child를 찾음
-        for(int i=1; i<name.length; ++i) {	//
-            int j;
-            int childkey = 0;
-            for(j=0; j<table.get(key).childs.size(); ++j) {
-                childkey = table.get(key).childs.get(j);
-                if (table.get(childkey).name.equals(name[i]))
-                    break;
-            }
-            if( j == table.get(key).childs.size() )
-                return -1;	// table에  해당 path가 존재하지 않음
-            else
-                key = childkey;
-        }
-        return key;
+        return getKeyWithFlag(path,0);
     }
 
     /**
@@ -179,10 +160,24 @@ public class MappingTable implements Serializable {
      * @return key
      */
     public int addPathAndGetKey(String path) {
+        return getKeyWithFlag(path,1);
+    }
+    /**
+     * for duplicate code between getKey and addPathAndGetKey
+     * @param path to get the key
+     * @param flag (0: getKey), (1: addPathAndGetKey)
+     * @return key
+     */
+    private int getKeyWithFlag(String path, int flag) {
+        if (!(flag==0 || flag==1))
+            return -1;
+
+        // path: /korea/busan/pnu -> name: [ root, korea, busan, pnu ]
         String[] name;
         Pattern pattern = Pattern.compile("/");
         name = pattern.split(path);
         int key = 0;
+        // 해당 key에서의 path와 일치하는 child를 찾음
         for(int i=1; i<name.length; ++i) {
             int j;
             int childkey = 0;
@@ -191,7 +186,11 @@ public class MappingTable implements Serializable {
                 if (table.get(childkey).name.equals(name[i]))
                     break;
             }
-            if( j == table.get(key).childs.size() ) {	// 존재하지 않으면 path를 추가함
+            if( j == table.get(key).childs.size() ) {	// table에  해당 path가 존재하지 않음
+                if(flag == 0) {
+                    return -1;
+                }
+                // flag == 1 : 존재하지 않으면 path를 추가함
                 int index = findInvalidIndex();
                 if( index < 0 ) {
                     index = table.size();
