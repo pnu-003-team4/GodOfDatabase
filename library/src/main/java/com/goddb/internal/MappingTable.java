@@ -155,7 +155,19 @@ public class MappingTable implements Serializable {
      * @return key or -1(path doesn't exist)
      */
     public int getKey(String path) {
-        return getKeyWithFlag(path,0);
+        return getKeyWithFlag(path,0,0);
+    }
+
+    /**
+     * current path key & subpath -> key
+     * if path doesn't exist : return -1
+     *
+     * @param currentKey current path key
+     * @param subpath like /korea/busan/pnu
+     * @return key or -1(path doesn't exist)
+     */
+    public int getKeyFromKey(int currentKey, String subpath) {
+        return getKeyWithFlag(subpath,0,currentKey);
     }
 
     /**
@@ -167,15 +179,17 @@ public class MappingTable implements Serializable {
      * @return key
      */
     public int addPathAndGetKey(String path) {
-        return getKeyWithFlag(path,1);
+        return getKeyWithFlag(path,1,0);
     }
+
     /**
      * for duplicate code between getKey and addPathAndGetKey
      * @param path to get the key
      * @param flag (0: getKey), (1: addPathAndGetKey)
+     * @param fromKey (0: if the path is an absolute path), (the others: if the path is a relative path)
      * @return key
      */
-    private int getKeyWithFlag(String path, int flag) {
+    private int getKeyWithFlag(String path, int flag, int fromKey) {
         if (!(flag==0 || flag==1))
             return -1;
 
@@ -183,7 +197,7 @@ public class MappingTable implements Serializable {
         String[] name;
         Pattern pattern = Pattern.compile("/");
         name = pattern.split(path);
-        int key = 0;
+        int key = fromKey; // 0: full path
         // 해당 key에서의 path와 일치하는 child를 찾음
         for(int i=1; i<name.length; ++i) {
             int j;
