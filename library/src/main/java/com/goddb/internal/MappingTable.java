@@ -274,7 +274,6 @@ public class MappingTable implements Serializable {
      * @return delete is success. (path: exist)
      */
     public boolean deletePath(int key) {
-        //int key = getKey(path);
         if( key < 0 ) // 존재x, invalid
             return false;
         int parentKey = getParentKey(key);
