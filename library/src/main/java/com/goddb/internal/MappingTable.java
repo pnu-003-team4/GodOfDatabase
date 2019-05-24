@@ -101,9 +101,9 @@ public class MappingTable implements Serializable {
         table = new ArrayList<>();
         table.add(new PathInfo(0,"<root>",-1)); // root
     }
-    /*public MappingTable( final MappingTable mt) {
-    	table = new ArrayList<>(mt.table);
-    }*/
+    public MappingTable( final MappingTable mt) {
+        table = new ArrayList<>(mt.table);
+    }
     /**
      * constructor with read file
      *
@@ -116,7 +116,7 @@ public class MappingTable implements Serializable {
         table = new ArrayList<>();
         try {
             readFile(fileName);
-        } catch (FileNotFoundException e) {	// not open
+        } catch (FileNotFoundException e) {	// not opened
             table.add(new PathInfo(0,"<root>",-1));
         }
     }
