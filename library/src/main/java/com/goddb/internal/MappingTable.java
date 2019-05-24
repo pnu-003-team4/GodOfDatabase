@@ -270,11 +270,11 @@ public class MappingTable implements Serializable {
     /**
      * Delete the path that exists in the mapping table.
      * Also delete all subdirectories (paths).
-     * @param path which You want to delete.
+     * @param key which You want to delete.
      * @return delete is success. (path: exist)
      */
-    public boolean deletePath(String path) {
-        int key = getKey(path);
+    public boolean deletePath(int key) {
+        //int key = getKey(path);
         if( key < 0 ) // 존재x, invalid
             return false;
         int parentKey = getParentKey(key);
