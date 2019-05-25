@@ -1,11 +1,10 @@
 package com.pnu.godofdatabase;
 
 import android.content.DialogInterface;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
+import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,22 +12,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
 import com.snappydb.SnappyDB;
 import com.snappydb.SnappydbException;
-//import com.snappydb.DBFactory;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-
-import static java.security.AccessController.getContext;
-
 
 public class performance extends AppCompatActivity {
 
@@ -58,7 +49,7 @@ public class performance extends AppCompatActivity {
                     .append(Math.random())
                     .append(Math.random())
                     .append(Math.random())
-                    .append(Math.random()).substring(0, 1000);
+                    .append(Math.random()).substring(0, 100);
 
             keys[i] = key;
             values[i] = value;
@@ -75,32 +66,55 @@ public class performance extends AppCompatActivity {
             }
         }
 
-        // Now we are ready to insert into SnappyDB [String]
         DB db = new SnappyDB.Builder(this)
                 .name("reference_bench_string")
                 .build();
-
         long beginWriteStr = System.nanoTime();
         for (int i = 0; i < 1000; i++) {
             db.put(keys[i], values[i]);
         }
         long endWriteStr = System.nanoTime();
 
-        db.close();
-
-        db = new SnappyDB.Builder(this)
-                .name("reference_bench_string")
-                .build();
-
         long beginReadStr = System.nanoTime();
         for (int i = 0; i < 1000; i++) {
             db.get(keys[i]);
         }
         long endReadStr = System.nanoTime();
+        db.destroy();
 
         writestr = (double)(endWriteStr - beginWriteStr)/1000000;
         readstr = (double)(endReadStr - beginReadStr)/1000000;
-        db.close();
+
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
+        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();     //닫기
+            }
+        });
+        alert.setMessage("1000 write of String in " + String.valueOf(writestr)+"ms\n"
+                +"1000 read of String in " + String.valueOf(readstr)+"ms\n");
+        alert.show();
+    }
+
+    public void testSqlite(){
+        SQLiteDbManager sqliteDbManager = new SQLiteDbManager(getApplicationContext(), "Food.db", null, 1);
+        long beginWriteStr = System.nanoTime();
+        for(int i=0; i<1000; i ++){
+            int num = (int)Math.random() * 1000;
+
+            sqliteDbManager.insert("insert into MYLIST values(null, 'test', " + num + ");");
+        }
+        long endWriteStr = System.nanoTime();
+
+        long beginReadStr = System.nanoTime();
+        sqliteDbManager.PrintData();
+        long endReadStr = System.nanoTime();
+        sqliteDbManager.close();
+
+        writestr = (double)(endWriteStr - beginWriteStr)/1000000;
+        readstr = (double)(endReadStr - beginReadStr)/1000000;
 
         AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -132,6 +146,12 @@ public class performance extends AppCompatActivity {
                 } catch (SnappydbException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        btn_sqlite_test.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                testSqlite();
             }
         });
     }

@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 public class SQLiteDbManager extends SQLiteOpenHelper {
 
-
     public SQLiteDbManager(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
