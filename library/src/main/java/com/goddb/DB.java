@@ -115,6 +115,16 @@ public interface DB {
      */
     JSONArray get(String path, String condition) throws GoddbException;
 
+    /**
+     * Gets the object array in path following the wildcard and condition.
+     *
+     * @param path      not null.
+     * @param condition allow null.
+     * @param options   allow null.
+     * @throws GoddbException if the path is null.
+     */
+    JSONArray get(String path, String condition, String options) throws GoddbException;
+
     //******************************************************************************************************************
     //*      KEYS OPERATIONS || TODO: STUDY - How to use these functions?
     //******************************************************************************************************************

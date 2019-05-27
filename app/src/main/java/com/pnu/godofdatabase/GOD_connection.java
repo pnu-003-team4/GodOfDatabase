@@ -2,7 +2,6 @@ package com.pnu.godofdatabase;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -66,14 +65,7 @@ public class GOD_connection extends AppCompatActivity {
 
         outputBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String sort = "age=<<";
-                JSONArray temp = getTest(inputPath.getText().toString(), inputCondition.getText().toString(), sort);
-
-                if (temp != null) {
-                    resultText.setText(temp.toString());
-                } else {
-                    Log.d("get", "null.");
-                }
+                getTest(inputPath.getText().toString(), inputCondition.getText().toString(), inputData.getText().toString());
             }
         });
 
@@ -111,55 +103,18 @@ public class GOD_connection extends AppCompatActivity {
         }
     }
 
-    JSONArray getTest(String path, String condition, String sort) {
-        String[] section = sort.split("=");
-        // section[0] = age, section[1] = <<
+    void getTest(String path, String condition, String sort) {
         try {
-            JSONArray sortArr = new JSONArray();
-            JSONArray retArr = godDB.get(path, condition);
-
-
-            if (section[1] == "<<") {
-                int i = 0, j = 0, border = 0, index = 0;
-                for (; i < retArr.length(); i++) {
-                    int tmp = retArr.getJSONObject(i).getInt(section[0]);
-                    for (; j < retArr.length(); j++) {
-                        int comp = retArr.getJSONObject(j).getInt(section[0]);
-                        if (comp > border && comp < tmp) {
-                            comp = tmp;
-                            index = j;
-                        }
-                        border = comp;
-                    }
-                    sortArr.put(retArr.getJSONObject(index));
-                }
-            } else if (section[1] == ">>") {
-                int i = 0, j = 0, border = 1000000, index = 0;
-                for (; i < retArr.length(); i++) {
-                    int tmp = retArr.getJSONObject(i).getInt(section[0]);
-                    for (; j < retArr.length(); j++) {
-                        int comp = retArr.getJSONObject(j).getInt(section[0]);
-                        if (comp < border && comp > tmp) {
-                            comp = tmp;
-                            index = j;
-                        }
-                        border = comp;
-                    }
-                    sortArr.put(retArr.getJSONObject(index));
-                }
+            JSONArray retArray;
+            if (sort.isEmpty() || sort == "") {
+                retArray = godDB.get(path, condition);
             } else {
-                //error
+                retArray = godDB.get(path, condition, sort);
             }
-
-            return sortArr;
-
+            resultText.setText("get: " + retArray.toString());
         } catch (GoddbException e) {
             e.printStackTrace();
-            return null;
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-        return null;
     }
 
     void delTest(String path, String condition) {
