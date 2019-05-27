@@ -21,6 +21,8 @@ import com.esotericsoftware.kryo.Kryo;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public interface DB {
     //******************************************************************************************************************
     //*      DB MANAGEMENT
@@ -31,7 +33,7 @@ public interface DB {
      *
      *  @throws GoddbException if exception
      */
-    void close() throws GoddbException;
+    void close() throws GoddbException, IOException;
 
     /**
      * Destroys database
