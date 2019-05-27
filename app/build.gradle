@@ -20,6 +20,7 @@ android {
 
 repositories {
     maven { url "https://jitpack.io" }
+    jcenter()
 }
 
 dependencies {
@@ -32,4 +33,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':library')
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    testImplementation "org.mockito:mockito-core:2.22.0"
 }

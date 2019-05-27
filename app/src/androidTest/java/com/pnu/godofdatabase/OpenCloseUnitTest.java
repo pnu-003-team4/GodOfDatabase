@@ -1,29 +1,28 @@
 package com.pnu.godofdatabase;
 
 import com.goddb.DB;
+import com.goddb.DBFactory;
 import com.goddb.GoddbException;
-import com.goddb.internal.DBImpl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class OpenCloseUnitTest {
     DB db;
 
     @Before
-    public void setUp() {
-        db = Mockito.mock(DBImpl.class);
-        assertTrue(db != null);
+    public void setUp() throws GoddbException {
+        db = DBFactory.open("test", "test");
     }
 
     //TODO: Make your test code
@@ -33,7 +32,11 @@ public class ExampleUnitTest {
         jobject.put("key", "value");
 
         db.put("abc", jobject);
+        assertEquals(jobject, db.get("abc", null).get(0));
+    }
 
-        Mockito.when(db.get("/abc", null).get(0).toString()).thenReturn(jobject.toString());
+    @After
+    public void tearDown() throws GoddbException {
+        //db.close();
     }
 }
