@@ -2,7 +2,6 @@ package com.pnu.godofdatabase;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -66,13 +65,7 @@ public class GOD_connection extends AppCompatActivity {
 
         outputBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                JSONArray temp = getTest(inputPath.getText().toString(), inputCondition.getText().toString());
-
-                if (temp != null) {
-                    resultText.setText(temp.toString());
-                } else {
-                    Log.d("get", "null.");
-                }
+                getTest(inputPath.getText().toString(), inputCondition.getText().toString(), inputData.getText().toString());
             }
         });
 
@@ -110,15 +103,17 @@ public class GOD_connection extends AppCompatActivity {
         }
     }
 
-    JSONArray getTest(String path, String condition) {
+    void getTest(String path, String condition, String sort) {
         try {
-            JSONArray ret = godDB.get(path, condition);
-
-
-            return ret;
+            JSONArray retArray;
+            if (sort.isEmpty() || sort == "") {
+                retArray = godDB.get(path, condition);
+            } else {
+                retArray = godDB.get(path, condition, sort);
+            }
+            resultText.setText("get: " + retArray.toString());
         } catch (GoddbException e) {
             e.printStackTrace();
-            return null;
         }
     }
 

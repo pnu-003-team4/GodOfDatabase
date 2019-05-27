@@ -284,6 +284,33 @@ public class DBImpl implements DB {
         return retData;
     }
 
+    @Override
+    public JSONArray get(String path, String condition, String options) throws GoddbException {
+        checkKey(path);
+        handlePath(path);
+
+        JSONArray retData;
+
+        retData = new JSONArray();
+
+        ArrayList<Integer> paths = Wildcard.extractWildcard(path, mappingTable);
+        for (int curPath : paths) {
+            if (exists(String.valueOf(curPath))) {
+                try {
+                    JSONArray tempArray;
+                    tempArray = Condition.extractCondition(new JSONArray(__get(String.valueOf(curPath))), condition);
+                    for (int i = 0; i < tempArray.length(); i++) {
+                        retData.put(tempArray.getJSONObject(i));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return Option.objectSorting(retData, options);
+    }
+
     //****************************
     //*      KEYS OPERATIONS
     //****************************
