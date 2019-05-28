@@ -15,6 +15,7 @@
         <activity android:name=".snappyDB_connection" />
         <activity android:name=".GOD_connection" />
         <activity android:name=".performance" />
+        <activity android:name=".god_performance" />
         <activity android:name=".Main_app">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
