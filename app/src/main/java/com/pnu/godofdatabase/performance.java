@@ -1,10 +1,9 @@
 package com.pnu.godofdatabase;
 
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteException;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,10 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.snappydb.DB;
-import com.snappydb.DBFactory;
 import com.snappydb.SnappyDB;
 import com.snappydb.SnappydbException;
 
@@ -30,7 +27,7 @@ public class performance extends AppCompatActivity {
     double writestr, readstr;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void testReferenceSetup() throws SnappydbException{
+    public void testReferenceSetup() throws SnappydbException {
         String keys[] = new String[1000];
         String values[] = new String[1000];
 
@@ -82,8 +79,8 @@ public class performance extends AppCompatActivity {
         long endReadStr = System.nanoTime();
         db.destroy();
 
-        writestr = (double)(endWriteStr - beginWriteStr)/1000000;
-        readstr = (double)(endReadStr - beginReadStr)/1000000;
+        writestr = (double) (endWriteStr - beginWriteStr) / 1000000;
+        readstr = (double) (endReadStr - beginReadStr) / 1000000;
 
 
         AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
@@ -93,16 +90,16 @@ public class performance extends AppCompatActivity {
                 dialog.dismiss();     //닫기
             }
         });
-        alert.setMessage("1000 write of String in " + String.valueOf(writestr)+"ms\n"
-                +"1000 read of String in " + String.valueOf(readstr)+"ms\n");
+        alert.setMessage("1000 write of String in " + String.valueOf(writestr) + "ms\n"
+                + "1000 read of String in " + String.valueOf(readstr) + "ms\n");
         alert.show();
     }
 
-    public void testSqlite(){
+    public void testSqlite() {
         SQLiteDbManager sqliteDbManager = new SQLiteDbManager(getApplicationContext(), "Food.db", null, 1);
         long beginWriteStr = System.nanoTime();
-        for(int i=0; i<1000; i ++){
-            int num = (int)Math.random() * 1000;
+        for (int i = 0; i < 1000; i++) {
+            int num = (int) Math.random() * 1000;
 
             sqliteDbManager.insert("insert into MYLIST values(null, 'test', " + num + ");");
         }
@@ -113,8 +110,8 @@ public class performance extends AppCompatActivity {
         long endReadStr = System.nanoTime();
         sqliteDbManager.close();
 
-        writestr = (double)(endWriteStr - beginWriteStr)/1000000;
-        readstr = (double)(endReadStr - beginReadStr)/1000000;
+        writestr = (double) (endWriteStr - beginWriteStr) / 1000000;
+        readstr = (double) (endReadStr - beginReadStr) / 1000000;
 
         AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -123,10 +120,13 @@ public class performance extends AppCompatActivity {
                 dialog.dismiss();     //닫기
             }
         });
-        alert.setMessage("1000 write of String in " + String.valueOf(writestr)+"ms\n"
-                +"1000 read of String in " + String.valueOf(readstr)+"ms\n");
+        alert.setMessage("1000 write of String in " + String.valueOf(writestr) + "ms\n"
+                + "1000 read of String in " + String.valueOf(readstr) + "ms\n");
         alert.show();
     }
+//    public void testGOD() throws GoddbException{
+//        DB godDB;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +152,23 @@ public class performance extends AppCompatActivity {
         btn_sqlite_test.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 testSqlite();
+            }
+        });
+//        btn_god_test.setOnClickListener(new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.N)
+//            public void onClick(View v) {
+//                try {
+//                    testGOD();
+//                } catch (GoddbException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+        btn_god_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(performance.this, god_performance.class);
+                startActivity(intent);
             }
         });
     }
