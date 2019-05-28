@@ -21,6 +21,8 @@ import com.esotericsoftware.kryo.Kryo;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public interface DB {
     //******************************************************************************************************************
     //*      DB MANAGEMENT
@@ -31,7 +33,7 @@ public interface DB {
      *
      *  @throws GoddbException if exception
      */
-    void close() throws GoddbException;
+    void close() throws GoddbException, IOException;
 
     /**
      * Destroys database
@@ -114,6 +116,16 @@ public interface DB {
      * @throws GoddbException if the path is null.
      */
     JSONArray get(String path, String condition) throws GoddbException;
+
+    /**
+     * Gets the object array in path following the wildcard and condition.
+     *
+     * @param path      not null.
+     * @param condition allow null.
+     * @param options   allow null.
+     * @throws GoddbException if the path is null.
+     */
+    JSONArray get(String path, String condition, String options) throws GoddbException;
 
     //******************************************************************************************************************
     //*      KEYS OPERATIONS || TODO: STUDY - How to use these functions?

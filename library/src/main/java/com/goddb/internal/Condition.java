@@ -50,6 +50,8 @@ public class Condition {
                 idx = condition.indexOf("<");
                 leftOperand = condition.substring(0, idx);
                 rightOperand = condition.substring(idx+1);
+            } else {
+                System.out.println("Invalid operator");
             }
         }
 
@@ -69,6 +71,8 @@ public class Condition {
                 idx = condition.indexOf("<");
                 leftOperand = condition.substring(0, idx);
                 rightOperand = condition.substring(idx+1);
+            } else {
+                System.out.println("Invalid operator");
             }
         }
     }
@@ -119,6 +123,9 @@ public class Condition {
                         if (Integer.valueOf(obj.get(leftOperand).toString()) >= Integer.parseInt(rightOperand)) {
                             newarray.put(obj);
                         }
+                        break;
+                        
+                    default:
                         break;
                 }
             } catch (JSONException e) {

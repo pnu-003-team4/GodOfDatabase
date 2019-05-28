@@ -27,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -43,7 +44,7 @@ public class DBImpl implements DB {
         System.loadLibrary(LIB_NAME);
     }
 
-    public DBImpl(String path, Kryo... kryo) throws GoddbException {
+    public DBImpl(String path, Kryo... kryo) throws GoddbException, IOException, ClassNotFoundException {
         this.dbPath = path;
 
         if (null != kryo && kryo.length > 0) {
@@ -54,7 +55,7 @@ public class DBImpl implements DB {
             this.kryo.setAsmEnabled(true);
         }
 
-        mappingTable = new MappingTable();
+        mappingTable = new MappingTable(path);
 
         __open(dbPath);
     }
@@ -64,7 +65,8 @@ public class DBImpl implements DB {
     // ***********************
 
     @Override
-    public void close() {
+    public void close() throws IOException {
+        mappingTable.saveToFile(this.dbPath);
         __close();
     }
 
@@ -282,6 +284,33 @@ public class DBImpl implements DB {
         }
 
         return retData;
+    }
+
+    @Override
+    public JSONArray get(String path, String condition, String options) throws GoddbException {
+        checkKey(path);
+        handlePath(path);
+
+        JSONArray retData;
+
+        retData = new JSONArray();
+
+        ArrayList<Integer> paths = Wildcard.extractWildcard(path, mappingTable);
+        for (int curPath : paths) {
+            if (exists(String.valueOf(curPath))) {
+                try {
+                    JSONArray tempArray;
+                    tempArray = Condition.extractCondition(new JSONArray(__get(String.valueOf(curPath))), condition);
+                    for (int i = 0; i < tempArray.length(); i++) {
+                        retData.put(tempArray.getJSONObject(i));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return Option.objectSorting(retData, options);
     }
 
     //****************************

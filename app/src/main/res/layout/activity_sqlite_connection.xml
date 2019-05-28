@@ -12,7 +12,9 @@
         android:layout_height="wrap_content"
         android:text="입력"
         app:layout_constraintBottom_toBottomOf="@+id/edit_put"
-        app:layout_constraintStart_toEndOf="@+id/edit_put" />
+        app:layout_constraintStart_toEndOf="@+id/edit_put"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"/>
 
     <EditText
         android:id="@+id/edit_put"
@@ -34,7 +36,9 @@
         android:layout_marginBottom="1dp"
         android:text="수정"
         app:layout_constraintBottom_toBottomOf="@+id/edit_update"
-        app:layout_constraintStart_toEndOf="@+id/edit_update" />
+        app:layout_constraintStart_toEndOf="@+id/edit_update"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"/>
 
     <EditText
         android:id="@+id/edit_select"
@@ -54,7 +58,9 @@
         android:layout_height="wrap_content"
         android:text="찾기"
         app:layout_constraintBottom_toBottomOf="@+id/edit_select"
-        app:layout_constraintStart_toEndOf="@+id/edit_select" />
+        app:layout_constraintStart_toEndOf="@+id/edit_select"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"/>
 
     <TextView
         android:id="@+id/output"
@@ -88,7 +94,9 @@
         android:layout_marginBottom="19dp"
         android:text="삭제"
         app:layout_constraintBottom_toTopOf="@+id/btn_select"
-        app:layout_constraintStart_toEndOf="@+id/edit_del" />
+        app:layout_constraintStart_toEndOf="@+id/edit_del"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"/>
 
     <EditText
         android:id="@+id/edit_update"
