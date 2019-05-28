@@ -274,6 +274,7 @@ public class MappingTable implements Serializable {
      * @return delete is success. (path: exist)
      */
     public boolean deletePath(int key) {
+        //int key = getKey(path);
         if( key < 0 ) // 존재x, invalid
             return false;
         int parentKey = getParentKey(key);
@@ -300,6 +301,23 @@ public class MappingTable implements Serializable {
     public boolean pathExists(String path) {
         return getKey(path) >= 0;
     }
+    /**
+     * key -> absolute path
+     *
+     * @param key >= 0
+     * @return path
+     */
+    public String pathOfKey(int key) {
+        String path = "";
+        if(key==0)
+            return "/";
+        while(key>0) {
+            path = "/" + table.get(key).name + path;
+            key = table.get(key).parent;
+        }
+        return path;
+    }
+
     @Override
     public String toString() {
         String str = "";
