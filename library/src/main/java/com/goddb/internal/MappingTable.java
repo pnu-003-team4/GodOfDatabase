@@ -311,9 +311,11 @@ public class MappingTable implements Serializable {
         String path = "";
         if(key==0)
             return "/";
-        while(key>0) {
-            path = "/" + table.get(key).name + path;
-            key = table.get(key).parent;
+        if(key<table.size() && !table.get(key).isInvalid()) {
+            while(key>0) {
+                path = "/" + table.get(key).name + path;
+                key = table.get(key).parent;
+            }
         }
         return path;
     }
