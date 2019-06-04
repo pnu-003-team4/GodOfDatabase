@@ -1,5 +1,7 @@
 package com.goddb.internal;
 
+import android.content.Context;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -40,6 +42,8 @@ import java.util.regex.Pattern;
 public class MappingTable implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger("logger");
+
+    private Context ctx;
 
     private ArrayList<PathInfo> table;
 
@@ -112,7 +116,8 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      * @throws ClassNotFoundException
      */
-    public MappingTable(String fileName) throws IOException, ClassNotFoundException {
+    public MappingTable(Context c, String fileName) throws IOException, ClassNotFoundException {
+        ctx = c;
         table = new ArrayList<>();
         try {
             readFile(fileName);
@@ -130,7 +135,7 @@ public class MappingTable implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public void readFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+        ObjectInputStream ois = new ObjectInputStream(ctx.openFileInput(fileName));
         table = (ArrayList<PathInfo>) ois.readObject();
         ois.close();
     }
@@ -142,7 +147,7 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      */
     public void saveToFile(String fileName) throws FileNotFoundException, IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+        ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName, Context.MODE_PRIVATE|Context.MODE_APPEND));
         oos.writeObject(table);
         oos.close();
     }
