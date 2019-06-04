@@ -135,7 +135,7 @@ public class MappingTable implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public void readFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(ctx.openFileInput(fileName));
+        ObjectInputStream ois = new ObjectInputStream(ctx.openFileInput(fileName + ".txt"));
         table = (ArrayList<PathInfo>) ois.readObject();
         ois.close();
     }
@@ -147,7 +147,7 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      */
     public void saveToFile(String fileName) throws FileNotFoundException, IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName, Context.MODE_PRIVATE|Context.MODE_APPEND));
+        ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE|Context.MODE_APPEND));
         oos.writeObject(table);
         oos.close();
     }
