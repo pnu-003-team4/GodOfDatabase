@@ -151,6 +151,11 @@ public class DBImpl implements DB {
 
     @Override
     public JSONArray del(String path, String condition) throws GoddbException, IOException {
+        path = path.replaceAll(" ", "");
+        path = path.replaceAll("\\p{Z}", "");
+        condition = condition.replaceAll(" ", "");
+        condition = condition.replaceAll("\\p{Z}", "");
+
         checkKey(path);
         handlePath(path);
 
@@ -194,6 +199,13 @@ public class DBImpl implements DB {
 
     @Override
     public void update(String path, String condition, String modData) throws GoddbException {
+        path = path.replaceAll(" ", "");
+        path = path.replaceAll("\\p{Z}", "");
+        condition = condition.replaceAll(" ", "");
+        condition = condition.replaceAll("\\p{Z}", "");
+        modData = modData.replaceAll(" ", "");
+        modData = modData.replaceAll("\\p{Z}", "");
+
         checkArgs(path, modData);
         handlePath(path);
 
@@ -243,6 +255,9 @@ public class DBImpl implements DB {
 
     @Override
     public JSONArray deldir(String path) throws GoddbException, IOException {
+        path = path.replaceAll(" ", "");
+        path = path.replaceAll("\\p{Z}", "");
+
         checkKey(path);
         handlePath(path);
 
@@ -271,6 +286,11 @@ public class DBImpl implements DB {
 
     @Override
     public JSONArray get(String path, String condition) throws GoddbException {
+        path = path.replaceAll(" ", "");
+        path = path.replaceAll("\\p{Z}", "");
+        condition = condition.replaceAll(" ", "");
+        condition = condition.replaceAll("\\p{Z}", "");
+
         checkKey(path);
         handlePath(path);
 
@@ -298,6 +318,13 @@ public class DBImpl implements DB {
 
     @Override
     public JSONArray get(String path, String condition, String options) throws GoddbException {
+        path = path.replaceAll(" ", "");
+        path = path.replaceAll("\\p{Z}", "");
+        condition = condition.replaceAll(" ", "");
+        condition = condition.replaceAll("\\p{Z}", "");
+        options = options.replaceAll(" ", "");
+        options = options.replaceAll("\\p{Z}", "");
+
         checkKey(path);
         handlePath(path);
 
