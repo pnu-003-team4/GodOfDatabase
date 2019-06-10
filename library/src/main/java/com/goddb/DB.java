@@ -60,7 +60,7 @@ public interface DB {
      * @param object not null.
      * @throws GoddbException if the key or data is null.
      */
-    void put(String path, JSONObject object) throws GoddbException;
+    void put(String path, JSONObject object) throws GoddbException, IOException;
 
 
     /**
@@ -70,7 +70,7 @@ public interface DB {
      * @param objects not null.
      * @throws GoddbException if the key or data is null.
      */
-    void put(String path, JSONArray objects) throws GoddbException;
+    void put(String path, JSONArray objects) throws GoddbException, IOException;
 
     //******************************************************************************************************************
     //*      DELETE
@@ -82,7 +82,7 @@ public interface DB {
      * @param condition allow null.
      * @throws GoddbException if the key is null.
      */
-    JSONArray del(String path, String condition) throws GoddbException;
+    JSONArray del(String path, String condition) throws GoddbException, IOException;
 
     /**
      * Deletes the path following the wildcard and codition.
@@ -90,7 +90,7 @@ public interface DB {
      * @param path      not null.
      * @throws GoddbException if the key is null.
      */
-    JSONArray deldir(String path) throws GoddbException;
+    JSONArray deldir(String path) throws GoddbException, IOException;
 
     //******************************************************************************************************************
     //*      UPDATE

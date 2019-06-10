@@ -22,6 +22,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.goddb.internal.DBImpl;
 
 import java.io.File;
+import java.io.IOException;
 
 public class DBFactory {
     private final static String DEFAULT_DBNAME = "goddb";
@@ -35,21 +36,9 @@ public class DBFactory {
      * @return Database handler {@link DB}
      * @throws GoddbException if exception
      */
-    public static DB open(String folder, String dbName, Kryo... kryo) throws GoddbException {
+    public static DB open(Context ctx, String folder, String dbName, Kryo... kryo) throws GoddbException, IOException, ClassNotFoundException {
         String dbFilePath = folder + File.separator + dbName;
-        return new DBImpl(dbFilePath, kryo);
-    }
-
-    /**
-     * Return the Database with the given folder and default name, if it doesn't exist create it
-     *
-     * @param folder the folder of the db file will be stored
-     * @param kryo optional custom instance of {@link com.esotericsoftware.kryo.Kryo} serializer
-     * @return Database handler {@link DB}
-     * @throws GoddbException if exception
-     */
-    public static DB open(String folder, Kryo... kryo) throws GoddbException {
-        return open(folder, DEFAULT_DBNAME, kryo);
+        return new DBImpl(ctx, dbFilePath, kryo);
     }
 
     /**
@@ -61,8 +50,8 @@ public class DBFactory {
      * @return Database handler {@link DB}
      * @throws GoddbException if exception
      */
-    public static DB open(Context ctx, String dbName, Kryo... kryo) throws GoddbException {
-        return open(ctx.getFilesDir().getAbsolutePath(), dbName, kryo);
+    public static DB open(Context ctx, String dbName, Kryo... kryo) throws GoddbException, IOException, ClassNotFoundException {
+        return open(ctx, ctx.getFilesDir().getAbsolutePath(), dbName, kryo);
     }
 
     /**
@@ -73,7 +62,7 @@ public class DBFactory {
      * @return Database handler {@link DB}
      * @throws GoddbException if exception
      */
-    public static DB open(Context ctx, Kryo... kryo) throws GoddbException {
+    public static DB open(Context ctx, Kryo... kryo) throws GoddbException, IOException, ClassNotFoundException {
         return open(ctx, DEFAULT_DBNAME, kryo);
     }
 

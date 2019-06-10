@@ -14,6 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 
 public class god_performance extends AppCompatActivity {
 
@@ -29,7 +31,7 @@ public class god_performance extends AppCompatActivity {
             godDB = new GodDB.Builder(this)
                     .name("godDB1")
                     .build();
-        } catch (GoddbException e) {
+        } catch (GoddbException | IOException | ClassNotFoundException e) {
 
         }
 
@@ -53,6 +55,8 @@ public class god_performance extends AppCompatActivity {
 
                     } catch (GoddbException e) {
 
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
 
                 }
@@ -97,7 +101,7 @@ public class god_performance extends AppCompatActivity {
     protected void onDestroy(Bundle savedInstanceState) {
         try {
             godDB.close();
-        } catch (GoddbException e) {
+        } catch (GoddbException | IOException e) {
             e.printStackTrace();
         }
     }

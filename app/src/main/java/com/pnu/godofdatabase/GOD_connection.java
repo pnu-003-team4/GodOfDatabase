@@ -15,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class GOD_connection extends AppCompatActivity {
     EditText inputPath;
     EditText inputData;
@@ -42,7 +44,7 @@ public class GOD_connection extends AppCompatActivity {
 
         try {
             godDB = DBFactory.open(this); //create or open an existing database using the default name
-        } catch (GoddbException e) {
+        } catch (GoddbException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -89,7 +91,7 @@ public class GOD_connection extends AppCompatActivity {
     protected void onStop(Bundle savedInstanceState) {
         try {
             godDB.close();
-        } catch (GoddbException e) {
+        } catch (GoddbException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -98,7 +100,7 @@ public class GOD_connection extends AppCompatActivity {
         try {
             godDB.put(path, obj);
             resultText.setText("put");
-        } catch (GoddbException e) {
+        } catch (GoddbException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -121,7 +123,7 @@ public class GOD_connection extends AppCompatActivity {
         try {
             JSONArray retArray = godDB.del(path, condition);
             resultText.setText("delete: " + retArray.toString());
-        } catch (GoddbException e) {
+        } catch (GoddbException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -130,7 +132,7 @@ public class GOD_connection extends AppCompatActivity {
         try {
             JSONArray retArray = godDB.deldir(path);
             resultText.setText("delete: " + retArray.toString());
-        } catch (GoddbException e) {
+        } catch (GoddbException | IOException e) {
             e.printStackTrace();
         }
     }

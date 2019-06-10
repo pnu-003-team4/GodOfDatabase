@@ -7,6 +7,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Nabil on 12/06/14.
@@ -14,7 +15,7 @@ import java.io.File;
 public class GodDB {
     private static volatile DB singleton = null;
 
-    public static DB with(Context context) throws GoddbException {
+    public static DB with(Context context) throws GoddbException, IOException, ClassNotFoundException {
         if (singleton == null || !singleton.isOpen()) {//add check if DB is closed recreate (open) a new db (isOpen)
             synchronized (GodDB.class) {
                 // double-checked locking.
@@ -87,14 +88,14 @@ public class GodDB {
         /**
          * Create the {@link DB} instance.
          */
-        public DB build() throws GoddbException {
+        public DB build() throws GoddbException, IOException, ClassNotFoundException {
             if (null != dir) {
                 File f = new File(dir);
                 if((f.mkdirs() || f.isDirectory()) && f.canWrite()) {
                     if (null != name) {
-                        return DBFactory.open(dir, name, kryo);
+                        return DBFactory.open(context, dir, name, kryo);
                     } else {
-                        return DBFactory.open(dir, kryo);
+                        return DBFactory.open(context, dir, kryo);
                     }
                 } else {
                     throw new IllegalStateException("Can't create or access directory " + dir);
