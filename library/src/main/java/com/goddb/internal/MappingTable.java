@@ -87,13 +87,12 @@ public class MappingTable implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public void readFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException, GoddbException {
-        byte hashBuffer[] = new byte[256];
         ObjectInputStream ois = new ObjectInputStream(ctx.openFileInput(fileName + ".txt"));
-        hashBuffer = (byte[]) ois.readObject();
+        byte[] hashBuffer = (byte[]) ois.readObject();  //
         table = (ArrayList<PathInfo>) ois.readObject();
         ois.close();
-        if(!java.util.Arrays.equals(hashBuffer,sha256(convertToString())))
-            throw new GoddbException("This is a damaged file.");
+        if(!java.util.Arrays.equals(hashBuffer,sha256(convertToString())))  //
+            throw new GoddbException("This is a damaged file.");    //
     }
     /**
      * save mapping table to file
@@ -103,32 +102,28 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      */
     public void saveToFile(String fileName) throws FileNotFoundException, IOException {
-        byte hashBuffer[] = new byte[256];
-        hashBuffer = sha256(convertToString());
+        byte hashBuffer[] = sha256(convertToString());  //
         ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE | Context.MODE_APPEND));
-        oos.writeObject(hashBuffer);
+        oos.writeObject(hashBuffer);    //
         oos.writeObject(table);
         oos.close();
 
     }
 
-    private byte[] sha256(String str){
-        byte hash[] = new byte[256];
+    public static byte[] sha256(String str){
         MessageDigest sh;
         try {
             sh = MessageDigest.getInstance("SHA-256");
             sh.update(str.getBytes());
-            hash =  sh.digest();
+            return sh.digest();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            print();
         }
-        return hash;
+        return null;
     }
     private String convertToString() throws IOException {
-        ObjectOutputStream os = null;
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        os = new ObjectOutputStream(new BufferedOutputStream(byteStream));
+        ObjectOutputStream os = new ObjectOutputStream(new BufferedOutputStream(byteStream));
         os.flush();
         os.writeObject(table);
         os.flush();
