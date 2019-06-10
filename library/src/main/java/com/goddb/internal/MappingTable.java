@@ -103,9 +103,9 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      */
     public void saveToFile(String fileName) throws FileNotFoundException, IOException {
-        byte hashBuffer[];
-        ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE | Context.MODE_APPEND));
+        byte hashBuffer[] = new byte[256];
         hashBuffer = sha256(convertToString());
+        ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE | Context.MODE_APPEND));
         oos.writeObject(hashBuffer);
         oos.writeObject(table);
         oos.close();
@@ -121,6 +121,7 @@ public class MappingTable implements Serializable {
             hash =  sh.digest();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+            print();
         }
         return hash;
     }
