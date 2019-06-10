@@ -15,7 +15,7 @@ import java.util.Locale;
  * @author MinJae
  *
  */
-class PathInfo implements Serializable {
+public class PathInfo implements Serializable {
     private static final long serialVersionUID = 2L;
     private final String name;
     private final int parent;
