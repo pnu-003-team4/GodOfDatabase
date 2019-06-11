@@ -52,7 +52,7 @@ public class Condition {
                 rightOperand = condition.substring(idx+1);
             } else {
                 System.out.println("Invalid operator");
-                return -1;
+                return;
             }
         }
 
@@ -74,7 +74,7 @@ public class Condition {
                 rightOperand = condition.substring(idx+1);
             } else {
                 System.out.println("Invalid operator");
-                return -1;
+                return;
             }
         }
     }

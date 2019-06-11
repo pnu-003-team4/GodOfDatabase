@@ -7,7 +7,7 @@
 #include "leveldb/comparator.h"
 #include "leveldb/iterator.h"
 #include "table/iterator_wrapper.h"
-#include "debug.h"
+
 namespace leveldb {
 
 namespace {
