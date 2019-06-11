@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.goddb.GodDB;
 import com.goddb.GoddbException;
-import com.snappydb.DB;
 import com.snappydb.SnappyDB;
 import com.snappydb.SnappydbException;
 
@@ -74,7 +73,7 @@ public class performance extends AppCompatActivity {
             }
         }
 
-        DB db = new SnappyDB.Builder(this)
+        com.snappydb.DB db = new SnappyDB.Builder(this)
                 .name("reference_bench_string")
                 .build();
 
@@ -91,8 +90,8 @@ public class performance extends AppCompatActivity {
         long endReadStr = System.nanoTime();
         db.destroy();
 
-        writestr_snappy = (endWriteStr - beginWriteStr) / 1000000;
-        readstr_snappy = (endReadStr - beginReadStr) / 1000000;
+        writestr_snappy = (endWriteStr - beginWriteStr) / 100000;
+        readstr_snappy = (endReadStr - beginReadStr) / 100000;
 
 
         AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
@@ -122,8 +121,8 @@ public class performance extends AppCompatActivity {
         long endReadStr = System.nanoTime();
         sqliteDbManager.close();
 
-        writestr_sqlite = (endWriteStr - beginWriteStr) / 1000000;
-        readstr_sqlite = (endReadStr - beginReadStr) / 1000000;
+        writestr_sqlite = (endWriteStr - beginWriteStr) / 100000;
+        readstr_sqlite = (endReadStr - beginReadStr) / 100000;
 
         AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -173,8 +172,8 @@ public class performance extends AppCompatActivity {
 
         godDB.destroy();
 
-        writestr_god = (endWriteStr - beginWriteStr) / 1000000;
-        readstr_god = (endReadStr - beginReadStr) / 1000000;
+        writestr_god = (endWriteStr - beginWriteStr) / 100000;
+        readstr_god = (endReadStr - beginReadStr) / 100000;
 
         AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
