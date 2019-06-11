@@ -99,7 +99,6 @@ public class MappingTable implements Serializable {
         ois.close();
         if(!java.util.Arrays.equals(hashBuffer,sha256(convertToString())))  //
             throw new GoddbException("This is a damaged file.");    //
-        print();
     }
     /**
      * save mapping table to file
@@ -109,10 +108,8 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      */
     public void saveToFile(String fileName) throws FileNotFoundException, IOException {
-        File file = new File(ctx.getFilesDir(),fileName + ".txt"); // 이전 버전의 파일이 존재할 경우 에러가 납니다.
-        file.delete();
         byte hashBuffer[] = sha256(convertToString());  //
-        ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE | Context.MODE_APPEND));
+        ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE));
         oos.writeObject(hashBuffer);    //
         oos.writeObject(table);
         oos.close();
