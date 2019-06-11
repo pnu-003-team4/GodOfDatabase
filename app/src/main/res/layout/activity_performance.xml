@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".performance">
+
+    <Button
+        android:id="@+id/btn_snappy_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/snappy_test"
+        />
+
+    <Button
+        android:id="@+id/btn_god_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_snappy_test"
+        android:text="@string/GOD_test" />
+
+    <Button
+        android:id="@+id/btn_sqlite_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_god_test"
+        android:text="SQLite 성능" />
+
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_sqlite_test"
+        android:layout_marginTop="9dp"
+        android:text="@string/result" />
+
+
+
+</RelativeLayout>

@@ -1,14 +1,13 @@
 package com.goddb.internal;
 
-import java.io.FileInputStream;
+import android.content.Context;
+
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -31,6 +30,9 @@ import java.util.regex.Pattern;
  *
  * path 정보를 table에서 지울 수 있음 (boolean deletePath(String))
  *
+ * table을 file에 저장하거나 (saveToFile(String fileName))
+ * 저장했던 file을 읽어올 수 있음 (readFile(String fileName), constructor)
+ *
  * @author MinJae
  *
  */
@@ -38,90 +40,45 @@ public class MappingTable implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger("logger");
 
-    // PathInfo: mapping table element class
-    // key: 현재 directory(path) key ( -1(or <0) : invalid )
-    // name: 현재 directory 이름
-    // parent: 상위 directory key
-    // childs: 하위 directory keys
-    private class PathInfo implements Serializable {
-        private static final long serialVersionUID = 2L;
-        private int key;
-        private final String name;
-        private final int parent;
-        private ArrayList<Integer> childs;
+    private Context ctx;
 
-        public PathInfo(int key, String name, int parent ) {
-            this.key = key;
-            this.name = name;
-            this.parent = parent;
-            this.childs = new ArrayList<>();
-        }
-        /*public PathInfo( PathInfo p ) { // not need
-            this.key = p.key;
-            this.name = p.name;
-            this.parent = p.parent;
-            this.childs = new ArrayList<>(p.childs);
-        }*/
-        public boolean addChild(int child) { //
-            int i;
-            for(i=0; i<childs.size() && childs.get(i)<child; ++i );
-            if(i<childs.size() && childs.get(i)==child)
-                return false; // 실패
-            childs.add(i,child);
-            return true;
-        }
-        public boolean deleteChild(int child) { //
-            int i;
-            for(i=0; i<childs.size() && !(childs.get(i)==child); ++i ) ;
-            if(i<childs.size()) {
-                childs.remove(i);
-                return true;
-            }
-            return false; // 실패
-        }
-        public void keyToInvalid() { // key가 delete될 때
-            key = -1;
-        }
-        public boolean isInvalid() { // delete된 index 알아낼 때 필요 (findInvalidIndex)
-            return key < 0;
-        }
-        @Override
-        public String toString() {
-            return String.format(Locale.US, "key: %d,\tname: %-20s, parent: %d,\tchilds: %s", key, name, parent, childs);
-        }
-    }
     private ArrayList<PathInfo> table;
 
     public MappingTable() {
         table = new ArrayList<>();
         table.add(new PathInfo(0,"<root>",-1)); // root
     }
-    /*public MappingTable( final MappingTable mt) {	// not need
-    	table = new ArrayList<>(mt.table);
-    }*/
+    public MappingTable( final MappingTable mt) {
+        table = new ArrayList<>(mt.table);
+    }
     /**
      * constructor with read file
      *
-     * @param fileName This is the file with mapping table.
+     * @param fileName This is an existing file with mapping table.
      * @throws IOException
      * @throws FileNotFoundException
      * @throws ClassNotFoundException
      */
-    public MappingTable(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public MappingTable(Context c, String fileName) throws IOException, ClassNotFoundException {
+        ctx = c;
         table = new ArrayList<>();
-        readFile(fileName);
+        try {
+            readFile(fileName);
+        } catch (FileNotFoundException e) {	// not opened
+            table.add(new PathInfo(0,"<root>",-1));
+        }
     }
     /**
      * read file
      *
-     * @param fileName This is the file with mapping table.
+     * @param fileName This is an existing file with mapping table.
      * @throws IOException
      * @throws FileNotFoundException
      * @throws ClassNotFoundException
      */
     @SuppressWarnings("unchecked")
     public void readFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+        ObjectInputStream ois = new ObjectInputStream(ctx.openFileInput(fileName + ".txt"));
         table = (ArrayList<PathInfo>) ois.readObject();
         ois.close();
     }
@@ -133,7 +90,7 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      */
     public void saveToFile(String fileName) throws FileNotFoundException, IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+        ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE | Context.MODE_APPEND));
         oos.writeObject(table);
         oos.close();
     }
@@ -146,26 +103,19 @@ public class MappingTable implements Serializable {
      * @return key or -1(path doesn't exist)
      */
     public int getKey(String path) {
-        // path: /korea/busan/pnu -> name: [ root, korea, busan, pnu ]
-        String[] name;
-        Pattern pattern = Pattern.compile("/");
-        name = pattern.split(path);
-        int key = 0;
-        // 해당 key에서의 path와 일치하는 child를 찾음
-        for(int i=1; i<name.length; ++i) {	//
-            int j;
-            int childkey = 0;
-            for(j=0; j<table.get(key).childs.size(); ++j) {
-                childkey = table.get(key).childs.get(j);
-                if (table.get(childkey).name.equals(name[i]))
-                    break;
-            }
-            if( j == table.get(key).childs.size() )
-                return -1;	// table에  해당 path가 존재하지 않음
-            else
-                key = childkey;
-        }
-        return key;
+        return getKeyWithFlag(path,0,0);
+    }
+
+    /**
+     * current path key & subpath -> key
+     * if path doesn't exist : return -1
+     *
+     * @param currentKey current path key
+     * @param subpath like /korea/busan/pnu
+     * @return key or -1(path doesn't exist)
+     */
+    public int getKeyFromKey(int currentKey, String subpath) {
+        return getKeyWithFlag(subpath,0,currentKey);
     }
 
     /**
@@ -177,19 +127,39 @@ public class MappingTable implements Serializable {
      * @return key
      */
     public int addPathAndGetKey(String path) {
+        return getKeyWithFlag(path,1,0);
+    }
+
+    /**
+     * for duplicate code between getKey and addPathAndGetKey
+     * @param path to get the key
+     * @param flag (0: getKey), (1: addPathAndGetKey)
+     * @param fromKey (0: if the path is an absolute path), (the others: if the path is a relative path)
+     * @return key
+     */
+    private int getKeyWithFlag(String path, int flag, int fromKey) {
+        if (!(flag==0 || flag==1))
+            return -1;
+
+        // path: /korea/busan/pnu -> name: [ root, korea, busan, pnu ]
         String[] name;
         Pattern pattern = Pattern.compile("/");
         name = pattern.split(path);
-        int key = 0;
+        int key = fromKey; // 0: full path
+        // 해당 key에서의 path와 일치하는 child를 찾음
         for(int i=1; i<name.length; ++i) {
             int j;
             int childkey = 0;
-            for(j=0; j<table.get(key).childs.size(); ++j) {
-                childkey = table.get(key).childs.get(j);
-                if (table.get(childkey).name.equals(name[i]))
+            for (j = 0; j < table.get(key).getChilds().size(); ++j) {
+                childkey = table.get(key).getChilds().get(j);
+                if (table.get(childkey).getName().equals(name[i]))
                     break;
             }
-            if( j == table.get(key).childs.size() ) {	// 존재하지 않으면 path를 추가함
+            if (j == table.get(key).getChilds().size()) {    // table에  해당 path가 존재하지 않음
+                if(flag == 0) {
+                    return -1;
+                }
+                // flag == 1 : 존재하지 않으면 path를 추가함
                 int index = findInvalidIndex();
                 if( index < 0 ) {
                     index = table.size();
@@ -232,7 +202,7 @@ public class MappingTable implements Serializable {
     public ArrayList<Integer> getChildKeys(int key) {
         if(key < 0) // exception
             return new ArrayList<>();
-        return new ArrayList<>(table.get(key).childs);
+        return new ArrayList<>(table.get(key).getChilds());
     }
     /**
      * get parent key by using the current key
@@ -243,7 +213,7 @@ public class MappingTable implements Serializable {
     public int getParentKey(int key) {
         if(key < 0) // exception
             return key;
-        return table.get(key).parent;
+        return table.get(key).getParent();
     }
     /**
      * Delete the path that exists in the mapping table.
@@ -252,19 +222,20 @@ public class MappingTable implements Serializable {
      * @return delete is success. (path: exist)
      */
     public boolean deletePath(int key) {
+        //int key = getKey(path);
         if( key < 0 ) // 존재x, invalid
             return false;
         int parentKey = getParentKey(key);
         if( parentKey < 0 ) // root를 지울 순 없음.
             return false;
-        return table.get(parentKey).deleteChild(key) && __deleteKey(key);
+        return table.get(parentKey).deleteChild(key) && deleteKeyChilds(key);
     }
-    private boolean __deleteKey(int key) {
+    private boolean deleteKeyChilds(int key) {
     	/*if( table.get(key).isInvalid() ) //.. 필요할까? deletePath에서만 쓸거면..
     		return false;*/
         ArrayList<Integer> childkeys = getChildKeys(key);
         for( int i =0; i<childkeys.size(); ++i) {
-            __deleteKey(childkeys.get(i));
+            deleteKeyChilds(childkeys.get(i));
         }
         table.get(key).keyToInvalid();
         return true;
@@ -275,9 +246,28 @@ public class MappingTable implements Serializable {
      * @param path like /korea/busan/pnu
      * @return path exist
      */
-    public boolean PathExists(String path) {
+    public boolean pathExists(String path) {
         return getKey(path) >= 0;
     }
+    /**
+     * key -> absolute path
+     *
+     * @param key >= 0
+     * @return path
+     */
+    public String pathOfKey(int key) {
+        String path = "";
+        if(key==0)
+            return "/";
+        if(key>0 && key<table.size() && !table.get(key).isInvalid()) {
+            while(key>0) {
+                path = "/" + table.get(key).getName() + path;
+                key = table.get(key).getParent();
+            }
+        }
+        return path;
+    }
+
     @Override
     public String toString() {
         String str = "";
