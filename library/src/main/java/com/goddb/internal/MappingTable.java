@@ -2,11 +2,19 @@ package com.goddb.internal;
 
 import android.content.Context;
 
+import com.goddb.GoddbException;
+
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -61,11 +69,15 @@ public class MappingTable implements Serializable {
      */
     public MappingTable(Context c, String fileName) throws IOException, ClassNotFoundException {
         ctx = c;
-        table = new ArrayList<>();
         try {
             readFile(fileName);
-        } catch (FileNotFoundException e) {	// not opened
-            table.add(new PathInfo(0,"<root>",-1));
+        } catch (FileNotFoundException e) {    // not opened
+            table = new ArrayList<>();
+            table.add(new PathInfo(0, "<root>", -1));
+        } catch (GoddbException e) {
+            e.printStackTrace();
+            table = new ArrayList<>();
+            table.add(new PathInfo(0, "<root>", -1));
         }
     }
     /**
@@ -75,12 +87,18 @@ public class MappingTable implements Serializable {
      * @throws IOException
      * @throws FileNotFoundException
      * @throws ClassNotFoundException
+     * @throws GoddbException This is a damaged file.
      */
     @SuppressWarnings("unchecked")
-    public void readFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public void readFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException, GoddbException {
+        //File file = new File(ctx.getFilesDir(),fileName + ".txt"); // 이전 버전의 파일이 존재할 경우 에러가 납니다.
+        //file.delete();    // 최초 실행에서 주석을 제거해주세요.
         ObjectInputStream ois = new ObjectInputStream(ctx.openFileInput(fileName + ".txt"));
+        byte[] hashBuffer = (byte[]) ois.readObject();  //
         table = (ArrayList<PathInfo>) ois.readObject();
         ois.close();
+        if(!java.util.Arrays.equals(hashBuffer,sha256(convertToString())))  //
+            throw new GoddbException("This is a damaged file.");    //
     }
     /**
      * save mapping table to file
@@ -90,9 +108,41 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      */
     public void saveToFile(String fileName) throws FileNotFoundException, IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE | Context.MODE_APPEND));
+        byte hashBuffer[] = sha256(convertToString());  //
+        ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE));
+        oos.writeObject(hashBuffer);    //
         oos.writeObject(table);
         oos.close();
+
+    }
+
+    public static byte[] sha256(String str){
+        MessageDigest sh;
+        try {
+            sh = MessageDigest.getInstance("SHA-256");
+            sh.update(str.getBytes());
+            return sh.digest();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    private String convertToString() throws IOException {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(new BufferedOutputStream(byteStream));
+        os.flush();
+        os.writeObject(table);
+        os.flush();
+        byte[] sendBuf = byteStream.toByteArray();
+        os.close();
+        return byteToHexString(sendBuf);
+    }
+    public static String byteToHexString(byte[] data) {
+        StringBuilder sb = new StringBuilder();
+        for(byte b : data) {
+            sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
     }
 
     /**
@@ -267,6 +317,8 @@ public class MappingTable implements Serializable {
         }
         return path;
     }
+
+
 
     @Override
     public String toString() {
