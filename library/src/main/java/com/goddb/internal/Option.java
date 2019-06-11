@@ -25,7 +25,7 @@ public class Option {
 
         JSONArray sortArr = new JSONArray();
         JSONArray retArr = jarray;
-        // section[0] = age, section[1] = <<
+        // section[0] = age, section[1] = <<;
         try {
 
             final List<JSONObject> jsonValues = new ArrayList<JSONObject>();

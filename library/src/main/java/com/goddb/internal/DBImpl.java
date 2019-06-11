@@ -281,7 +281,7 @@ public class DBImpl implements DB {
     }
 
     // ***********************
-    // *       RETRIEVE
+    // *       RETRIEVe
     // ***********************
 
     @Override
