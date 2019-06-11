@@ -6,8 +6,6 @@ import com.goddb.GoddbException;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -108,7 +106,7 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      */
     public void saveToFile(String fileName) throws FileNotFoundException, IOException {
-        byte hashBuffer[] = sha256(convertToString());  //
+        byte[] hashBuffer = sha256(convertToString());  //
         ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE));
         oos.writeObject(hashBuffer);    //
         oos.writeObject(table);
