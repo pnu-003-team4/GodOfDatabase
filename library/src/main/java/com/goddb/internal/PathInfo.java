@@ -4,17 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
 
-/**
- * PathInfo: mapping table element class
- *
- * key: 현재 directory(path) key ( -1(or <0) : invalid )
- * name: 현재 directory 이름
- * parent: 상위 directory key
- * childs: 하위 directory keys
- *
- * @author MinJae
- *
- */
+// PathInfo: mapping table element class
+// key: 현재 directory(path) key ( -1(or <0) : invalid )
+// name: 현재 directory 이름
+// parent: 상위 directory key
+// childs: 하위 directory keys
 public class PathInfo implements Serializable {
     private static final long serialVersionUID = 2L;
     private final String name;
