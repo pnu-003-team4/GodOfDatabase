@@ -16,7 +16,9 @@
 
 package com.goddb.internal;
 
+import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.goddb.DB;
@@ -27,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -35,6 +38,7 @@ public class DBImpl implements DB {
     private static final int LIMIT_MAX = Integer.MAX_VALUE - 8;
 
     private String dbPath;
+    private String mappingTablePath;
     private Kryo kryo;
 
     private MappingTable mappingTable;
@@ -43,7 +47,8 @@ public class DBImpl implements DB {
         System.loadLibrary(LIB_NAME);
     }
 
-    public DBImpl(String path, Kryo... kryo) throws GoddbException {
+    public DBImpl(Context ctx, String path, Kryo... kryo) throws GoddbException, IOException, ClassNotFoundException {
+        String[] fileName;
         this.dbPath = path;
 
         if (null != kryo && kryo.length > 0) {
@@ -54,7 +59,11 @@ public class DBImpl implements DB {
             this.kryo.setAsmEnabled(true);
         }
 
-        mappingTable = new MappingTable();
+        Log.d("path", path);
+        fileName = path.split("/");
+        mappingTablePath = fileName[fileName.length - 1];
+        mappingTable = new MappingTable(ctx, mappingTablePath);
+        Log.d("MT", mappingTable.toString());
 
         __open(dbPath);
     }
@@ -64,7 +73,8 @@ public class DBImpl implements DB {
     // ***********************
 
     @Override
-    public void close() {
+    public void close() throws IOException {
+        mappingTable.saveToFile(mappingTablePath);
         __close();
     }
 
@@ -83,7 +93,7 @@ public class DBImpl implements DB {
     // *       INSERT
     // ***********************
     @Override
-    public void put(String path, JSONObject object) throws GoddbException {
+    public void put(String path, JSONObject object) throws GoddbException, IOException {
         int newKey;
 
         checkArgs(path, object); // path, object가 null 인지 확인
@@ -108,10 +118,11 @@ public class DBImpl implements DB {
                 e.printStackTrace();
             }
         }
+        mappingTable.saveToFile(mappingTablePath);
     }
 
     @Override
-    public void put(String path, JSONArray objects) throws GoddbException {
+    public void put(String path, JSONArray objects) throws GoddbException, IOException {
         int newKey;
         checkArgs(path, objects);
         handlePath(path);
@@ -131,6 +142,7 @@ public class DBImpl implements DB {
                 e.printStackTrace();
             }
         }
+        mappingTable.saveToFile(mappingTablePath);
     }
 
     // ***********************
@@ -138,7 +150,7 @@ public class DBImpl implements DB {
     // ***********************
 
     @Override
-    public JSONArray del(String path, String condition) throws GoddbException {
+    public JSONArray del(String path, String condition) throws GoddbException, IOException {
         checkKey(path);
         handlePath(path);
 
@@ -173,7 +185,7 @@ public class DBImpl implements DB {
                 e.printStackTrace();
             }
         }
-
+        mappingTable.saveToFile(mappingTablePath);
         return retArray;
     }
     // ***********************
@@ -230,7 +242,7 @@ public class DBImpl implements DB {
 
 
     @Override
-    public JSONArray deldir(String path) throws GoddbException {
+    public JSONArray deldir(String path) throws GoddbException, IOException {
         checkKey(path);
         handlePath(path);
 
@@ -249,7 +261,7 @@ public class DBImpl implements DB {
                 e.printStackTrace();
             }
         }
-
+        mappingTable.saveToFile(mappingTablePath);
         return retArray;
     }
 
