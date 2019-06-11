@@ -65,15 +65,18 @@ public class MappingTable implements Serializable {
      * @throws IOException
      * @throws FileNotFoundException
      * @throws ClassNotFoundException
-     * @throws GoddbException
      */
-    public MappingTable(Context c, String fileName) throws IOException, ClassNotFoundException, GoddbException {
+    public MappingTable(Context c, String fileName) throws IOException, ClassNotFoundException {
         ctx = c;
-        table = new ArrayList<>();
         try {
             readFile(fileName);
-        } catch (FileNotFoundException e) {	// not opened
-            table.add(new PathInfo(0,"<root>",-1));
+        } catch (FileNotFoundException e) {    // not opened
+            table = new ArrayList<>();
+            table.add(new PathInfo(0, "<root>", -1));
+        } catch (GoddbException e) {
+            e.printStackTrace();
+            table = new ArrayList<>();
+            table.add(new PathInfo(0, "<root>", -1));
         }
     }
     /**
@@ -87,6 +90,8 @@ public class MappingTable implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public void readFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException, GoddbException {
+        //File file = new File(ctx.getFilesDir(),fileName + ".txt"); // 이전 버전의 파일이 존재할 경우 에러가 납니다.
+        //file.delete();
         ObjectInputStream ois = new ObjectInputStream(ctx.openFileInput(fileName + ".txt"));
         byte[] hashBuffer = (byte[]) ois.readObject();  //
         table = (ArrayList<PathInfo>) ois.readObject();
