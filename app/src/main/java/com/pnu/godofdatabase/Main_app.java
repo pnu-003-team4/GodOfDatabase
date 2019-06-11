@@ -43,10 +43,10 @@ public class Main_app extends AppCompatActivity {
             }
         });
 
-        btn_cal.setOnClickListener(new View.OnClickListener(){
+        btn_per.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Intent intent = new Intent(Main_app.this, Quality_test.class);
+                Intent intent = new Intent(Main_app.this, performance.class);
                 startActivity(intent);
             }
         });

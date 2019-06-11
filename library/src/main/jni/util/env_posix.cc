@@ -18,7 +18,6 @@
 #include <time.h>
 #include <unistd.h>
 #if defined(LEVELDB_PLATFORM_ANDROID)
-#include <sys/stat.h>
 #endif
 #include "leveldb/env.h"
 #include "leveldb/slice.h"
@@ -26,7 +25,6 @@
 #include "util/logging.h"
 #include "util/mutexlock.h"
 #include "util/posix_logger.h"
-#include "debug.h"
 
 namespace leveldb {
 

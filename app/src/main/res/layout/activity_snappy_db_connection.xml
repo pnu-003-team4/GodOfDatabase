@@ -12,7 +12,9 @@
         android:layout_height="wrap_content"
         android:text="입력"
         app:layout_constraintBottom_toBottomOf="@+id/edit_put"
-        app:layout_constraintStart_toEndOf="@+id/edit_put" />
+        app:layout_constraintStart_toEndOf="@+id/edit_put"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"/>
 
     <EditText
         android:id="@+id/edit_put"
@@ -24,7 +26,9 @@
         android:hint="key,{value}"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/black"/>
 
     <Button
         android:id="@+id/btn_update"
@@ -33,7 +37,9 @@
         android:layout_marginBottom="1dp"
         android:text="수정"
         app:layout_constraintBottom_toBottomOf="@+id/edit_update"
-        app:layout_constraintStart_toEndOf="@+id/edit_update" />
+        app:layout_constraintStart_toEndOf="@+id/edit_update"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"/>
 
     <EditText
         android:id="@+id/edit_select"
@@ -44,7 +50,9 @@
         android:hint="key"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toStartOf="@+id/btn_update"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/black"/>
 
     <Button
         android:id="@+id/btn_select"
@@ -52,7 +60,9 @@
         android:layout_height="wrap_content"
         android:text="찾기"
         app:layout_constraintBottom_toBottomOf="@+id/edit_select"
-        app:layout_constraintStart_toEndOf="@+id/edit_select" />
+        app:layout_constraintStart_toEndOf="@+id/edit_select"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"/>
 
     <TextView
         android:id="@+id/output"
@@ -64,7 +74,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_update" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_update"
+        android:textColor="@android:color/black"/>
 
     <EditText
         android:id="@+id/edit_del"
@@ -75,7 +86,9 @@
         android:hint="key"
         android:inputType="textPersonName"
         app:layout_constraintBaseline_toBaselineOf="@+id/btn_del"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/black"/>
 
     <Button
         android:id="@+id/btn_del"
@@ -84,7 +97,9 @@
         android:layout_marginBottom="19dp"
         android:text="삭제"
         app:layout_constraintBottom_toTopOf="@+id/btn_select"
-        app:layout_constraintStart_toEndOf="@+id/edit_del" />
+        app:layout_constraintStart_toEndOf="@+id/edit_del"
+        android:background="@android:color/holo_purple"
+        android:textColor="@android:color/background_light"/>
 
     <EditText
         android:id="@+id/edit_update"
@@ -96,6 +111,8 @@
         android:hint="key,{value}"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_select" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_select"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/black"/>
 
 </android.support.constraint.ConstraintLayout>

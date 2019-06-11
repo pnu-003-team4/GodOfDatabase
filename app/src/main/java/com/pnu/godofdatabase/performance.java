@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.goddb.GodDB;
 import com.goddb.GoddbException;
@@ -30,8 +28,13 @@ public class performance extends AppCompatActivity {
     Button btn_snappy_test;
     Button btn_god_test;
     Button btn_sqlite_test;
-    TextView result;
-    double writestr, readstr;
+    Button btn_chart;
+
+    float writestr_snappy, readstr_snappy;
+    float writestr_god, readstr_god;
+    float writestr_sqlite, readstr_sqlite;
+
+    DB godDB;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void testReferenceSetup() throws SnappydbException {
@@ -59,23 +62,29 @@ public class performance extends AppCompatActivity {
             values[i] = value;
         }
 
-        HashMap<String, Boolean> keyMap = new HashMap<>((int) Math.ceil(1000 / 0.75));
-
-        for (String k : keys) {
-            if (null == keyMap.get(k)) {
-                keyMap.put(k, true);
-            } else {
-                Log.d("fail: ", "duplicate key");
-                break;
-            }
+        final com.snappydb.DB db = DBFactory.open(this);
+        long beginWriteStr = System.nanoTime();
+        for (int i = 0; i < 1000; i++) {
+            db.put(keys[i], values[i]);
         }
+        long endWriteStr = System.nanoTime();
+
+        long beginReadStr = System.nanoTime();
+        for (int i = 0; i < 1000; i++) {
+            db.get(keys[i]);
+        }
+        long endReadStr = System.nanoTime();
+        db.destroy();
+
+        writestr_snappy = (float) (endWriteStr - beginWriteStr) / 1000000;
+        readstr_snappy = (float) (endReadStr - beginReadStr) / 1000000;
 
         DB db = new SnappyDB.Builder(this)
                 .name("reference_bench_string")
                 .build();
         long beginWriteStr = System.nanoTime();
         for (int i = 0; i < 1000; i++) {
-            db.put(keys[i], values[i]);
+            sqliteDbManager.insert("insert into MYLIST values(null, 'test', " + values[i] + ");");
         }
         long endWriteStr = System.nanoTime();
 
@@ -144,35 +153,24 @@ public class performance extends AppCompatActivity {
         long beginWriteStr = System.nanoTime();
         String static_path = Double.toString(1000);
         for (int i = 0; i < 1000; i++) {
-            JSONObject jsonObject = new JSONObject();
-
-            String random_obj = Double.toString(Math.random() * 1000);
+            String random_path = Double.toString(Math.random() * 1000);
+            String random_condition = Double.toString(Math.random() * 1000);
             try {
-                jsonObject.put("val", random_obj);
-                godDB.put(static_path, jsonObject);
-            } catch (JSONException e) {
-
+                JSONArray ret = godDB.get(random_path, random_condition);
             } catch (GoddbException e) {
-
             }
-
-        }
-        long endWriteStr = System.nanoTime();
-
-        long beginReadStr = System.nanoTime();
-
-        try {
-
-            JSONArray ret = godDB.get(static_path, "*");
-
-        } catch (GoddbException e) {
         }
 
         long endReadStr = System.nanoTime();
+        godDB.destroy();
+
+        writestr_god = (float) (endWriteStr - beginWriteStr) / 1000000;
+        readstr_god = (float) (endReadStr - beginReadStr) / 1000000;
 
         writestr = (double) (endWriteStr - beginWriteStr) / 1000000;
         readstr = (double) (endReadStr - beginReadStr) / 1000000;
 
+    public void alertDialog(float writestr, float readstr){
         AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
@@ -194,7 +192,15 @@ public class performance extends AppCompatActivity {
         btn_snappy_test = findViewById(R.id.btn_snappy_test);
         btn_god_test = findViewById(R.id.btn_god_test);
         btn_sqlite_test = findViewById(R.id.btn_sqlite_test);
-        result = findViewById(R.id.result);
+        btn_chart = findViewById(R.id.btn_chart);
+
+        try {
+            godDB = new GodDB.Builder(this)
+                    .name("godDB1")
+                    .build();
+        } catch (GoddbException | IOException | ClassNotFoundException e) {
+
+        }
 
         btn_snappy_test.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)

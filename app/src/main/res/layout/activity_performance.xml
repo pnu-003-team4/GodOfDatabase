@@ -11,7 +11,8 @@
         android:id="@+id/btn_snappy_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/snappy_test" />
+        android:text="@string/snappy_test"
+        />
 
     <Button
         android:id="@+id/btn_god_test"
@@ -27,15 +28,11 @@
         android:layout_below="@+id/btn_god_test"
         android:text="SQLite 성능" />
 
-
-    <TextView
-        android:id="@+id/result"
+    <Button
+        android:id="@+id/btn_chart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btn_sqlite_test"
-        android:layout_marginTop="9dp"
-        android:text="@string/result" />
-
-
+        android:text="성능 비교 차트" />
 
 </RelativeLayout>
