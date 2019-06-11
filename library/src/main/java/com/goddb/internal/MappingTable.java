@@ -83,7 +83,7 @@ public class MappingTable implements Serializable {
      * @throws IOException
      * @throws FileNotFoundException
      * @throws ClassNotFoundException
-     * @throws GoddbException
+     * @throws GoddbException This is a damaged file.
      */
     @SuppressWarnings("unchecked")
     public void readFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException, GoddbException {
