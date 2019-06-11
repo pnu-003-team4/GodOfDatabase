@@ -6,6 +6,7 @@ import com.goddb.GoddbException;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -91,13 +92,14 @@ public class MappingTable implements Serializable {
     @SuppressWarnings("unchecked")
     public void readFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException, GoddbException {
         //File file = new File(ctx.getFilesDir(),fileName + ".txt"); // 이전 버전의 파일이 존재할 경우 에러가 납니다.
-        //file.delete();
+        //file.delete();    // 최초 실행에서 주석을 제거해주세요.
         ObjectInputStream ois = new ObjectInputStream(ctx.openFileInput(fileName + ".txt"));
         byte[] hashBuffer = (byte[]) ois.readObject();  //
         table = (ArrayList<PathInfo>) ois.readObject();
         ois.close();
         if(!java.util.Arrays.equals(hashBuffer,sha256(convertToString())))  //
             throw new GoddbException("This is a damaged file.");    //
+        print();
     }
     /**
      * save mapping table to file
@@ -107,6 +109,8 @@ public class MappingTable implements Serializable {
      * @throws FileNotFoundException
      */
     public void saveToFile(String fileName) throws FileNotFoundException, IOException {
+        File file = new File(ctx.getFilesDir(),fileName + ".txt"); // 이전 버전의 파일이 존재할 경우 에러가 납니다.
+        file.delete();
         byte hashBuffer[] = sha256(convertToString());  //
         ObjectOutputStream oos = new ObjectOutputStream(ctx.openFileOutput(fileName + ".txt", Context.MODE_PRIVATE | Context.MODE_APPEND));
         oos.writeObject(hashBuffer);    //
