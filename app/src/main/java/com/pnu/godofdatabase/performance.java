@@ -10,10 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.goddb.DB;
 import com.goddb.GodDB;
 import com.goddb.GoddbException;
-import com.snappydb.DBFactory;
+import com.snappydb.DB;
+import com.snappydb.SnappyDB;
 import com.snappydb.SnappydbException;
 
 import org.json.JSONArray;
@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class performance extends AppCompatActivity {
 
@@ -78,18 +79,45 @@ public class performance extends AppCompatActivity {
         writestr_snappy = (float) (endWriteStr - beginWriteStr) / 1000000;
         readstr_snappy = (float) (endReadStr - beginReadStr) / 1000000;
 
-        alertDialog(writestr_snappy, readstr_snappy);
+        DB db = new SnappyDB.Builder(this)
+                .name("reference_bench_string")
+                .build();
+        long beginWriteStr = System.nanoTime();
+        for (int i = 0; i < 1000; i++) {
+            sqliteDbManager.insert("insert into MYLIST values(null, 'test', " + values[i] + ");");
+        }
+        long endWriteStr = System.nanoTime();
+
+        long beginReadStr = System.nanoTime();
+        for (int i = 0; i < 1000; i++) {
+            db.get(keys[i]);
+        }
+        long endReadStr = System.nanoTime();
+        db.destroy();
+
+        writestr = (double) (endWriteStr - beginWriteStr) / 1000000;
+        readstr = (double) (endReadStr - beginReadStr) / 1000000;
+
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
+        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();     //닫기
+            }
+        });
+        alert.setMessage("1000 write of String in " + String.valueOf(writestr) + "ms\n"
+                + "1000 read of String in " + String.valueOf(readstr) + "ms\n");
+        alert.show();
     }
 
     public void testSqlite() {
         SQLiteDbManager sqliteDbManager = new SQLiteDbManager(getApplicationContext(), "Food.db", null, 1);
-        int values[] = new int[1000];
-        for(int i=0;i<1000;i++){
-            values[i] = (int) Math.random() * 1000;
-        }
         long beginWriteStr = System.nanoTime();
         for (int i = 0; i < 1000; i++) {
-            sqliteDbManager.insert("insert into MYLIST values(null, 'test', " + values[i] + ");");
+            int num = (int) Math.random() * 1000;
+
+            sqliteDbManager.insert("insert into MYLIST values(null, 'test', " + num + ");");
         }
         long endWriteStr = System.nanoTime();
 
@@ -98,32 +126,32 @@ public class performance extends AppCompatActivity {
         long endReadStr = System.nanoTime();
         sqliteDbManager.close();
 
-        writestr_sqlite = (float) (endWriteStr - beginWriteStr) / 1000000;
-        readstr_sqlite = (float) (endReadStr - beginReadStr) / 1000000;
+        writestr = (double) (endWriteStr - beginWriteStr) / 1000000;
+        readstr = (double) (endReadStr - beginReadStr) / 1000000;
 
-        alertDialog(writestr_sqlite, readstr_sqlite);
-    }
-
-    public void testGOD() throws GoddbException {
-        long beginWriteStr = System.nanoTime();
-        for (int i = 0; i < 1000; i++) {
-            JSONObject jsonObject = new JSONObject();
-            String random_path = Double.toString(Math.random() * 1000);
-            String random_obj = Double.toString(Math.random() * 1000);
-            try {
-                jsonObject.put("val", random_obj);
-                godDB.put(random_path, jsonObject);
-            } catch (JSONException e) {
-
-            } catch (GoddbException e) {
-
-            } catch (IOException e) {
-                e.printStackTrace();
+        AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
+        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();     //닫기
             }
-        }
-        long endWriteStr = System.nanoTime();
+        });
+        alert.setMessage("1000 write of String in " + String.valueOf(writestr) + "ms\n"
+                + "1000 read of String in " + String.valueOf(readstr) + "ms\n");
+        alert.show();
+    }
+    public void testGOD() throws GoddbException {
+        com.goddb.DB godDB = null;
+        try {
+            godDB = new GodDB.Builder(this)
+                    .name("godDB1")
+                    .build();
+        } catch (GoddbException e) {
 
-        long beginReadStr = System.nanoTime();
+        }
+
+        long beginWriteStr = System.nanoTime();
+        String static_path = Double.toString(1000);
         for (int i = 0; i < 1000; i++) {
             String random_path = Double.toString(Math.random() * 1000);
             String random_condition = Double.toString(Math.random() * 1000);
@@ -132,14 +160,15 @@ public class performance extends AppCompatActivity {
             } catch (GoddbException e) {
             }
         }
+
         long endReadStr = System.nanoTime();
         godDB.destroy();
 
         writestr_god = (float) (endWriteStr - beginWriteStr) / 1000000;
         readstr_god = (float) (endReadStr - beginReadStr) / 1000000;
 
-        alertDialog(writestr_god, readstr_god);
-    }
+        writestr = (double) (endWriteStr - beginWriteStr) / 1000000;
+        readstr = (double) (endReadStr - beginReadStr) / 1000000;
 
     public void alertDialog(float writestr, float readstr){
         AlertDialog.Builder alert = new AlertDialog.Builder(performance.this);
@@ -152,6 +181,7 @@ public class performance extends AppCompatActivity {
         alert.setMessage("1000 write of String in " + String.valueOf(writestr) + "ms\n"
                 + "1000 read of String in " + String.valueOf(readstr) + "ms\n");
         alert.show();
+
     }
 
     @Override
@@ -188,40 +218,15 @@ public class performance extends AppCompatActivity {
                 testSqlite();
             }
         });
-//        btn_god_test.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.N)
-//            public void onClick(View v) {
-//                try {
-//                    testGOD();
-//                } catch (GoddbException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+
         btn_god_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(performance.this, god_performance.class);
-                //startActivity(intent);
                 try {
                     testGOD();
                 } catch (GoddbException e) {
                     e.printStackTrace();
                 }
-            }
-        });
-
-        btn_chart.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent intent = new Intent(performance.this, Chart.class);
-                intent.putExtra("write_snappy",writestr_snappy);
-                intent.putExtra("read_snappy",readstr_snappy);
-                intent.putExtra("write_sqlite",writestr_sqlite);
-                intent.putExtra("read_sqlite",readstr_sqlite);
-                intent.putExtra("write_god",writestr_god);
-                intent.putExtra("read_god",readstr_god);
-                startActivity(intent);
             }
         });
     }
