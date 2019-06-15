@@ -128,7 +128,7 @@ public class Condition {
                         break;
                         
                     default:
-                        return jsonArray;
+                        return newarray;
                         break;
                 }
             } catch (JSONException e) {
