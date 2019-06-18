@@ -20,21 +20,20 @@ public class Wildcard {
             return Find;
     }
 
-    public static ArrayList<Integer> star(int pathkey, MappingTable mappingTable) {
-        ArrayList<Integer> child;
-        child = mappingTable.getChildKeys(pathkey);
-        for (int i = 0; i < child.size(); i++) {
-            child.addAll(star(child.get(i), mappingTable));
+    public static ArrayList<Integer> star(int pathkey, MappingTable mappingTable, ArrayList<Integer> child) {
+        ArrayList<Integer> temp = mappingTable.getChildKeys(pathkey);
+        child.addAll(temp);
+        for (int i = 0; i < temp.size(); i++) {
+            star(temp.get(i), mappingTable, child);
         }
 
         return child;
     }
 
-    public static ArrayList<Integer> split(String path, MappingTable mappingTable) {
+    public static ArrayList<Integer> split(String path, MappingTable mappingTable, ArrayList<Integer> child) {
         boolean IsWild = false;
         int wildlocation = 0;
         if (path.contains("#")) {
-
             int SharpLocation = path.indexOf("#");
             String leftnode  = path.substring(0,SharpLocation-1);
             int LeftKey = mappingTable.getKey(leftnode);
@@ -45,7 +44,7 @@ public class Wildcard {
         } else if (path.contains("*")) {
             wildlocation = path.indexOf("*");
             String Starpath = path.substring(0, wildlocation - 1);
-            return star(mappingTable.getKey(Starpath), mappingTable);
+            return star(mappingTable.getKey(Starpath), mappingTable, child);
         }
         if (!IsWild) {
             //ArrayList<Integer> child;
@@ -54,12 +53,12 @@ public class Wildcard {
             return temp;
         }
         return null;
-
     }
 
     public static ArrayList<Integer> extractWildcard(String path, MappingTable mp) {
         // 변수
         ArrayList<Integer> result = new ArrayList<>();
+        ArrayList<Integer> child = new ArrayList<>();
         path = path.replaceAll(" ", "");
         //path = "/Korea/Pusan/Haeundae/*&/Korea/Seoul/#/kangnam&US/Sanhose&??&whycant..&megabox/#/zzez";
         String wild = "";
@@ -81,13 +80,13 @@ public class Wildcard {
                 wildlocation = path.indexOf("*");
                 IsWild = true;
 
+            } else {
+                result.add(mp.getKey(path));
             }
-
         }
 
         if (IsWild) {
             if (("#").equals(wild)) {
-
                 int SharpLocation = path.indexOf("#");
                 String leftnode  = path.substring(0,SharpLocation-1);
                 int last = path.length();
@@ -95,19 +94,15 @@ public class Wildcard {
                 result.addAll(sharp(mp.getKey(leftnode), rightnode, mp));
             } else if (("*").equals(wild)) {
                 String Starpath = path.substring(0, wildlocation - 1);
-                result.addAll(star(mp.getKey(Starpath), mp));
+                result.addAll(star(mp.getKey(Starpath), mp, child));
             } else if (("&").equals(wild)) {
                 String str = path;
                 String[] array = str.split("&");
                 for (int i = 0; i < array.length; i++) {
-                    result.addAll(split(array[i], mp));
-
+                    result.addAll(split(array[i], mp, child));
                 }
-                // System.out.println(result);
-                return result;
             }
-        } else
-            result.add(mp.getKey(path));
+        }
 
         return result;
     }

@@ -12,7 +12,7 @@ public class Condition {
     public static String rightOperand = "";
     public static String operator = "";
 
-    public static void separation(String condition, int flag) { //연산자를 구분한다.
+    public static int separation(String condition, int flag) { //연산자를 구분한다.
 
         switch (condition = condition.replaceAll(" ", "")) { //입력받은 문자열의 공백 제거
         }
@@ -51,8 +51,7 @@ public class Condition {
                 leftOperand = condition.substring(0, idx);
                 rightOperand = condition.substring(idx+1);
             } else {
-                System.out.println("Invalid operator");
-                return;
+                return -1;
             }
         }
 
@@ -73,18 +72,19 @@ public class Condition {
                 leftOperand = condition.substring(0, idx);
                 rightOperand = condition.substring(idx+1);
             } else {
-                System.out.println("Invalid operator");
-                return;
+                return -1;
             }
         }
+
+        return 1;
     }
 
     public static JSONArray extractCondition(JSONArray jsonArray, String condition) throws JSONException {
 
-        if (condition.isEmpty()) return jsonArray;
+        if (condition==null) return jsonArray;
 
         JSONArray newarray = new JSONArray();
-        separation(condition, 0);
+        if (separation(condition, 0) < 0) return jsonArray;
 
         //연관된 오브젝트를 배열에 넣는다.
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -128,7 +128,7 @@ public class Condition {
                         break;
                         
                     default:
-                        break;
+                        return newarray;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
